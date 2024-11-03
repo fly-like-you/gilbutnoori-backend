@@ -1,6 +1,5 @@
 package com.ssafy.gilbut.travel.model.entity;
 
-import com.ssafy.gilbut.course.model.entity.RoadOrBike;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.NotNull;
@@ -39,5 +38,5 @@ public class Travel {
     @Schema(description = "자전거 도로 구분", example = "DNWW")
     @Size(max = 4)
     @NotNull
-    private RoadOrBike roadOrBike;
+    private String roadOrBike;
 }
