@@ -42,7 +42,7 @@ public class Course {
     @Size(max = 10)
     private String cycle;
 
-    @Schema(description = "길 정보 요약", example = "진하해변을 출발해 덕하역까지 구간 - 해파랑길 울산 구간이 시작되는 코스...")
+    @Schema(description = "코스 정보 요약", example = "진하해변을 출발해 덕하역까지 구간 - 해파랑길 울산 구간이 시작되는 코스...")
     private String summary;
 
     @Schema(description = "상세 정보", example = "간절곶 북쪽 진하해변을 출발해 회야강을 따라 외고산 옹기마을까지 간 후 덕하역까지 걷는 코스다.")
