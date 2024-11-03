@@ -1,4 +1,4 @@
-package com.ssafy.gilbut.course.model.entity;
+package com.ssafy.gilbut.course.model.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
@@ -6,17 +6,12 @@ import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Data;
 
-@Getter
+@Data
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Schema(title = "Route (길 정보)", description = "길 정보가 담긴 Domain Class")
-public class Route {
+public class RouteDTO {
 
     @Schema(description = "길 아이디", requiredMode = RequiredMode.REQUIRED, example = "T_ROUTE_MNG0000000043")
     @Size(max = 30)

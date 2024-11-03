@@ -6,11 +6,15 @@ import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Data
+@Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Schema(title = "Course (둘렛길 정보)", description = "코스 정보가 담긴 Domain Class")
 public class Course {
 
@@ -20,9 +24,7 @@ public class Course {
     private String id;
 
     @Schema(description = "길 아이디", example = "T_THEME_MNG0000011235")
-    @Size(max = 30)
-    @NotNull
-    private String routeId;
+    private Route route;
 
     @Schema(description = "코스 이름", example = "해파랑길 5코스")
     @Size(max = 60)
@@ -61,7 +63,7 @@ public class Course {
 
     @Schema(description = "자전거 도로 구분", example = "DNWW")
     @Size(max = 4)
-    private RoadOrBike roadOrBike;
+    private String roadOrBike;
 
     @Future
     @Schema(description = "둘렛길 생성된 시간", example = "2017-01-20 04:20:00")

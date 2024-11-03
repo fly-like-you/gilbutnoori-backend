@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.gilbut.course.mapper.CourseMapper">
+    <!-- ResultMap 정의 -->
+    <resultMap id="CourseWithRouteResultMap" type="Course">
+        <!-- Course 필드 매핑 -->
+        <id property="id" column="course_id"/>
+        <result property="name" column="course_name"/>
+        <result property="dist" column="dist"/>
+        <result property="turnaround" column="turnaround"/>
+        <result property="level" column="level"/>
+        <result property="cycle" column="cycle"/>
+        <result property="summary" column="summary"/>
+        <result property="detail" column="detail"/>
+        <result property="travelPoint" column="travel_point"/>
+        <result property="travelerInfo" column="traveler_info"/>
+        <result property="sigun" column="sigun"/>
+        <result property="roadOrBike" column="road_or_bike"/>
+        <result property="createdAt" column="course_created_at"/>
+        <result property="updatedAt" column="course_updated_at"/>
+
+        <!-- Route 필드 매핑 -->
+        <association property="route" javaType="Route">
+            <id property="id" column="route_id"/>
+            <result property="name" column="route_name"/>
+            <result property="summary" column="route_summary"/>
+            <result property="detail" column="route_detail"/>
+            <result property="roadOrBike" column="route_road_or_bike"/>
+            <result property="createdAt" column="route_created_at"/>
+            <result property="updatedAt" column="route_updated_at"/>
+        </association>
+    </resultMap>
+    <!-- Course와 Route를 함께 조회하는 쿼리 -->
+    <select id="courseList" parameterType="map" resultMap="CourseWithRouteResultMap">
+        SELECT
+            c.id AS course_id,
+            c.name AS course_name,
+            c.dist,
+            c.turnaround,
+            c.level,
+            c.cycle,
+            c.summary,
+            c.detail,
+            c.travel_point,
+            c.traveler_info,
+            c.sigun,
+            c.road_or_bike,
+            c.created_at AS course_created_at,
+            c.updated_at AS course_updated_at,
+            r.id AS route_id,
+            r.name AS route_name,
+            r.summary AS route_summary,
+            r.detail AS route_detail,
+            r.road_or_bike AS route_road_or_bike,
+            r.created_at AS route_created_at,
+            r.updated_at AS route_updated_at
+        FROM Courses c
+        JOIN Routes r
+        ON c.route_id = r.id
+        LIMIT ${offset}, ${pageSize}
+    </select>
+
+
+    <select id="countCourses" resultType="int">
+        SELECT COUNT(*) AS course_count
+        FROM courses
+    </select>
+
+    <select id="courseDetail" parameterType="string" resultMap="CourseWithRouteResultMap">
+        SELECT
+            c.id AS course_id,
+            c.name AS course_name,
+            c.dist,
+            c.turnaround,
+            c.level,
+            c.cycle,
+            c.summary,
+            c.detail,
+            c.travel_point,
+            c.traveler_info,
+            c.sigun,
+            c.road_or_bike,
+            c.created_at AS course_created_at,
+            c.updated_at AS course_updated_at,
+            r.id AS route_id,
+            r.name AS route_name,
+            r.summary AS route_summary,
+            r.detail AS route_detail,
+            r.road_or_bike AS route_road_or_bike,
+            r.created_at AS route_created_at,
+            r.updated_at AS route_updated_at
+        FROM Courses c
+        JOIN Routes r
+        ON c.route_id = r.id
+        WHERE c.id = #{courseId}
+    </select>
+
+</mapper>
+
+
+<!--        &lt;!&ndash; ResultMap 정의 &ndash;&gt;-->
+<!--<resultMap id="courseRM" type="Course">-->
+<!--&lt;!&ndash; Course 필드 매핑 &ndash;&gt;-->
+<!--<id property="id" column="id"/>-->
+<!--<result property="name" column="name"/>-->
+<!--<result property="dist" column="dist"/>-->
+<!--<result property="turnaround" column="turnaround"/>-->
+<!--<result property="level" column="level"/>-->
+<!--<result property="cycle" column="cycle"/>-->
+<!--<result property="summary" column="summary"/>-->
+<!--<result property="detail" column="detail"/>-->
+<!--<result property="travelPoint" column="travel_point"/>-->
+<!--<result property="travelerInfo" column="traveler_info"/>-->
+<!--<result property="sigun" column="sigun"/>-->
+<!--<result property="roadOrBike" column="road_or_bike"/>-->
+<!--<result property="createdAt" column="created_at"/>-->
+<!--<result property="updatedAt" column="updated_at"/>-->
+
+<!--&lt;!&ndash; Route 필드 매핑 &ndash;&gt;-->
+<!--<association property="route" javaType="Route">-->
+<!--    <id property="id" column="id"/>-->
+<!--    <result property="name" column="name"/>-->
+<!--    <result property="summary" column="summary"/>-->
+<!--    <result property="detail" column="detail"/>-->
+<!--    <result property="roadOrBike" column="road_or_bike"/>-->
+<!--    <result property="createdAt" column="created_at"/>-->
+<!--    <result property="updatedAt" column="updated_at"/>-->
+<!--</association>-->
+<!--</resultMap>-->
+<!--<select id="courseList" parameterType="map" resultMap="courseRM" >-->
+<!--SELECT c.id, c.name, c.dist, c.turnaround, c.level, c.cycle, c.summary, c.detail, c.travel_point, c.traveler_info, c.sigun, c.road_or_bike, c.created_at, c.updated_at,-->
+<!--       r.id, r.name, r.summary, r.detail, r.road_or_bike, r.created_at, r.updated_at-->
+<!--FROM Courses c-->
+<!--         LEFT JOIN Routes r-->
+<!--                   ON c.route_id = r.id-->
+<!--    LIMIT ${offset}, ${pageSize}-->
+<!--</select>-->
