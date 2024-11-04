@@ -1,14 +1,10 @@
 package com.ssafy.gilbut.course.controller;
 
+import com.ssafy.gilbut.advice.status.ErrorStatus;
 import com.ssafy.gilbut.course.model.dto.CourseDTO;
 import com.ssafy.gilbut.course.service.CourseService;
+import com.ssafy.gilbut.exception.handler.TempHandler;
 import com.ssafy.gilbut.util.SizeConstant;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
@@ -17,12 +13,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -68,7 +66,13 @@ public class CourseController implements CourseControllerDocs {
     @PostMapping("/map/{courseId}")
     public ResponseEntity<?> courseMapData(@PathVariable String courseId) throws IOException {
         // 파일 경로 설정: resources/static/courses/courseId.gpx
-        Path filePath = Paths.get(new ClassPathResource("static/courses/" + courseId + ".gpx").getURI());
+        Path filePath;
+        try {
+
+            filePath = Paths.get(new ClassPathResource("static/courses/" + courseId + ".gpx").getURI());
+        } catch (IOException e) {
+            throw new TempHandler(ErrorStatus._INTERNAL_SERVER_ERROR);
+        }
 
         // 파일 읽기
         String fileContent = Files.readString(filePath);
