@@ -19,7 +19,7 @@ public class LoggingAspect {
 //	}
 
 //	@Around(value = "execution(* com.ssafy.gilbut.course.mapper.Course*.*(..))")
-	@Around(value = "execution(* com.ssafy.gilbut.course.controller.Course*.*(..))")
+	@Around(value = "execution(* com.ssafy.gilbut.domain.course.controller.Course*.*(..))")
 	public Object executionTime(ProceedingJoinPoint joinPoint) throws Throwable {
 		log.debug("around call method : {} ", joinPoint.getSignature());
 		StopWatch stopWatch = new StopWatch();
