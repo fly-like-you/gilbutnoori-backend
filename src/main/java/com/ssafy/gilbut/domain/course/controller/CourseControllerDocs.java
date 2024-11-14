@@ -39,4 +39,9 @@ public interface CourseControllerDocs {
     )
     ResponseEntity<?> travelingPointList(String courseId);
 
+    @Operation(
+            summary="해파랑길, 남파랑길 등의 길 정보 가져오기"
+    )
+    ResponseEntity<?> routeList();
+
 }

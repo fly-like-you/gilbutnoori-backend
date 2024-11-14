@@ -32,7 +32,7 @@ public class CourseController implements CourseControllerDocs {
     @Override
     @GetMapping("/search")
     public ResponseEntity<?> courseSearch(Map<String, String> map) {
-
+        // TODO: 코스의 테마에 맞게 추천
         return null;
     }
 
@@ -86,6 +86,14 @@ public class CourseController implements CourseControllerDocs {
     @Override
     @GetMapping("/travelPoint/{courseId}")
     public ResponseEntity<?> travelingPointList(String courseId) {
+        // https://apis.data.go.kr/B551011/KorService1/areaBasedList1 요청
+        return null;
+    }
+
+    @Override
+    @GetMapping("/routes")
+    public ResponseEntity<?> routeList() {
+        // TODO: 길 정보를 모두 가져오는 메서드
         return null;
     }
 
