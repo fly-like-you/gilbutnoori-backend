@@ -1,15 +1,16 @@
 package com.ssafy.gilbut.domain.course.mapper;
 
 import com.ssafy.gilbut.domain.course.model.dto.CourseDTO;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+import java.util.Optional;
 
 @Mapper
 public interface CourseMapper {
 
-    List<Map<String, Object>> courseList(Map<String, Object> paramMap);
+    List<CourseDTO> courseList(@Param("offset") long offset, @Param("pageSize") int pageSize);
 
     int countCourses();
 

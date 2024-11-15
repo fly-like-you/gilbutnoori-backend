@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 
 @Tag(name="코스 정보 컨트롤러", description = "코스 정보 상세보기, 리스트 보기 등의 처리를 하는 클래스")
 public interface CourseControllerDocs {
-    @Operation(summary = "코스 검색", description = "필터 별로 다양한 코스를 검색할 수 있는 기능")
+    @Operation(summary = "코스 검색", description = "필터 별로 다양한 코스를 검색할 수 있는 기능", deprecated = true)
     ResponseEntity<?> courseSearch(
             @Parameter(description = "필터링 용 맵 데이터") Map<String, String> map
     );
@@ -39,9 +39,6 @@ public interface CourseControllerDocs {
     )
     ResponseEntity<?> travelingPointList(String courseId);
 
-    @Operation(
-            summary="해파랑길, 남파랑길 등의 길 정보 가져오기"
-    )
-    ResponseEntity<?> routeList();
+
 
 }

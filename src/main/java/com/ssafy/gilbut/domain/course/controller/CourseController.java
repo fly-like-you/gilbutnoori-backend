@@ -12,7 +12,6 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +19,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
@@ -41,18 +39,11 @@ public class CourseController implements CourseControllerDocs {
     public ResponseEntity<?> courseList(
             @RequestParam Map<String, Object> paramMap,
             @PageableDefault(size = SizeConstant.LIST_SIZE) Pageable page
-
     ) {
+        Page<CourseDTO> result =  courseService.courseList(page);
+        log.trace("result={}", result);
 
-        HashMap<String, Object> resultMap = new HashMap<>();
-
-        Page<Map<String, Object>> result =  courseService.courseList(paramMap, page);
-        resultMap.put("pages", result);
-        resultMap.put("size", page.getPageSize());
-        log.trace("result={}, size={}", result, page.getPageSize());
-
-        return ResponseEntity.ok().body(ApiResponse.onSuccess(resultMap));
-
+        return ResponseEntity.ok().body(ApiResponse.onSuccess(result));
     }
 
     @Override
@@ -78,7 +69,6 @@ public class CourseController implements CourseControllerDocs {
         String fileContent = Files.readString(filePath);
 
         // 파일 내용을 응답으로 반환
-//        return new ResponseEntity<>(fileContent, HttpStatus.OK);
         return ResponseEntity.ok(ApiResponse.onSuccess(fileContent));
     }
 
@@ -90,12 +80,7 @@ public class CourseController implements CourseControllerDocs {
         return null;
     }
 
-    @Override
-    @GetMapping("/routes")
-    public ResponseEntity<?> routeList() {
-        // TODO: 길 정보를 모두 가져오는 메서드
-        return null;
-    }
+
 
 
 }
