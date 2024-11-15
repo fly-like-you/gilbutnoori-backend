@@ -4,7 +4,7 @@
 
 <mapper namespace="com.ssafy.gilbut.domain.course.mapper.CourseMapper">
     <!-- ResultMap 정의 -->
-    <resultMap id="CourseWithRouteResultMap" type="CourseDTO">
+    <resultMap id="CourseRouteResultMap" type="CourseDTO">
         <!-- Course 필드 매핑 -->
         <id property="id" column="course_id"/>
         <result property="name" column="course_name"/>
@@ -21,33 +21,64 @@
         <result property="createdAt" column="course_created_at"/>
         <result property="updatedAt" column="course_updated_at"/>
 
-        <!-- Route 필드 매핑 -->
-        <association property="route" javaType="RouteDTO">
-            <id property="id" column="route_id"/>
-            <result property="name" column="route_name"/>
-            <result property="summary" column="route_summary"/>
-            <result property="detail" column="route_detail"/>
-            <result property="roadOrBike" column="route_road_or_bike"/>
-            <result property="createdAt" column="route_created_at"/>
-            <result property="updatedAt" column="route_updated_at"/>
-        </association>
+        <association property="route" column="route_id" javaType="RouteDTO" resultMap="route"/>
+
     </resultMap>
+    <!-- Route 필드 매핑 -->
+    <resultMap id="route" type="RouteDTO">
+        <id property="id" column="route_id"/>
+        <result property="name" column="route_name"/>
+        <result property="summary" column="route_summary"/>
+        <result property="detail" column="route_detail"/>
+        <result property="roadOrBike" column="route_road_or_bike"/>
+        <result property="createdAt" column="route_created_at"/>
+        <result property="updatedAt" column="route_updated_at"/>
+    </resultMap>
+
+    <!-- 쿼리 시작 -->
     <select id="courseList" resultType="CourseDTO">
-        select
-            c.id,
-            c.route_id,
-            c.name,
-            c.dist,
-            c.turnaround,
-            c.level,
-            c.cycle,
-            c.summary,
-            c.detail,
-            c.travel_point,
-            c.traveler_info,
-            c.sigun
+        select c.id,
+               c.route_id,
+               c.name,
+               c.dist,
+               c.turnaround,
+               c.level,
+               c.cycle,
+               c.summary,
+               c.detail,
+               c.travel_point,
+               c.traveler_info,
+               c.sigun
         from courses c
-        LIMIT ${offset}, ${pageSize}
+            LIMIT ${offset}, ${pageSize}
+    </select>
+
+    <select id="courseDetail" resultMap="CourseRouteResultMap">
+        SELECT c.id           AS course_id,
+               c.name         AS course_name,
+               c.dist,
+               c.turnaround,
+               c.level,
+               c.cycle,
+               c.summary,
+               c.detail,
+               c.travel_point,
+               c.traveler_info,
+               c.sigun,
+               c.road_or_bike,
+               c.created_at   AS course_created_at,
+               c.updated_at   AS course_updated_at,
+               r.id           AS route_id,
+               r.name         AS route_name,
+               r.summary      AS route_summary,
+               r.detail       AS route_detail,
+               r.road_or_bike AS route_road_or_bike,
+               r.created_at   AS route_created_at,
+               r.updated_at   AS route_updated_at
+        FROM Courses c
+                 JOIN Routes r
+                      ON c.route_id = r.id
+        WHERE c.id = #{courseId}
     </select>
 
     <select id="countCourses" resultType="int">
@@ -55,33 +86,5 @@
         FROM courses
     </select>
 
-    <select id="courseDetail" resultMap="CourseWithRouteResultMap">
-        SELECT
-            c.id AS course_id,
-            c.name AS course_name,
-            c.dist,
-            c.turnaround,
-            c.level,
-            c.cycle,
-            c.summary,
-            c.detail,
-            c.travel_point,
-            c.traveler_info,
-            c.sigun,
-            c.road_or_bike,
-            c.created_at AS course_created_at,
-            c.updated_at AS course_updated_at,
-            r.id AS route_id,
-            r.name AS route_name,
-            r.summary AS route_summary,
-            r.detail AS route_detail,
-            r.road_or_bike AS route_road_or_bike,
-            r.created_at AS route_created_at,
-            r.updated_at AS route_updated_at
-        FROM Courses c
-        JOIN Routes r
-        ON c.route_id = r.id
-        WHERE c.id = #{courseId}
-    </select>
 
 </mapper>

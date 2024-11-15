@@ -54,6 +54,7 @@ public class CourseDTO {
     @NotNull
     private String sigun;
 
+
     @Schema(description = "자전거 도로 구분", example = "DNWW")
     @Size(max = 4)
     private String roadOrBike;

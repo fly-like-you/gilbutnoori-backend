@@ -3,10 +3,11 @@ package com.ssafy.gilbut.domain.course.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.io.IOException;
-import java.util.Map;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+
+import java.io.IOException;
+import java.util.Map;
 
 @Tag(name="코스 정보 컨트롤러", description = "코스 정보 상세보기, 리스트 보기 등의 처리를 하는 클래스")
 public interface CourseControllerDocs {
@@ -30,14 +31,6 @@ public interface CourseControllerDocs {
             @Parameter(required = true, description = "조회할 코스 ID") String courseId
     ) throws IOException;
 
-    @Operation(
-            summary =
-                    "코스 근처 관광지 정보 가져오기",
-            description =
-                    "코스 근처에 있는 관광지 정보를 가져옵니다. "
-                  + "필터를 통해 다양한 관광지 정보를 얻을 수 있습니다."
-    )
-    ResponseEntity<?> travelingPointList(String courseId);
 
 
 

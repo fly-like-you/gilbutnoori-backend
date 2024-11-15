@@ -9,4 +9,6 @@ public interface CourseService {
     Page<CourseDTO> courseList(Pageable page);
 
     CourseDTO courseDetail(String courseId);
+
+    CourseDTO courseAttractionList(String courseId);
 }

@@ -72,15 +72,5 @@ public class CourseController implements CourseControllerDocs {
         return ResponseEntity.ok(ApiResponse.onSuccess(fileContent));
     }
 
-    // TODO: courseId를 기반으로 주변의 관광지 정보를 불러오기, 관광지 API를 사용할 수고 있고 직접 코드를 짤 수도 있음
-    @Override
-    @GetMapping("/travelPoint/{courseId}")
-    public ResponseEntity<?> travelingPointList(String courseId) {
-        // https://apis.data.go.kr/B551011/KorService1/areaBasedList1 요청
-        return null;
-    }
-
-
-
 
 }

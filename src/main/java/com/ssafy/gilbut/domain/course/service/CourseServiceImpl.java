@@ -4,6 +4,7 @@ import com.ssafy.gilbut.domain.course.mapper.CourseMapper;
 import com.ssafy.gilbut.domain.course.model.dto.CourseDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +18,10 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class CourseServiceImpl implements CourseService{
     private final CourseMapper courseMapper;
+
+    @Value("${open-api.travel.api-key}")
+    private String openApiKey;
+
     @Override
     public Page<CourseDTO> courseList(Pageable page) {
         log.trace("offset = {}, pageSize = {}", page.getOffset(), page.getPageSize());
@@ -29,11 +34,15 @@ public class CourseServiceImpl implements CourseService{
 
     @Override
     public CourseDTO courseDetail(String courseId) {
-
         return courseMapper
                 .courseDetail(courseId)
                 .orElseThrow(() -> new NoSuchElementException("해당 코스가 존재하지 않습니다."));
     }
 
+    @Override
+    public CourseDTO courseAttractionList(String courseId) {
+        // courseID와 일
+        return null;
+    }
 
 }
