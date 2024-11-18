@@ -18,6 +18,7 @@ public class RouteController implements RouteControllerDocs{
     @GetMapping("/routes")
     public ResponseEntity<?> routeList() {
         // TODO: 길 정보를 모두 가져오는 메서드
+
         return null;
     }
 }

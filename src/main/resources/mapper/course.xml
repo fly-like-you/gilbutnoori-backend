@@ -50,35 +50,44 @@
                c.traveler_info,
                c.sigun
         from courses c
-            LIMIT ${offset}, ${pageSize}
+        <if test="pageable.sort.sorted">
+            <trim prefix="order by">
+                <foreach item="order" collection="pageable.sort" separator=", ">
+                    ${order.property} ${order.direction}
+                </foreach>
+            </trim>
+        </if>
+        LIMIT ${pageable.offset}, ${pageable.pageSize}
     </select>
 
     <select id="courseDetail" resultMap="CourseRouteResultMap">
         SELECT c.id           AS course_id,
-               c.name         AS course_name,
-               c.dist,
-               c.turnaround,
-               c.level,
-               c.cycle,
-               c.summary,
-               c.detail,
-               c.travel_point,
-               c.traveler_info,
-               c.sigun,
-               c.road_or_bike,
-               c.created_at   AS course_created_at,
-               c.updated_at   AS course_updated_at,
-               r.id           AS route_id,
-               r.name         AS route_name,
-               r.summary      AS route_summary,
-               r.detail       AS route_detail,
-               r.road_or_bike AS route_road_or_bike,
-               r.created_at   AS route_created_at,
-               r.updated_at   AS route_updated_at
+        c.name         AS course_name,
+        c.dist,
+        c.turnaround,
+        c.level,
+        c.cycle,
+        c.summary,
+        c.detail,
+        c.travel_point,
+        c.traveler_info,
+        c.sigun,
+        c.road_or_bike,
+        c.created_at   AS course_created_at,
+        c.updated_at   AS course_updated_at,
+        r.id           AS route_id,
+        r.name         AS route_name,
+        r.summary      AS route_summary,
+        r.detail       AS route_detail,
+        r.road_or_bike AS route_road_or_bike,
+        r.created_at   AS route_created_at,
+        r.updated_at   AS route_updated_at
         FROM Courses c
-                 JOIN Routes r
-                      ON c.route_id = r.id
+        JOIN Routes r
+        ON c.route_id = r.id
         WHERE c.id = #{courseId}
+
+
     </select>
 
     <select id="countCourses" resultType="int">

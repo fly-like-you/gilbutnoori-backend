@@ -9,8 +9,8 @@ import java.util.List;
 
 @Mapper
 public interface AttractionMapper {
-//    List<AttractionDTO> searchAttractionByCourseId(String courseId, @Param("offset") long offset, @Param("pageSize") int pageSize);
-    List<AttractionDTO> searchAttractionByCourseId(String courseId, @Param("pageable") Pageable pageable);
+
+    List<AttractionDTO> searchAttractionByCourseId(String courseId, Integer contentTypeId, @Param("pageable") Pageable pageable);
 
 
     int countAllAttraction();

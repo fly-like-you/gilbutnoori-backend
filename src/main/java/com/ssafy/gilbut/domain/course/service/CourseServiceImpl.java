@@ -26,7 +26,7 @@ public class CourseServiceImpl implements CourseService{
     public Page<CourseDTO> courseList(Pageable page) {
         log.trace("offset = {}, pageSize = {}", page.getOffset(), page.getPageSize());
 
-        List<CourseDTO> contents = courseMapper.courseList(page.getOffset(), page.getPageSize());
+        List<CourseDTO> contents = courseMapper.courseList(page);
         int count = courseMapper.countCourses();
 
         return new PageImpl<>(contents,page,count);

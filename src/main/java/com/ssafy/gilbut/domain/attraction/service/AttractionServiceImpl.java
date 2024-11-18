@@ -19,10 +19,10 @@ public class AttractionServiceImpl implements AttractionService{
     private final AttractionMapper attractionMapper;
 
     @Override
-    public Page<AttractionDTO> searchTravelingPointByCourseId(String courseId, Pageable page) {
+    public Page<AttractionDTO> searchTravelingPointByCourseId(String courseId, Integer contentTypeId, Pageable page) {
         log.trace("offset = {}, pageSize = {}", page.getOffset(), page.getPageSize());
 
-        List<AttractionDTO> contents = attractionMapper.searchAttractionByCourseId(courseId, page);
+        List<AttractionDTO> contents = attractionMapper.searchAttractionByCourseId(courseId, contentTypeId, page);
         int count = attractionMapper.countAttractionByCourseId(courseId);
         return new PageImpl<>(contents,page,count);
     }

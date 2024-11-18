@@ -25,9 +25,13 @@
                  INNER JOIN Courses c
                             ON a.area_code = c.sido_code AND a.si_gun_gu_code = c.gugun_code
         WHERE c.id = #{courseId}
+          <if test="contentTypeId">
+              AND a.content_type_id = #{contentTypeId}
+          </if>
+
         <if test="pageable.sort.sorted">
             <trim prefix="order by">
-                <foreach item="order" index="i" collection="pageable.sort" separator=", ">
+                <foreach item="order" collection="pageable.sort" separator=", ">
                     ${order.property} ${order.direction}
                 </foreach>
             </trim>
