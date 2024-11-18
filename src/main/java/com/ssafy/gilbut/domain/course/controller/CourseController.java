@@ -3,6 +3,7 @@ package com.ssafy.gilbut.domain.course.controller;
 import com.ssafy.gilbut.advice.ApiResponse;
 import com.ssafy.gilbut.advice.status.ErrorStatus;
 import com.ssafy.gilbut.domain.course.model.dto.CourseDTO;
+import com.ssafy.gilbut.domain.course.model.dto.CourseSearchCriteria;
 import com.ssafy.gilbut.domain.course.service.CourseService;
 import com.ssafy.gilbut.exception.handler.TempHandler;
 import com.ssafy.gilbut.util.SizeConstant;
@@ -29,9 +30,17 @@ public class CourseController implements CourseControllerDocs {
     private final CourseService courseService;
     @Override
     @GetMapping("/search")
-    public ResponseEntity<?> courseSearch(Map<String, String> map) {
+    public ResponseEntity<?> courseSearch(
+            @ModelAttribute CourseSearchCriteria criteria,
+            @PageableDefault(size = SizeConstant.LIST_SIZE) Pageable page
+    ) {
+        log.trace("Search criteria: {}", criteria);
         // TODO: 코스의 테마에 맞게 추천
-        return null;
+        Page<CourseDTO> result = courseService.courseSearch(criteria, page);
+        log.trace("result={}", result);
+
+        return ResponseEntity.ok().body(ApiResponse.onSuccess(result));
+
     }
 
     @Override
@@ -62,7 +71,7 @@ public class CourseController implements CourseControllerDocs {
         try {
             filePath = Paths.get(new ClassPathResource("static/courses/" + courseId + ".gpx").getURI());
         } catch (IOException e) {
-            throw new TempHandler(ErrorStatus._INTERNAL_SERVER_ERROR);
+            throw new TempHandler(ErrorStatus.COURSE_NOT_FOUND);
         }
 
         // 파일 읽기
@@ -71,6 +80,5 @@ public class CourseController implements CourseControllerDocs {
         // 파일 내용을 응답으로 반환
         return ResponseEntity.ok(ApiResponse.onSuccess(fileContent));
     }
-
 
 }

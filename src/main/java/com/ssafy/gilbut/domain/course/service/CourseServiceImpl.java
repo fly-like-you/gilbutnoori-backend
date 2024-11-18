@@ -2,6 +2,8 @@ package com.ssafy.gilbut.domain.course.service;
 
 import com.ssafy.gilbut.domain.course.mapper.CourseMapper;
 import com.ssafy.gilbut.domain.course.model.dto.CourseDTO;
+import com.ssafy.gilbut.domain.course.model.dto.CourseSearchCriteria;
+import com.ssafy.gilbut.domain.course.model.dto.RouteDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,10 +41,27 @@ public class CourseServiceImpl implements CourseService{
                 .orElseThrow(() -> new NoSuchElementException("해당 코스가 존재하지 않습니다."));
     }
 
+
+
     @Override
-    public CourseDTO courseAttractionList(String courseId) {
-        // courseID와 일
-        return null;
+    public Page<RouteDTO> routeList(Pageable page) {
+        log.trace("offset = {}, pageSize = {}", page.getOffset(), page.getPageSize());
+
+        List<RouteDTO> contents = courseMapper.routeList(page);
+        int count = courseMapper.countRoutes();
+
+        return new PageImpl<>(contents,page,count);
+
+    }
+
+    @Override
+    public Page<CourseDTO> courseSearch(CourseSearchCriteria criteria, Pageable page) {
+        log.trace("offset = {}, pageSize = {}", page.getOffset(), page.getPageSize());
+
+        List<CourseDTO> contents = courseMapper.courseSearchBy(criteria, page);
+        int count = courseMapper.countCoursesBy(criteria);
+
+        return new PageImpl<>(contents,page,count);
     }
 
 }
