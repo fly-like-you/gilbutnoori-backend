@@ -3,7 +3,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ssafy.gilbut.domain.attraction.mapper.AttractionMapper">
-    <select id="search">
+
+    <select id="searchAttractionByCourseId">
         SELECT a.id,
                a.content_id,
                a.title,
@@ -20,9 +21,25 @@
                a.addr2,
                a.homepage,
                a.overview
-        FROM attractions a
+        FROM Attractions a
                  INNER JOIN Courses c
                             ON a.area_code = c.sido_code AND a.si_gun_gu_code = c.gugun_code
-        WHERE a.area_code = #{areaCode};
+        WHERE c.id = #{courseId}
+        <if test="pageable.sort.sorted">
+            <trim prefix="order by">
+                <foreach item="order" index="i" collection="pageable.sort" separator=", ">
+                    ${order.property} ${order.direction}
+                </foreach>
+            </trim>
+        </if>
+        LIMIT ${pageable.offset}, ${pageable.pageSize}
+    </select>
+
+    <select id="countAttractionByCourseId">
+        SELECT COUNT(*)
+        FROM Attractions a
+                 INNER JOIN Courses c
+                            ON a.area_code = c.sido_code AND a.si_gun_gu_code = c.gugun_code
+        WHERE c.id = #{courseId}
     </select>
 </mapper>
