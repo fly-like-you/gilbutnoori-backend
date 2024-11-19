@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.gilbut.domain.user.mapper.UserMapper">
+    <insert id="register" useGeneratedKeys="true" keyProperty="user.id">
+        INSERT INTO users
+            (login_id, password, email, nickname, role, status)
+        VALUE (#{user.loginId}, #{user.password}, #{user.email}, #{user.nickname}, 'USER', 'ACTIVATE')
+    </insert>
+
+
+
+    <select id="login">
+        select login_id, nickname, token
+        from users
+        where login_id = #{user.loginId} and password = #{user.password}
+    </select>
+
+    <select id="userInfo">
+        SELECT nickname, login_id, email, created_at
+        from users
+        where login_id = #{loginId}
+    </select>
+
+    <update id="saveRefreshToken">
+        update users
+        set token = #{refreshToken}
+        where login_id = #{loginId}
+    </update>
+
+    <select id="getRefreshToken">
+        select token
+        from users
+        where login_id = #{loginId}
+    </select>
+
+    <update id="deleteRefreshToken">
+        update users
+        set token = ''
+        where login_id = #{loginId}
+    </update>
+    <select id="findUserById">
+        SELECT
+    </select>
+    <!-- 아이디 중복 체크 -->
+    <select id="checkDuplicatedLoginId">
+        SELECT COUNT(*)
+        FROM Users
+        WHERE login_id = #{loginId}
+    </select>
+
+    <!-- 닉네임 중복 체크 -->
+    <select id="checkDuplicatedNickname">
+        SELECT COUNT(*)
+        FROM Users
+        WHERE nickname = #{nickname}
+    </select>
+</mapper>

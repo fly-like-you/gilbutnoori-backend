@@ -1,6 +1,8 @@
 package com.ssafy.gilbut.advice;
 
+import com.ssafy.gilbut.advice.code.BaseErrorCode;
 import com.ssafy.gilbut.advice.status.ErrorStatus;
+import com.ssafy.gilbut.exception.handler.TempHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -13,22 +15,17 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestControllerAdvice
 public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
 
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<?> handleAllException(Exception e, WebRequest request) {
-		log.error("핸들러 호출");
-		String errorMessage = e.getMessage();
-		log.error(errorMessage);
-		return handleExceptionInternalConstraint(e, ErrorStatus._INTERNAL_SERVER_ERROR, HttpHeaders.EMPTY,request);
+	@ExceptionHandler(TempHandler.class)
+	public ResponseEntity<?> handleTempHandlerException(TempHandler t, WebRequest request) {
+//		log.info(t.getMessage());
+		return handleExceptionInternalConstraint(t, t.getCode(), HttpHeaders.EMPTY, request);
 	}
-
-//	@ExceptionHandler(NoHandlerFoundException.class)
-//	@ResponseStatus(value = HttpStatus.NOT_FOUND)
-//	public ResponseEntity<?> handle404(NoHandlerFoundException ex, Model model) {
-//		log.error("404 발생 : {}", "404 page not found");
-//		model.addAttribute("msg", "해당 페이지를 찾을 수 없습니다!!!");
-//		return null;
+//	@ExceptionHandler(Exception.class)
+//	public ResponseEntity<?> handleAllException(Exception e, WebRequest request) {
+//		log.error("", e);
+//
+//		return handleExceptionInternalConstraint(e, ErrorStatus._INTERNAL_SERVER_ERROR, HttpHeaders.EMPTY, request);
 //	}
-
 
 	private ResponseEntity<Object> handleExceptionInternalConstraint(Exception e, ErrorStatus errorCommonStatus,
 																	 HttpHeaders headers, WebRequest request) {
@@ -41,5 +38,14 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
 				request
 		);
 	}
-
+	private ResponseEntity<Object> handleExceptionInternalConstraint(Exception e, BaseErrorCode baseErrorCode,
+																	 HttpHeaders headers, WebRequest request) {
+		return super.handleExceptionInternal(
+				e,
+				baseErrorCode.getReason(),
+				headers,
+				baseErrorCode.getReason().getHttpStatus(),
+				request
+		);
+	}
 }

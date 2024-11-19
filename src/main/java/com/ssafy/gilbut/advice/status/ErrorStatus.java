@@ -20,9 +20,10 @@ public enum ErrorStatus implements BaseErrorCode {
     COURSE_NOT_FOUND(HttpStatus.BAD_REQUEST, "COURSE4001", "관련 코스가 없습니다."),
 
     // 멤버 관려 에러
-    MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "MEMBER4001", "사용자가 없습니다."),
-    NICKNAME_NOT_EXIST(HttpStatus.BAD_REQUEST, "MEMBER4002", "닉네임은 필수 입니다."),
-
+    USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "MEMBER4001", "사용자가 없습니다."),
+    USER_NICKNAME_NOT_EXIST(HttpStatus.BAD_REQUEST, "MEMBER4002", "닉네임은 필수 입니다."),
+    USER_DUPLICATED_LOGIN_ID(HttpStatus.BAD_REQUEST, "MEMBER4003", "아이디가 중복되었습니다."),
+    USER_DUPLICATED_NICKNAME(HttpStatus.BAD_REQUEST, "MEMBER4004", "닉네임이 중복되었습니다."),
     // 예시,,,
     ARTICLE_NOT_FOUND(HttpStatus.NOT_FOUND, "ARTICLE4001", "게시글이 없습니다.");
 
