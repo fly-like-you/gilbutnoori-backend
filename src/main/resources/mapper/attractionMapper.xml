@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.gilbut.domain.attraction.mapper.AttractionMapper">
+
+    <select id="searchAttractionByCourseId">
+        SELECT a.id,
+               a.content_id,
+               a.title,
+               a.content_type_id,
+               a.area_code,
+               a.si_gun_gu_code,
+               a.first_image1,
+               a.first_image2,
+               a.map_level,
+               a.latitude,
+               a.longitude,
+               a.tel,
+               a.addr1,
+               a.addr2,
+               a.homepage,
+               a.overview
+        FROM Attractions a
+                 INNER JOIN Courses c
+                            ON a.area_code = c.sido_code AND a.si_gun_gu_code = c.gugun_code
+        WHERE c.id = #{courseId}
+          <if test="contentTypeId">
+              AND a.content_type_id = #{contentTypeId}
+          </if>
+
+        <if test="pageable.sort.sorted">
+            <trim prefix="order by">
+                <foreach item="order" collection="pageable.sort" separator=", ">
+                    ${order.property} ${order.direction}
+                </foreach>
+            </trim>
+        </if>
+        LIMIT ${pageable.offset}, ${pageable.pageSize}
+    </select>
+
+    <select id="countAttractionByCourseId">
+        SELECT COUNT(*)
+        FROM Attractions a
+                 INNER JOIN Courses c
+                            ON a.area_code = c.sido_code AND a.si_gun_gu_code = c.gugun_code
+        WHERE c.id = #{courseId}
+    </select>
+</mapper>

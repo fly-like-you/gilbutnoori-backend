@@ -5,11 +5,12 @@ import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
 
 @Getter
 @Builder
@@ -60,6 +61,14 @@ public class Course {
     @Size(max = 10)
     @NotNull
     private String sigun;
+
+    @Schema(description = "둘렛길 시도 코드", example = "6 (부산광역시)")
+    @NotNull
+    private Integer sidoCode;
+
+    @Schema(description = "둘렛길 구군 코드", example = "12 (sidoCode = 6 기준 수영구)")
+    @NotNull
+    private Integer gugunCode;
 
     @Schema(description = "자전거 도로 구분", example = "DNWW")
     @Size(max = 4)

@@ -1,27 +1,24 @@
 package com.ssafy.gilbut.domain.course.model.dto;
 
-import com.ssafy.gilbut.domain.course.model.entity.Route;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
-import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import java.time.LocalDate;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
-@Data
+import java.time.LocalDate;
+
+@Getter
+@Setter
 @Builder
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class CourseDTO {
     @Schema(description = "둘렛길 아이디", requiredMode = RequiredMode.REQUIRED, example = "T_CRS_MNG0000004190")
     @Size(max = 30)
     @NotNull
     private String id;
-
-    @Schema(description = "길", example = "T_THEME_MNG0000011235")
-//    @Size(max = 30)
-//    @NotNull
-    private Route route;
 
     @Schema(description = "코스 이름", example = "해파랑길 5코스")
     @Size(max = 60)
@@ -38,7 +35,6 @@ public class CourseDTO {
     private Integer level;
 
     @Schema(description = "순환형, 비순환형", example = "비순환형")
-    @Size(max = 10)
     private String cycle;
 
     @Schema(description = "코스 정보 요약", example = "진하해변을 출발해 덕하역까지 구간 - 해파랑길 울산 구간이 시작되는 코스...")
@@ -58,14 +54,17 @@ public class CourseDTO {
     @NotNull
     private String sigun;
 
+
     @Schema(description = "자전거 도로 구분", example = "DNWW")
     @Size(max = 4)
     private String roadOrBike;
 
-    @Future
     @Schema(description = "둘렛길 생성된 시간", example = "2017-01-20 04:20:00")
     private LocalDate createdAt;
 
     @Schema(description = "둘렛길 수정 시간", example = "2017-01-20 04:20:00")
     private LocalDate updatedAt;
+
+    @Schema(description = "길", example = "T_THEME_MNG0000011235")
+    private RouteDTO route;
 }
