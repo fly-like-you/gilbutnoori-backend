@@ -2,10 +2,12 @@ package com.ssafy.gilbut.advice.code;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 import org.springframework.http.HttpStatus;
 
 @Getter
 @Builder
+@ToString
 public class ErrorReasonDTO {
 
     private HttpStatus httpStatus;
