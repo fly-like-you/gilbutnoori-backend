@@ -5,7 +5,7 @@ import com.ssafy.gilbut.advice.status.ErrorStatus;
 import com.ssafy.gilbut.domain.course.model.dto.CourseDTO;
 import com.ssafy.gilbut.domain.course.model.dto.CourseSearchCriteria;
 import com.ssafy.gilbut.domain.course.service.CourseService;
-import com.ssafy.gilbut.exception.handler.TempHandler;
+import com.ssafy.gilbut.exception.handler.GeneralExceptionHandler;
 import com.ssafy.gilbut.util.SizeConstant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -71,7 +71,7 @@ public class CourseController implements CourseControllerDocs {
         try {
             filePath = Paths.get(new ClassPathResource("static/courses/" + courseId + ".gpx").getURI());
         } catch (IOException e) {
-            throw new TempHandler(ErrorStatus.COURSE_NOT_FOUND);
+            throw new GeneralExceptionHandler(ErrorStatus.COURSE_NOT_FOUND);
         }
 
         // 파일 읽기

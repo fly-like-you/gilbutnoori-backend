@@ -8,8 +8,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 
 @Tag(name = "회원 인증 컨트롤러", description = "로그인 로그아웃, 토큰처리등 회원의 인증관련 처리하는 클래스.")
 interface UserControllerDocs {
@@ -22,7 +20,7 @@ interface UserControllerDocs {
     @Hidden
     @Operation(summary = "회원인증", description = "회원 정보를 담은 Token 을 반환한다.")
     ResponseEntity<?> getInfo(
-            @Parameter(description = "인증할 회원의 아이디.", required = true) String userId,
+            @Parameter(description = "인증할 회원의 아이디.", required = true) String loginId,
             String header);
 
     // TODO: 로그아웃 (POST)
@@ -30,15 +28,18 @@ interface UserControllerDocs {
     ResponseEntity<?> logout(@Parameter(description = "로그아웃 할 회원의 아이디.", required = true) String userId);
 
     @Operation(summary = "Access Token 재발급", description = "만료된 access token 을 재발급 받는다.")
-    ResponseEntity<?> refreshToken(@RequestBody UserLoginRequestDTO memberDto, @RequestHeader("refreshToken") String token) throws Exception;
+    ResponseEntity<?> refreshToken(String accessToken, String refreshToken) throws Exception;
 
     // TODO: 회원가입 (POST)
     ResponseEntity<?> register(UserSignUpRequestDTO user);
 
     // TODO: 회원 탈퇴 (DELETE)
-    ResponseEntity<?> withdraw(String token);
+    ResponseEntity<?> withdraw(
+            @Parameter(description = "인증할 회원의 아이디.", required = true) String loginId,
+            @Parameter(description = "인증 토큰 값", required = true) String userToken
+    );
 
     // TODO: 정보 수정 (PUT)
-    ResponseEntity<?> updateUser(UserUpdateRequestDTO user);
+    ResponseEntity<?> updateUser(String accessToken, UserUpdateRequestDTO user);
 
 }

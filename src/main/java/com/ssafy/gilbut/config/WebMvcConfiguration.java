@@ -1,8 +1,6 @@
 package com.ssafy.gilbut.config;
 
-import com.ssafy.gilbut.interceptor.ConfirmInterceptor;
-import java.util.Arrays;
-import java.util.List;
+import com.ssafy.gilbut.interceptor.JWTInterceptor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -10,8 +8,10 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.Arrays;
+import java.util.List;
 
 
 //@Slf4j
@@ -23,7 +23,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 	private final List<String> patterns = Arrays.asList("");
 
 	@Autowired
-	private ConfirmInterceptor confirmInterceptor;
+	private JWTInterceptor jwtInterceptor;
 
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
@@ -35,17 +35,13 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 //				.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD")
 //				.allowedMethods("*")
 				.maxAge(1800); // 1800초 동안 preflight 결과를 캐시에 저장
-		//ㅁㄴㅇㄴㅁ
+
 	}
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(confirmInterceptor).addPathPatterns(patterns);
+		registry.addInterceptor(jwtInterceptor)
+				.excludePathPatterns("/css/**", "/images/**", "/js/**", "/user/login", "/user/signup");
 	}
 
-	@Override
-	public void addViewControllers(ViewControllerRegistry registry) {
-		registry.addViewController("/").setViewName("index2");
-	}
-	
 }

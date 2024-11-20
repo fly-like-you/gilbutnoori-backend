@@ -1,6 +1,5 @@
 package com.ssafy.gilbut.interceptor;
 
-import com.ssafy.gilbut.exception.UnAuthorizedException;
 import com.ssafy.gilbut.util.JWTUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,15 +23,12 @@ public class JWTInterceptor implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		final String token = request.getHeader(HEADER_AUTH);
+		log.debug("인증 인터셉터");
+		final String header = request.getHeader(HEADER_AUTH);
 
-		if (token != null && jwtUtil.checkToken(token)) {
-			log.info("토큰 사용 가능 : {}", token);
-			return true;
-		} else {
-			log.info("토큰 사용 불가능 : {}", token);
-			throw new UnAuthorizedException();
-		}
+		jwtUtil.checkTokenValidation(header);
+		log.info("jwt interceptor -> 토큰 유효함");
 
+		return true;
 	}
 }
