@@ -33,11 +33,10 @@ public class UserController implements UserControllerDocs {
     @Override
     @DeleteMapping("/{userId}")
     public ResponseEntity<?> withdraw(
-            @PathVariable("userId") String loginId,
             @RequestHeader("Authorization") String userToken
     ) {
         log.debug("accessToken -> {}", userToken);
-        userService.withdraw(loginId, userToken);
+        userService.withdraw(userToken);
 
         return ResponseEntity.noContent().build();
     }
@@ -64,14 +63,13 @@ public class UserController implements UserControllerDocs {
     }
 
     @Override
-    @GetMapping("/info/{userId}")
+    @GetMapping("/info")
     public ResponseEntity<?> getInfo(
-            @PathVariable("userId") String loginId,
             @RequestHeader("Authorization") String header
     ) {
 
-        log.debug("userId : {}, header : {} ", loginId, header);
-        UserInfoResponseDTO info = userService.userInfo(loginId, header);
+        log.debug("header : {} ", header);
+        UserInfoResponseDTO info = userService.userInfo(header);
 
         return ResponseEntity.ok(ApiResponse.onSuccess(info));
     }
@@ -89,9 +87,8 @@ public class UserController implements UserControllerDocs {
     @Override
     @PostMapping("/refresh")
     public ResponseEntity<?> refreshToken(
-            @RequestHeader("Authorization") String accessToken,
             @RequestHeader("RefreshToken") String refreshToken) {
-        UserTokenResponseDTO userToken = userService.refreshAccessToken(accessToken, refreshToken);
+        UserTokenResponseDTO userToken = userService.refreshAccessToken(refreshToken);
         log.debug("token -> {}", refreshToken);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.onSuccess(userToken));

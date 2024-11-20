@@ -11,15 +11,15 @@ public interface UserService {
 
     UserTokenResponseDTO login(UserLoginRequestDTO memberDto);
 
-    UserInfoResponseDTO userInfo(String loginId, String header);
+    UserInfoResponseDTO userInfo(String header);
 
     void deleteRefreshToken(String loginId);
 
-    void withdraw(String loginId, String userToken);
+    void withdraw(String userToken);
 
     UserResponseDTO register(UserSignUpRequestDTO user);
 
-    UserTokenResponseDTO refreshAccessToken(String accessToken, String refreshToken);
+    UserTokenResponseDTO refreshAccessToken(String refreshToken);
 
     void updateUser(String accessToken, UserUpdateRequestDTO user);
 }

@@ -19,23 +19,20 @@ interface UserControllerDocs {
 
     @Hidden
     @Operation(summary = "회원인증", description = "회원 정보를 담은 Token 을 반환한다.")
-    ResponseEntity<?> getInfo(
-            @Parameter(description = "인증할 회원의 아이디.", required = true) String loginId,
-            String header);
+    ResponseEntity<?> getInfo(String header);
 
     // TODO: 로그아웃 (POST)
     @Operation(summary = "로그아웃", description = "회원 정보를 담은 Token 을 제거한다.")
     ResponseEntity<?> logout(@Parameter(description = "로그아웃 할 회원의 아이디.", required = true) String userId);
 
     @Operation(summary = "Access Token 재발급", description = "만료된 access token 을 재발급 받는다.")
-    ResponseEntity<?> refreshToken(String accessToken, String refreshToken) throws Exception;
+    ResponseEntity<?> refreshToken(String refreshToken) throws Exception;
 
     // TODO: 회원가입 (POST)
     ResponseEntity<?> register(UserSignUpRequestDTO user);
 
     // TODO: 회원 탈퇴 (DELETE)
     ResponseEntity<?> withdraw(
-            @Parameter(description = "인증할 회원의 아이디.", required = true) String loginId,
             @Parameter(description = "인증 토큰 값", required = true) String userToken
     );
 

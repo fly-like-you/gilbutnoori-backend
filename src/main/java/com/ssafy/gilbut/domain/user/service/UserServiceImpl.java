@@ -27,12 +27,9 @@ public class UserServiceImpl implements UserService {
     private final JWTUtil jwtUtil;
 
     @Override
-    public void withdraw(String loginId, String userToken) {
-        String userTokenId = jwtUtil.getUserId(userToken);
-        User user = getActivatedUserByLoginId(loginId);
-
-        // 로그인 아이디와 토큰에서 추출한 아이디를 비교하기 (예외)
-        if (!userTokenId.equals(user.getLoginId())) throw new GeneralExceptionHandler(ErrorStatus.USER_LOGIN_FAILED);
+    public void withdraw(String accessToken) {
+        String userTokenId = jwtUtil.getUserId(accessToken);
+        User user = getActivatedUserByLoginId(userTokenId);
 
         userMapper.inactivateUser(user);
     }
@@ -60,7 +57,7 @@ public class UserServiceImpl implements UserService {
         String password = login.getPassword();
 
         // 비밀번호 일치 확인
-        if (!passwordEncoder.matches(password, passwordEncoder.encode(memberDto.getPassword())))
+        if (!passwordEncoder.matches(memberDto.getPassword(), password))
             throw new GeneralExceptionHandler(ErrorStatus.USER_LOGIN_FAILED);
 
         // 토큰 생성
@@ -77,13 +74,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserInfoResponseDTO userInfo(String loginId, String token) {
+    public UserInfoResponseDTO userInfo(String token) {
         // 토큰 값과 파라미터의 아이디가 일치하는지 검사
         String tokenUserLoginId = jwtUtil.getUserId(token);
-        if (!tokenUserLoginId.equals(loginId)) throw new GeneralExceptionHandler(ErrorStatus.USER_BAD_REQUEST);
 
         // 유저 데이터 가져오기
-        User user = getActivatedUserByLoginId(loginId);
+        User user = getActivatedUserByLoginId(tokenUserLoginId);
 
         return UserInfoResponseDTO.builder()
                 .loginId(user.getLoginId())
@@ -96,12 +92,12 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserTokenResponseDTO refreshAccessToken(String accessToken, String refreshToken) {
+    public UserTokenResponseDTO refreshAccessToken(String refreshToken) {
         // RefreshToken 유효성 검사하기
         jwtUtil.checkTokenValidation(refreshToken);
 
         // 토큰에서 ID 찾기
-        User user = getActivatedUserByLoginId(jwtUtil.getUserId(accessToken));
+        User user = getActivatedUserByLoginId(jwtUtil.getUserId(refreshToken));
 
         // ID로 RefreshToken 가져오기
         String authRefreshToken = getRefreshToken(user.getLoginId());

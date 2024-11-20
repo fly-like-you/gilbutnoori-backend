@@ -14,11 +14,11 @@ import java.util.*;
 @Component
 @Slf4j
 public class JWTUtil {
-
-    @Value("${jwt.access-token.expiretime}")
+    //
+    @Value("#{${jwt.access-token.expiretime} * 60 * 1000}")
     private int accessTokenExpireTime;
 
-    @Value("${jwt.refresh-token.expiretime}")
+    @Value("#{${jwt.refresh-token.expiretime} * 5 * 60 * 1000}")
     private int refreshTokenExpireTime;
 
     @Value("${jwt.secret-key}")

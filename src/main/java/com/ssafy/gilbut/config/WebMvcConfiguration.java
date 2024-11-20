@@ -41,7 +41,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(jwtInterceptor)
-				.excludePathPatterns("/css/**", "/images/**", "/js/**", "/user/login", "/user/signup");
+				.excludePathPatterns("/css/**", "/images/**", "/js/**", "/user/login", "/user/signup", "/user/refresh");
 	}
 
 }
