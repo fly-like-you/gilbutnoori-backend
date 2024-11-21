@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class CourseDTO {
+public class CourseDetailResponseDTO {
     @Schema(description = "둘렛길 아이디", requiredMode = RequiredMode.REQUIRED, example = "T_CRS_MNG0000004190")
     @Size(max = 30)
     @NotNull

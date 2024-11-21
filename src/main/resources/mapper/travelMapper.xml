@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.gilbut.domain.travel.mapper.TravelMapper">
+
+    <!-- ResultMap 정의 -->
+    <resultMap id="TravelDetailResultMap" type="TravelDetailResponseDTO">
+        <id property="id" column="travel_id"/>
+        <result property="title" column="travel_title"/>
+        <result property="content" column="travel_content"/>
+        <result property="startDate" column="start_date"/>
+
+        <!-- Course 관련 매핑 -->
+        <association property="course" javaType="CourseSimpleResponseDTO">
+            <result property="name" column="course_name"/>
+            <result property="dist" column="course_dist"/>
+            <result property="turnaround" column="course_turnaround"/>
+            <result property="level" column="course_level"/>
+        </association>
+
+        <!-- User 관련 매핑 -->
+        <association property="user" javaType="UserResponseDTO">
+            <result property="loginId" column="user_login_id"/>
+            <result property="nickname" column="nickname"/>
+            <result property="email" column="user_email"/>
+        </association>
+    </resultMap>
+
+    <!-- 쿼리 작성 -->
+    <select id="findTravelListByUserId" resultMap="TravelDetailResultMap">
+        SELECT
+            t.id as travel_id,
+            t.title as travel_title,
+            t.content as travel_content,
+            t.start_date,
+            c.name as course_name,
+            c.dist as course_dist,
+            c.turnaround as course_turnaround,
+            c.level as course_level,
+            u.login_id as user_login_id,
+            u.nickname as nickname,
+            u.email as user_email
+        FROM
+            travels t
+                LEFT JOIN courses c ON t.course_id = c.id
+                LEFT JOIN users u ON t.user_id = u.id
+        WHERE
+            t.user_id = #{userId}
+    </select>
+    <!-- 사용자의 총 여행 수 조회 -->
+    <select id="countTotalTravelByUserId" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM
+            travels
+        WHERE
+            user_id = #{userId}
+    </select>
+
+    <!-- 여행 ID로 여행 정보 조회 -->
+    <select id="findTravelByTravelId" resultMap="TravelDetailResultMap">
+        SELECT
+            t.id as travel_id,
+            t.title as travel_title,
+            t.content as travel_content,
+            t.start_date,
+            c.name as course_name,
+            c.dist as course_dist,
+            c.turnaround as course_turnaround,
+            c.level as course_level,
+            u.login_id as user_login_id,
+            u.nickname as nickname,
+            u.email as user_email
+        FROM
+            travels t
+                LEFT JOIN courses c ON t.course_id = c.id
+                LEFT JOIN users u ON t.user_id = u.id
+        WHERE
+            t.id = #{travelId}
+    </select>
+
+    <!-- 여행 정보 삭제 -->
+    <delete id="deleteTravelByTravelId">
+        DELETE FROM travels
+        WHERE id = #{travelId}
+    </delete>
+
+    <!-- 여행 정보 수정 -->
+    <update id="updateTravel">
+        UPDATE travels
+        SET
+            title = #{travel.title},
+            content = NULLIF(#{travel.content}, ''),
+            course_id = #{travel.courseId},
+            start_date = #{travel.startDate}
+        WHERE
+            id = #{travelId}
+          AND user_id = #{userId}
+    </update>
+    <!-- 새로운 여행 생성 -->
+    <insert id="travelCreate" parameterType="map" useGeneratedKeys="true" keyProperty="travel.id">
+        INSERT INTO travels (
+            user_id,
+            title,
+            content,
+            course_id,
+            start_date
+        ) VALUES (
+                     #{userId},
+                     #{travel.title},
+                     #{travel.content},
+                     #{travel.courseId},
+                     #{travel.startDate}
+                 )
+    </insert>
+
+</mapper>

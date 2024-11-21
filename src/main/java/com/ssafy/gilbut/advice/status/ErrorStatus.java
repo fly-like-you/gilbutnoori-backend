@@ -12,12 +12,15 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // 가장 일반적인 응답
     _INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON500", "서버 에러, 관리자에게 문의 바랍니다."),
-    _BAD_REQUEST(HttpStatus.BAD_REQUEST,"COMMON400","잘못된 요청입니다."),
-    _UNAUTHORIZED(HttpStatus.UNAUTHORIZED,"COMMON401","인증이 필요합니다."),
+    _BAD_REQUEST(HttpStatus.BAD_REQUEST, "COMMON400", "잘못된 요청입니다."),
+    _UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "COMMON401", "인증이 필요합니다."),
     _FORBIDDEN(HttpStatus.FORBIDDEN, "COMMON403", "금지된 요청입니다."),
 
     // 코스 관련 에러
     COURSE_NOT_FOUND(HttpStatus.BAD_REQUEST, "COURSE4001", "관련 코스가 없습니다."),
+
+    // 여행 (Travel) 관련 에러
+    TRAVEL_NOT_FOUND(HttpStatus.BAD_REQUEST, "TRAVEL4001", "ID와 일치하는 여행 계획이 없습니다."),
 
     // 멤버 관려 에러
     USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "MEMBER4001", "사용자가 없습니다."),
@@ -28,7 +31,6 @@ public enum ErrorStatus implements BaseErrorCode {
     USER_BAD_REQUEST(HttpStatus.BAD_REQUEST, "MEMBER4006", "토큰 값과 요청한 아이디가 일치하지않습니다."),
 
     // 토큰 관련 에러
-// 토큰 관련 에러
     TOKEN_EXPIRED_ERROR(HttpStatus.UNAUTHORIZED, "TOKEN4001", "토큰의 유효기간이 만료되었습니다."),
     TOKEN_MALFORMED_ERROR(HttpStatus.UNAUTHORIZED, "TOKEN4002", "토큰이 변형되었습니다."),
     TOKEN_UNSUPPORTED_ERROR(HttpStatus.BAD_REQUEST, "TOKEN4003", "지원되지 않는 형식의 토큰입니다."),

@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void withdraw(String accessToken) {
-        String userTokenId = jwtUtil.getUserId(accessToken);
+        String userTokenId = jwtUtil.getUserLoginId(accessToken);
         User user = getActivatedUserByLoginId(userTokenId);
 
         userMapper.inactivateUser(user);
@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
         log.debug("register done => user: {}", user);
 
         return UserResponseDTO.builder()
-                .username("asd")
+                .nickname("asd")
                 .build();
     }
 
@@ -61,8 +61,8 @@ public class UserServiceImpl implements UserService {
             throw new GeneralExceptionHandler(ErrorStatus.USER_LOGIN_FAILED);
 
         // 토큰 생성
-        String accessToken = jwtUtil.createAccessToken(login.getLoginId());
-        String refreshToken = jwtUtil.createRefreshToken(login.getLoginId());
+        String accessToken = jwtUtil.createAccessToken(login);
+        String refreshToken = jwtUtil.createRefreshToken(login);
 
         // Refresh Token만 DB에 저장
         saveRefreshToken(login.getLoginId(), refreshToken);
@@ -76,7 +76,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserInfoResponseDTO userInfo(String token) {
         // 토큰 값과 파라미터의 아이디가 일치하는지 검사
-        String tokenUserLoginId = jwtUtil.getUserId(token);
+        String tokenUserLoginId = jwtUtil.getUserLoginId(token);
 
         // 유저 데이터 가져오기
         User user = getActivatedUserByLoginId(tokenUserLoginId);
@@ -97,14 +97,14 @@ public class UserServiceImpl implements UserService {
         jwtUtil.checkTokenValidation(refreshToken);
 
         // 토큰에서 ID 찾기
-        User user = getActivatedUserByLoginId(jwtUtil.getUserId(refreshToken));
+        User user = getActivatedUserByLoginId(jwtUtil.getUserLoginId(refreshToken));
 
         // ID로 RefreshToken 가져오기
         String authRefreshToken = getRefreshToken(user.getLoginId());
         if (!authRefreshToken.equals(refreshToken)) throw new GeneralExceptionHandler(ErrorStatus.USER_BAD_REQUEST);
 
         // RefreshToken 저장하기
-        String newToken = jwtUtil.createAccessToken(user.getLoginId());
+        String newToken = jwtUtil.createAccessToken(user);
         log.debug("정상적으로 access token 재발급!!!");
 
         return UserTokenResponseDTO.builder()
@@ -116,7 +116,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUser(String accessToken, UserUpdateRequestDTO requestUser) {
         // 토큰으로부터 사용자의 정보 가져오기
-        User user = getActivatedUserByLoginId(jwtUtil.getUserId(accessToken));
+        User user = getActivatedUserByLoginId(jwtUtil.getUserLoginId(accessToken));
 
         // 비밀번호 일치 확인
         if (!passwordEncoder.matches(user.getPassword(), passwordEncoder.encode(requestUser.getOldPassword())))
@@ -128,7 +128,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteRefreshToken(String accessToken) {
         // 토큰으로부터 사용자의 아이디 찾아오기
-        String userTokenId = jwtUtil.getUserId(accessToken);
+        String userTokenId = jwtUtil.getUserLoginId(accessToken);
         log.debug("userTokenId -> {}", userTokenId);
 
         // DB에서 token값 삭제하기 (로그아웃)

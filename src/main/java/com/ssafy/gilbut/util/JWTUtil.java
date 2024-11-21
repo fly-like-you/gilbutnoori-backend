@@ -1,8 +1,12 @@
 package com.ssafy.gilbut.util;
 
 import com.ssafy.gilbut.advice.status.ErrorStatus;
+import com.ssafy.gilbut.domain.user.model.entity.User;
 import com.ssafy.gilbut.exception.handler.GeneralExceptionHandler;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtParser;
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,16 +28,25 @@ public class JWTUtil {
     @Value("${jwt.secret-key}")
     private String secretKey;
 
-    public String createAccessToken(String userId) {
-        return create(userId, "accessToken", accessTokenExpireTime);
+    public String createAccessToken(User user) {
+        return create(user, "accessToken", accessTokenExpireTime);
     }
 
     //	AccessToken에 비해 유효기간을 길게 설정.
-    public String createRefreshToken(String userId) {
-        return create(userId, "refreshToken", refreshTokenExpireTime);
+    public String createRefreshToken(User user) {
+        return create(user, "refreshToken", refreshTokenExpireTime);
     }
 
-    public String getUserId(String header) {
+    public Integer getUserId(String header) {
+        String token = getToken(header);
+        Jws<Claims> claims = getClaimsJws(token);
+
+        Map<String, Object> value = claims.getPayload();
+        log.info("value : {}", value);
+
+        return Integer.parseInt(value.get("id").toString());
+    }
+    public String getUserLoginId(String header) {
         String token = getToken(header);
         Jws<Claims> claims = getClaimsJws(token);
 
@@ -58,7 +71,7 @@ public class JWTUtil {
     }
 
     //	Token 발금
-    private String create(String loginId, String subject, long expireTime) {
+    private String create(User user, String subject, long expireTime) {
         SecretKey key = getSecretKey();
         Map<String, String> headers = new HashMap<>();
         headers.put("typ", "JWT");
@@ -68,7 +81,8 @@ public class JWTUtil {
                 .add(headers)
                 .and()
                 .subject(subject)
-                .claim("loginId", loginId)
+                .claim("loginId", user.getLoginId())
+                .claim("id", user.getId())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + expireTime))
                 .signWith(key, Jwts.SIG.HS256)

@@ -1,7 +1,7 @@
 package com.ssafy.gilbut.domain.course.service;
 
 import com.ssafy.gilbut.domain.course.mapper.CourseMapper;
-import com.ssafy.gilbut.domain.course.model.dto.CourseDTO;
+import com.ssafy.gilbut.domain.course.model.dto.CourseDetailResponseDTO;
 import com.ssafy.gilbut.domain.course.model.dto.CourseSearchCriteria;
 import com.ssafy.gilbut.domain.course.model.dto.RouteDTO;
 import lombok.RequiredArgsConstructor;
@@ -25,17 +25,17 @@ public class CourseServiceImpl implements CourseService{
     private String openApiKey;
 
     @Override
-    public Page<CourseDTO> courseList(Pageable page) {
+    public Page<CourseDetailResponseDTO> courseList(Pageable page) {
         log.trace("offset = {}, pageSize = {}", page.getOffset(), page.getPageSize());
 
-        List<CourseDTO> contents = courseMapper.courseList(page);
+        List<CourseDetailResponseDTO> contents = courseMapper.courseList(page);
         int count = courseMapper.countCourses();
 
         return new PageImpl<>(contents,page,count);
     }
 
     @Override
-    public CourseDTO courseDetail(String courseId) {
+    public CourseDetailResponseDTO courseDetail(String courseId) {
         return courseMapper
                 .courseDetail(courseId)
                 .orElseThrow(() -> new NoSuchElementException("해당 코스가 존재하지 않습니다."));
@@ -55,10 +55,10 @@ public class CourseServiceImpl implements CourseService{
     }
 
     @Override
-    public Page<CourseDTO> courseSearch(CourseSearchCriteria criteria, Pageable page) {
+    public Page<CourseDetailResponseDTO> courseSearch(CourseSearchCriteria criteria, Pageable page) {
         log.trace("offset = {}, pageSize = {}", page.getOffset(), page.getPageSize());
 
-        List<CourseDTO> contents = courseMapper.courseSearchBy(criteria, page);
+        List<CourseDetailResponseDTO> contents = courseMapper.courseSearchBy(criteria, page);
         int count = courseMapper.countCoursesBy(criteria);
 
         return new PageImpl<>(contents,page,count);

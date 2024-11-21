@@ -1,6 +1,6 @@
 package com.ssafy.gilbut.domain.course.mapper;
 
-import com.ssafy.gilbut.domain.course.model.dto.CourseDTO;
+import com.ssafy.gilbut.domain.course.model.dto.CourseDetailResponseDTO;
 import com.ssafy.gilbut.domain.course.model.dto.CourseSearchCriteria;
 import com.ssafy.gilbut.domain.course.model.dto.RouteDTO;
 import org.apache.ibatis.annotations.Mapper;
@@ -12,9 +12,9 @@ import java.util.Optional;
 
 @Mapper
 public interface CourseMapper {
-    List<CourseDTO> courseList(@Param("pageable") Pageable pageable);
+    List<CourseDetailResponseDTO> courseList(@Param("pageable") Pageable pageable);
 
-    Optional<CourseDTO> courseDetail(@Param("courseId") String courseId);
+    Optional<CourseDetailResponseDTO> courseDetail(@Param("courseId") String courseId);
 
     List<RouteDTO> routeList(@Param("pageable") Pageable page);
 
@@ -24,6 +24,6 @@ public interface CourseMapper {
 
     int countCoursesBy(@Param("criteria") CourseSearchCriteria criteria);
 
-    List<CourseDTO> courseSearchBy(@Param("criteria") CourseSearchCriteria criteria,
-                                  @Param("pageable") Pageable pageable);
+    List<CourseDetailResponseDTO> courseSearchBy(@Param("criteria") CourseSearchCriteria criteria,
+                                                 @Param("pageable") Pageable pageable);
 }

@@ -13,5 +13,5 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CourseListDTO {
-    private List<CourseDTO> courses = new ArrayList<>();
+    private List<CourseDetailResponseDTO> courses = new ArrayList<>();
 }

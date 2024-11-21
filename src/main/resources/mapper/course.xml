@@ -4,7 +4,7 @@
 
 <mapper namespace="com.ssafy.gilbut.domain.course.mapper.CourseMapper">
     <!-- ResultMap 정의 -->
-    <resultMap id="CourseRouteResultMap" type="CourseDTO">
+    <resultMap id="CourseRouteResultMap" type="CourseDetailResponseDTO">
         <!-- Course 필드 매핑 -->
         <id property="id" column="course_id"/>
         <result property="name" column="course_name"/>
@@ -36,7 +36,7 @@
     </resultMap>
 
     <!-- 쿼리 시작 -->
-    <select id="courseList" resultType="CourseDTO">
+    <select id="courseList" resultType="CourseDetailResponseDTO">
         select c.id,
         c.route_id,
         c.name,

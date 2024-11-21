@@ -2,7 +2,7 @@ package com.ssafy.gilbut.domain.course.controller;
 
 import com.ssafy.gilbut.advice.ApiResponse;
 import com.ssafy.gilbut.advice.status.ErrorStatus;
-import com.ssafy.gilbut.domain.course.model.dto.CourseDTO;
+import com.ssafy.gilbut.domain.course.model.dto.CourseDetailResponseDTO;
 import com.ssafy.gilbut.domain.course.model.dto.CourseSearchCriteria;
 import com.ssafy.gilbut.domain.course.service.CourseService;
 import com.ssafy.gilbut.exception.handler.GeneralExceptionHandler;
@@ -36,7 +36,7 @@ public class CourseController implements CourseControllerDocs {
     ) {
         log.trace("Search criteria: {}", criteria);
         // TODO: 코스의 테마에 맞게 추천
-        Page<CourseDTO> result = courseService.courseSearch(criteria, page);
+        Page<CourseDetailResponseDTO> result = courseService.courseSearch(criteria, page);
         log.trace("result={}", result);
 
         return ResponseEntity.ok().body(ApiResponse.onSuccess(result));
@@ -49,7 +49,7 @@ public class CourseController implements CourseControllerDocs {
             @RequestParam Map<String, Object> paramMap,
             @PageableDefault(size = SizeConstant.LIST_SIZE) Pageable page
     ) {
-        Page<CourseDTO> result =  courseService.courseList(page);
+        Page<CourseDetailResponseDTO> result =  courseService.courseList(page);
         log.trace("result={}", result);
 
         return ResponseEntity.ok().body(ApiResponse.onSuccess(result));
@@ -58,9 +58,9 @@ public class CourseController implements CourseControllerDocs {
     @Override
     @GetMapping("/{courseId}")
     public ResponseEntity<?> courseDetail(@PathVariable String courseId) {
-        CourseDTO courseDTO = courseService.courseDetail(courseId);
+        CourseDetailResponseDTO courseDetailResponseDTO = courseService.courseDetail(courseId);
 
-        return ResponseEntity.ok(ApiResponse.onSuccess(courseDTO));
+        return ResponseEntity.ok(ApiResponse.onSuccess(courseDetailResponseDTO));
     }
 
     @Override
