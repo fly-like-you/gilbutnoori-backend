@@ -14,7 +14,10 @@ import lombok.NoArgsConstructor;
 public class PlanUpdateRequestDTO {
 
     @Schema(description = "관광지 ID", example = "1")
-    private Long attractionId;
+    private Integer attractionId;
+
+    @Schema(description = "여행 ID", example = "1")
+    private Integer travelId;
 
     @Schema(description = "코스 ID", example = "COURSE_001")
     private String courseId;

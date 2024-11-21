@@ -25,29 +25,65 @@
             <result property="nickname" column="nickname"/>
             <result property="email" column="user_email"/>
         </association>
+
+        <!-- Plans 관련 매핑 -->
+        <collection property="plans" ofType="PlanResponseDTO">
+            <id property="id" column="plan_id"/>
+            <result property="travelId" column="travel_id"/>
+            <result property="order" column="plan_order"/>
+
+            <!-- Attraction 관련 매핑 -->
+            <association property="attraction" javaType="AttractionDTO">
+                <id property="id" column="attraction_id"/>
+                <result property="title" column="attraction_name"/>
+                <!-- AttractionDTO의 다른 필드들 추가 -->
+            </association>
+
+            <!-- Course 관련 매핑 -->
+            <association property="course" javaType="CourseSimpleResponseDTO">
+                <result property="name" column="course_name"/>
+                <result property="dist" column="course_dist"/>
+                <result property="turnaround" column="course_turnaround"/>
+                <result property="level" column="course_level"/>
+            </association>
+        </collection>
     </resultMap>
 
-    <!-- 쿼리 작성 -->
     <select id="findTravelListByUserId" resultMap="TravelDetailResultMap">
         SELECT
-            t.id as travel_id,
-            t.title as travel_title,
-            t.content as travel_content,
+            t.id AS travel_id,
+            t.title AS travel_title,
+            t.content AS travel_content,
             t.start_date,
-            c.name as course_name,
-            c.dist as course_dist,
-            c.turnaround as course_turnaround,
-            c.level as course_level,
-            u.login_id as user_login_id,
-            u.nickname as nickname,
-            u.email as user_email
-        FROM
-            travels t
-                LEFT JOIN courses c ON t.course_id = c.id
-                LEFT JOIN users u ON t.user_id = u.id
-        WHERE
-            t.user_id = #{userId}
+
+            /* Course 정보 */
+            c.name AS course_name,
+            c.dist AS course_dist,
+            c.turnaround AS course_turnaround,
+            c.level AS course_level,
+
+            /* User 정보 */
+            u.login_id AS user_login_id,
+            u.nickname,
+            u.email AS user_email,
+
+            /* Plan 정보 */
+            p.id AS plan_id,
+            p.order AS plan_order,
+
+            /* Attraction 정보 */
+            a.id AS attraction_id,
+            a.title AS attraction_name
+
+        FROM travels t
+                 INNER JOIN courses c ON t.course_id = c.id
+                 INNER JOIN users u ON t.user_id = u.id
+                 LEFT JOIN plans p ON t.id = p.travel_id
+                 LEFT JOIN attractions a ON p.attraction_id = a.id
+        WHERE t.user_id = #{userId}
+        ORDER BY t.start_date DESC, p.order ASC
     </select>
+
     <!-- 사용자의 총 여행 수 조회 -->
     <select id="countTotalTravelByUserId" resultType="int">
         SELECT
@@ -61,23 +97,37 @@
     <!-- 여행 ID로 여행 정보 조회 -->
     <select id="findTravelByTravelId" resultMap="TravelDetailResultMap">
         SELECT
-            t.id as travel_id,
-            t.title as travel_title,
-            t.content as travel_content,
+            t.id AS travel_id,
+            t.title AS travel_title,
+            t.content AS travel_content,
             t.start_date,
-            c.name as course_name,
-            c.dist as course_dist,
-            c.turnaround as course_turnaround,
-            c.level as course_level,
-            u.login_id as user_login_id,
-            u.nickname as nickname,
-            u.email as user_email
-        FROM
-            travels t
-                LEFT JOIN courses c ON t.course_id = c.id
-                LEFT JOIN users u ON t.user_id = u.id
-        WHERE
-            t.id = #{travelId}
+
+            /* Course 정보 */
+            c.name AS course_name,
+            c.dist AS course_dist,
+            c.turnaround AS course_turnaround,
+            c.level AS course_level,
+
+            /* User 정보 */
+            u.login_id AS user_login_id,
+            u.nickname,
+            u.email AS user_email,
+
+            /* Plan 정보 */
+            p.id AS plan_id,
+            p.order AS plan_order,
+
+            /* Attraction 정보 */
+            a.id AS attraction_id,
+            a.title AS attraction_name
+
+        FROM travels t
+                 INNER JOIN courses c ON t.course_id = c.id
+                 INNER JOIN users u ON t.user_id = u.id
+                 LEFT JOIN plans p ON t.id = p.travel_id
+                 LEFT JOIN attractions a ON p.attraction_id = a.id
+        WHERE t.id = #{travelId}
+        ORDER BY p.order ASC
     </select>
 
     <!-- 여행 정보 삭제 -->

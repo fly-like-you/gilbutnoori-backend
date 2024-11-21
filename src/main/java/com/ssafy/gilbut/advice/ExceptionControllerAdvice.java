@@ -58,6 +58,7 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<?> handleAllException(Exception e, WebRequest request) {
 		log.error("Exception Handler: {}", e.getMessage());
+		e.printStackTrace();
 		return ResponseEntity
 				.status(HttpStatus.INTERNAL_SERVER_ERROR)
 				.body(ApiResponse.onFailure(

@@ -24,20 +24,7 @@ public class TravelController implements TravelControllerDocs {
 
     private final TravelService travelService;
 
-    /**
-     * @param accessToken
-     * @param travelCreateRequestDTO
-     * @return
-     */
-    @Override
-    @PostMapping
-    public ResponseEntity<?> travelCreate(
-            @RequestHeader("Authorization") String accessToken,
-            @RequestBody TravelCreateRequestDTO travelCreateRequestDTO
-    ) {
-        travelService.travelCreate(accessToken, travelCreateRequestDTO);
-        return ResponseEntity.noContent().build();
-    }
+
 
     /**
      * @param accessToken
@@ -70,6 +57,21 @@ public class TravelController implements TravelControllerDocs {
         log.info("travel: {}", travel);
 
         return ResponseEntity.ok(ApiResponse.onSuccess(travel));
+    }
+
+    /**
+     * @param accessToken
+     * @param travelCreateRequestDTO
+     * @return
+     */
+    @Override
+    @PostMapping
+    public ResponseEntity<?> travelCreate(
+            @RequestHeader("Authorization") String accessToken,
+            @RequestBody TravelCreateRequestDTO travelCreateRequestDTO
+    ) {
+        travelService.travelCreate(accessToken, travelCreateRequestDTO);
+        return ResponseEntity.noContent().build();
     }
 
     /**

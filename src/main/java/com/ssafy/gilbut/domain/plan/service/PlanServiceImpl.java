@@ -1,19 +1,20 @@
 package com.ssafy.gilbut.domain.plan.service;
 
+import com.ssafy.gilbut.advice.status.ErrorStatus;
 import com.ssafy.gilbut.domain.plan.mapper.PlanMapper;
 import com.ssafy.gilbut.domain.plan.model.dto.request.PlanCreateRequestDTO;
 import com.ssafy.gilbut.domain.plan.model.dto.request.PlanUpdateRequestDTO;
 import com.ssafy.gilbut.domain.plan.model.dto.response.PlanResponseDTO;
+import com.ssafy.gilbut.exception.handler.GeneralExceptionHandler;
 import com.ssafy.gilbut.util.JWTUtil;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,16 +25,15 @@ public class PlanServiceImpl implements PlanService {
     private final PlanMapper planMapper;
 
     @Override
-    public PlanResponseDTO createPlan(String accessToken, PlanCreateRequestDTO requestDTO) {
+    public void createPlans(String accessToken, List<PlanCreateRequestDTO> plans) {
         Integer userId = jwtUtil.getUserId(accessToken);
         log.info("Creating plan for user: {}", userId);
 
-        planMapper.insertPlan(requestDTO);
-        Optional<PlanResponseDTO> result = planMapper.findPlanById(requestDTO.getId());
-        log.debug("Created plan: {}", result);
-
-        return result.orElseThrow(() -> new RuntimeException("Plan creation failed"));
+        validatePlans(plans);
+        planMapper.insertPlans(plans);
     }
+
+
 
     @Override
     public PlanResponseDTO getPlan(String accessToken, Integer planId) {
@@ -60,7 +60,7 @@ public class PlanServiceImpl implements PlanService {
     }
 
     @Override
-    public PlanResponseDTO updatePlan(String accessToken, Integer planId, PlanUpdateRequestDTO requestDTO) {
+    public PlanResponseDTO updatePlan(String accessToken, Integer planId, List<PlanUpdateRequestDTO> plans) {
         Integer userId = jwtUtil.getUserId(accessToken);
         log.info("Updating plan {} for user: {}", planId, userId);
 
@@ -78,5 +78,19 @@ public class PlanServiceImpl implements PlanService {
 
         planMapper.deletePlan(planId);
         log.debug("Plan deleted successfully");
+    }
+
+    private static void validatePlans(List<PlanCreateRequestDTO> plans) {
+        // 상호 베타 검증
+        if (!plans.stream().allMatch((plan) -> (plan.getAttractionId() == null) ^ (plan.getCourseId() == null))) {
+            throw new GeneralExceptionHandler(ErrorStatus.PLAN_ATTRACTION_DUPLICATED_ERROR);
+        }
+        // order 중복 검증
+        if (plans.stream()
+                .map(PlanCreateRequestDTO::getOrder)
+                .distinct()
+                .count() != plans.size()) {
+            throw new GeneralExceptionHandler(ErrorStatus.PLAN_ORDER_DUPLICATED_ERROR);
+        }
     }
 }

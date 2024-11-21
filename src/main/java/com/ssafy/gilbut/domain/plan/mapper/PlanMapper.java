@@ -13,7 +13,7 @@ import java.util.Optional;
 @Mapper
 public interface PlanMapper {
 
-    void insertPlan(@Param("dto") PlanCreateRequestDTO dto);
+    void insertPlans(@Param("dto") List<PlanCreateRequestDTO> dto);
 
     Optional<PlanResponseDTO> findPlanById(@Param("planId") Integer planId);
 

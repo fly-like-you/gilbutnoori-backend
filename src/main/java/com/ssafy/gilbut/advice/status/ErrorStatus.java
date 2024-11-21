@@ -22,7 +22,11 @@ public enum ErrorStatus implements BaseErrorCode {
     // 여행 (Travel) 관련 에러
     TRAVEL_NOT_FOUND(HttpStatus.BAD_REQUEST, "TRAVEL4001", "ID와 일치하는 여행 계획이 없습니다."),
 
-    // 멤버 관려 에러
+    // 여행 계획 (Plan) 관련 에러
+    PLAN_ATTRACTION_DUPLICATED_ERROR(HttpStatus.BAD_REQUEST, "PLAN4001", "여행지와 둘렛길이 중복됩니다."),
+    PLAN_ORDER_DUPLICATED_ERROR(HttpStatus.BAD_REQUEST, "PLAN4002", "여행지 탐방 순서가 중복됩니다."),
+
+    // 멤버 관련 에러
     USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "MEMBER4001", "사용자가 없습니다."),
     USER_NICKNAME_NOT_EXIST(HttpStatus.BAD_REQUEST, "MEMBER4002", "닉네임은 필수 입니다."),
     USER_DUPLICATED_LOGIN_ID(HttpStatus.BAD_REQUEST, "MEMBER4003", "아이디가 중복되었습니다."),
