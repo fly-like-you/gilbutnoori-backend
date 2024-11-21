@@ -9,8 +9,8 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@Schema(description = "코스 간단 정보 응답 DTO")
 public class CourseSimpleResponseDTO {
-
     @Schema(description = "코스 이름", example = "해파랑길 5코스")
     private String name;
 
