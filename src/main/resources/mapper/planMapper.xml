@@ -4,88 +4,100 @@
 
 <mapper namespace="com.ssafy.gilbut.domain.plan.mapper.PlanMapper">
     <!-- Plan ResultMap 정의 -->
-    <resultMap id="PlanResultMap" type="PlanResponseDTO">
+    <resultMap id="PlanResultMap" type="Plan">
         <id property="id" column="plan_id"/>
-        <result property="travelId" column="travel_id"/>
-        <result property="order" column="plan_order"/>
+        <result property="sequence" column="plan_sequence"/>
+
+        <!-- Travel 관련 매핑 -->
+        <association property="travel" javaType="Travel">
+            <id property="id" column="travel_id"/>
+            <association property="user" javaType="User">
+                <id property="id" column="user_id"/>
+            </association>
+        </association>
 
         <!-- Attraction 관련 매핑 -->
-        <association property="attraction" javaType="AttractionDTO">
+        <association property="attraction" javaType="Attraction">
             <id property="id" column="attraction_id"/>
             <result property="title" column="attraction_name"/>
-            <!-- AttractionDTO의 다른 필드들 추가 -->
+            <result property="contentTypeId" column="attraction_content_type_id"/>
+            <result property="siGunGuCode" column="attraction_si_gun_gu_code"/>
+            <result property="firstImage1" column="attraction_first_image1"/>
+            <result property="firstImage2" column="attraction_first_image2"/>
+            <result property="mapLevel" column="attraction_map_level"/>
+            <result property="latitude" column="attraction_latitude"/>
+            <result property="longitude" column="attraction_longitude"/>
+            <result property="tel" column="attraction_tel"/>
+            <result property="addr1" column="attraction_addr1"/>
+            <result property="addr2" column="attraction_addr2"/>
+            <result property="homepage" column="attraction_homepage"/>
+            <result property="overview" column="attraction_overview"/>
         </association>
 
         <!-- Course 관련 매핑 -->
-        <association property="course" javaType="CourseSimpleResponseDTO">
+        <association property="course" javaType="Course">
+            <result property="id" column="course_id"/>
             <result property="name" column="course_name"/>
             <result property="dist" column="course_dist"/>
             <result property="turnaround" column="course_turnaround"/>
             <result property="level" column="course_level"/>
-        </association>
+            <result property="cycle" column="course_cycle"/>
+            <result property="summary" column="course_summary"/>
+            <result property="detail" column="course_detail"/>
+            <result property="travelPoint" column="course_travel_point"/>
+            <result property="travelerInfo" column="course_traveler_info"/>
+            <result property="sigun" column="course_sigun"/>
+            <result property="sidoCode" column="course_sido_code"/>
+            <result property="gugunCode" column="course_gugun_code"/>
+            <result property="roadOrBike" column="course_road_or_bike"/>
+            <result property="createdAt" column="course_created_at"/>
+            <result property="updatedAt" column="course_updated_at"/>
 
+            <!-- Route 관련 매핑 -->
+            <association property="route" javaType="Route">
+                <id property="id" column="route_id"/>
+                <result property="name" column="route_name"/>
+                <result property="summary" column="route_summary"/>
+                <result property="detail" column="route_detail"/>
+                <result property="roadOrBike" column="route_road_or_bike"/>
+                <result property="createdAt" column="route_created_at"/>
+                <result property="updatedAt" column="route_updated_at"/>
+            </association>
+        </association>
     </resultMap>
 
-    <insert id="insertPlans" parameterType="PlanCreateRequestDTO" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO plans (
-            attraction_id,
-            travel_id,
-            course_id,
-            `order`
-        ) VALUES
-              <foreach collection="dto" item="plan" separator=",">
-              (
-                     #{plan.attractionId},
-                     #{plan.travelId},
-                     #{plan.courseId},
-                     #{plan.order}
-                 )
-              </foreach>
-    </insert>
 
     <!-- 계획 ID로 단일 계획 조회 -->
     <select id="findPlanById" resultMap="PlanResultMap">
         SELECT
-            p.id as plan_id,
-            p.travel_id,
-            p.order,
-            a.id as attraction_id,
-            a.title as attraction_name,
-            /* attraction의 다른 필드들 */
-            c.name as course_name,
-            c.dist as course_dist,
-            c.turnaround as course_turnaround,
-            c.level as course_level
-        FROM
-            plans p
-                LEFT JOIN attractions a ON p.attraction_id = a.id
-                LEFT JOIN courses c ON p.course_id = c.id
-        WHERE
-            p.id = #{planId}
+        <include refid="planColumns"/>,
+        <include refid="attractionColumns"/>,
+        <include refid="courseColumns"/>,
+        <include refid="routeColumns"/>
+        FROM plans p
+        LEFT JOIN travels t ON p.travel_id = t.id
+        LEFT JOIN users u ON t.user_id = u.id
+        LEFT JOIN attractions a ON p.attraction_id = a.id
+        LEFT JOIN courses c ON p.course_id = c.id
+        LEFT JOIN routes r ON c.route_id = r.id
+        WHERE p.id = #{planId}
     </select>
 
     <!-- 사용자 ID로 계획 목록 조회 -->
     <select id="findPlansByUserId" resultMap="PlanResultMap">
         SELECT
-            p.id as plan_id,
-            p.travel_id,
-            p.order,
-            a.id as attraction_id,
-            a.title as attraction_name,
-            /* attraction의 다른 필드들 */
-            c.name as course_name,
-            c.dist as course_dist,
-            c.turnaround as course_turnaround,
-            c.level as course_level
-        FROM
-            plans p
-                LEFT JOIN attractions a ON p.attraction_id = a.id
-                LEFT JOIN courses c ON p.course_id = c.id
-                INNER JOIN travels t ON p.travel_id = t.id
-        WHERE
-            t.user_id = #{userId}
-        ORDER BY
-            p.travel_id, p.order
+        <include refid="planColumns"/>,
+        <include refid="attractionColumns"/>,
+        <include refid="courseColumns"/>,
+        <include refid="routeColumns"/>
+        FROM plans p
+        LEFT JOIN travels t ON p.travel_id = t.id
+        LEFT JOIN users u ON t.user_id = u.id
+        LEFT JOIN attractions a ON p.attraction_id = a.id
+        LEFT JOIN courses c ON p.course_id = c.id
+        LEFT JOIN routes r ON c.route_id = r.id
+        WHERE t.user_id = #{userId}
+        <include refid="pagination"/>
     </select>
 
     <select id="countPlansByUserId" resultType="int">
@@ -94,19 +106,123 @@
                  JOIN travels t ON p.travel_id = t.id
         WHERE t.user_id = #{userId}
     </select>
+    <select id="findPlansByPlanIds" resultMap="PlanResultMap">
+        SELECT
+        <include refid="planColumns"/>,
+        <include refid="attractionColumns"/>,
+        <include refid="courseColumns"/>,
+        <include refid="routeColumns"/>
+        FROM plans p
+        LEFT JOIN travels t ON p.travel_id = t.id
+        LEFT JOIN users u ON t.user_id = u.id
+        LEFT JOIN attractions a ON p.attraction_id = a.id
+        LEFT JOIN courses c ON p.course_id = c.id
+        LEFT JOIN routes r ON c.route_id = r.id
+        WHERE 1=1
+        AND
+            <foreach collection="ids" item="id" separator=" ">
+                p.id = #{id} OR
+            </foreach>
+                1=0
+    </select>
 
-    <update id="updatePlan">
+    <insert id="insertPlans" parameterType="com.ssafy.gilbut.domain.plan.model.dto.request.PlanRequest$CreateDTO" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO plans (
+        attraction_id,
+        travel_id,
+        course_id,
+        `sequence`
+        ) VALUES
+        <foreach collection="dto" item="plan" separator=",">
+            (
+            #{plan.attractionId},
+            #{plan.travelId},
+            #{plan.courseId},
+            #{plan.sequence}
+            )
+        </foreach>
+    </insert>
+    <update id="updatePlans">
         UPDATE plans
-        SET
-            attraction_id = #{dto.attractionId},
-            course_id = #{dto.courseId},
-            `order` = #{dto.order}
+        SET attraction_id = #{dto.attractionId},
+            course_id     = #{dto.courseId},
+            `sequence`       = #{dto.sequence}
         WHERE id = #{planId}
     </update>
 
-    <delete id="deletePlan">
-        DELETE FROM plans
-        WHERE id = #{planId}
+    <delete id="deletePlanByTravelId">
+        DELETE
+        FROM plans
+        WHERE travel_id = #{travelId}
     </delete>
+
+    <!-- 공통 컬럼 정의 -->
+    <sql id="planColumns">
+    p.id as plan_id,
+    p.travel_id,
+    p.sequence as plan_sequence
+    </sql>
+    <sql id="travelColumns">
+        /* Travel 관련 컬럼 */
+    t.id as travel_id,
+    u.id as user_id
+    </sql>
+    <sql id="attractionColumns">
+    a.id as attraction_id,
+    a.title as attraction_name,
+    a.content_type_id as attraction_content_type_id,
+    a.si_gun_gu_code as attraction_si_gun_gu_code,
+    a.first_image1 as attraction_first_image1,
+    a.first_image2 as attraction_first_image2,
+    a.map_level as attraction_map_level,
+    a.latitude as attraction_latitude,
+    a.longitude as attraction_longitude,
+    a.tel as attraction_tel,
+    a.addr1 as attraction_addr1,
+    a.addr2 as attraction_addr2,
+    a.homepage as attraction_homepage,
+    a.overview as attraction_overview
+    </sql>
+
+    <sql id="courseColumns">
+    c.id as course_id,
+    c.name as course_name,
+    c.dist as course_dist,
+    c.turnaround as course_turnaround,
+    c.level as course_level,
+    c.cycle as course_cycle,
+    c.summary as course_summary,
+    c.detail as course_detail,
+    c.travel_point as course_travel_point,
+    c.traveler_info as course_traveler_info,
+    c.sigun as course_sigun,
+    c.sido_code as course_sido_code,
+    c.gugun_code as course_gugun_code,
+    c.road_or_bike as course_road_or_bike,
+    c.created_at as course_created_at,
+    c.updated_at as course_updated_at
+    </sql>
+
+    <sql id="routeColumns">
+    r.id as route_id,
+    r.name as route_name,
+    r.summary as route_summary,
+    r.detail as route_detail,
+    r.road_or_bike as route_road_or_bike,
+    r.created_at as route_created_at,
+    r.updated_at as route_updated_at
+    </sql>
+
+    <!-- 페이지네이션 -->
+    <sql id="pagination">
+        <if test="pageable.sort.sorted">
+            <trim prefix="ORDER BY">
+                <foreach item="order" collection="pageable.sort" separator=", ">
+                    #{order.property} #{order.direction}
+                </foreach>
+            </trim>
+        </if>
+        LIMIT #{pageable.offset}, #{pageable.pageSize}
+    </sql>
 
 </mapper>

@@ -1,10 +1,12 @@
 package com.ssafy.gilbut.domain.attraction.model.entity;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
 @Builder
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class Attraction {
     private Long id;
     private Long contentTypeId;

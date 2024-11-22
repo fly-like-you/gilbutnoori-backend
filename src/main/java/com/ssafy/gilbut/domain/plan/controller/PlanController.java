@@ -1,55 +1,40 @@
 package com.ssafy.gilbut.domain.plan.controller;
 
 import com.ssafy.gilbut.advice.ApiResponse;
-import com.ssafy.gilbut.domain.plan.model.dto.request.PlanCreateRequestDTO;
-import com.ssafy.gilbut.domain.plan.model.dto.request.PlanUpdateRequestDTO;
-import com.ssafy.gilbut.domain.plan.model.dto.response.PlanResponseDTO;
+import com.ssafy.gilbut.domain.plan.model.dto.request.PlanRequest;
+import com.ssafy.gilbut.domain.plan.model.dto.response.PlanResponse;
 import com.ssafy.gilbut.domain.plan.service.PlanService;
 import com.ssafy.gilbut.util.SizeConstant;
-import java.util.List;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
 @RequestMapping("/plans")
 @RequiredArgsConstructor
+@Tag(name = "Plan", description = "계획 관련 API")
 public class PlanController {
 
     private final PlanService planService;
-
-    @PostMapping
-    public ResponseEntity<?> createPlan(
-            @RequestHeader("Authorization") String accessToken,
-            @RequestBody List<PlanCreateRequestDTO> plans
-    ) {
-        planService.createPlans(accessToken, plans);
-
-        return ResponseEntity.noContent().build();
-    }
 
     @GetMapping("/{planId}")
     public ResponseEntity<?> getPlan(
             @RequestHeader("Authorization") String accessToken,
             @PathVariable Integer planId
     ) {
-        PlanResponseDTO result = planService.getPlan(accessToken, planId);
-        log.info("Retrieved plan: {}", result);
+        PlanResponse.DetailResultDTO plan = planService.getPlan(accessToken, planId);
 
-        return ResponseEntity.ok().body(ApiResponse.onSuccess(result));
+        log.info("Retrieved plan: {}", plan);
+
+        return ResponseEntity.ok().body(ApiResponse.onSuccess(plan));
     }
 
     @GetMapping
@@ -57,31 +42,42 @@ public class PlanController {
             @RequestHeader("Authorization") String accessToken,
             @PageableDefault(size = SizeConstant.LIST_SIZE) Pageable page
     ) {
-        Page<PlanResponseDTO> result = planService.getPlanList(accessToken, page);
-        log.info("Retrieved plan list: {}", result);
+        PlanResponse.DetailResultPageDTO planList = planService.getPlanList(accessToken, page);
+        log.info("Retrieved plan list: {}", planList);
 
-        return ResponseEntity.ok().body(ApiResponse.onSuccess(result));
+        return ResponseEntity.ok().body(ApiResponse.onSuccess(planList));
     }
 
-    @PutMapping("/{planId}")
+    @Operation(summary = "계획 생성", description = "새로운 계획을 생성합니다.")
+    @PostMapping
+    public ResponseEntity<?> createPlan(
+            @RequestHeader("Authorization") String accessToken,
+            @RequestBody List<PlanRequest.CreateDTO> planDTOList
+    ) {
+        PlanResponse.DetailResultListDTO planResultDTO = planService.createPlans(accessToken, planDTOList);
+        log.info(planResultDTO.toString());
+        return ResponseEntity.ok(ApiResponse.onSuccess(planResultDTO));
+    }
+
+    @PutMapping("/{travelId}")
     public ResponseEntity<?> updatePlan(
             @RequestHeader("Authorization") String accessToken,
-            @PathVariable Integer planId,
-            @RequestBody PlanUpdateRequestDTO requestDTO
+            @PathVariable("travelId") Integer travelId,
+            @RequestBody List<PlanRequest.CreateDTO> plans
     ) {
-        PlanResponseDTO result = planService.updatePlan(accessToken, planId, requestDTO);
+        PlanResponse.DetailResultListDTO result = planService.updatePlan(accessToken, travelId, plans);
         log.info("Updated plan: {}", result);
 
         return ResponseEntity.ok().body(ApiResponse.onSuccess(result));
     }
 
-    @DeleteMapping("/{planId}")
+    @DeleteMapping("/{travelId}")
     public ResponseEntity<?> deletePlan(
             @RequestHeader("Authorization") String accessToken,
-            @PathVariable Integer planId
+            @PathVariable Integer travelId
     ) {
-        planService.deletePlan(accessToken, planId);
-        log.info("Deleted plan with id: {}", planId);
+        planService.deletePlanByTravelId(accessToken, travelId);
+        log.info("Deleted plan with id: {}", travelId);
 
         return ResponseEntity.ok().body(ApiResponse.onSuccess(null));
     }

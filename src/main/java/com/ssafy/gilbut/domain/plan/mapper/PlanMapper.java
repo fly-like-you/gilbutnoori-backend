@@ -1,8 +1,7 @@
 package com.ssafy.gilbut.domain.plan.mapper;
 
-import com.ssafy.gilbut.domain.plan.model.dto.request.PlanCreateRequestDTO;
-import com.ssafy.gilbut.domain.plan.model.dto.request.PlanUpdateRequestDTO;
-import com.ssafy.gilbut.domain.plan.model.dto.response.PlanResponseDTO;
+import com.ssafy.gilbut.domain.plan.model.dto.request.PlanRequest;
+import com.ssafy.gilbut.domain.plan.model.entity.Plan;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.data.domain.Pageable;
@@ -13,21 +12,26 @@ import java.util.Optional;
 @Mapper
 public interface PlanMapper {
 
-    void insertPlans(@Param("dto") List<PlanCreateRequestDTO> dto);
+    void insertPlans(@Param("dto") List<PlanRequest.CreateDTO> dto);
 
-    Optional<PlanResponseDTO> findPlanById(@Param("planId") Integer planId);
+    Optional<Plan> findPlanById(@Param("planId") Integer planId);
 
-    List<PlanResponseDTO> findPlansByUserId(
+    List<Plan> findPlansByUserId(
             @Param("userId") Integer userId,
-            @Param("page") Pageable page
+            @Param("pageable") Pageable pageable
+    );
+
+    List<Plan> findPlansByPlanIds(
+            @Param("ids") List<Integer> ids
     );
 
     int countPlansByUserId(@Param("userId") Integer userId);
 
-    void updatePlan(
+    void updatePlans(
             @Param("planId") Integer planId,
-            @Param("dto") PlanUpdateRequestDTO dto
+            @Param("dto") List<PlanRequest.UpdateDTO> dto
     );
 
-    void deletePlan(@Param("planId") Integer planId);
+
+    void deletePlanByTravelId(@Param("travelId") Integer travelId);
 }
