@@ -3,7 +3,6 @@ package com.ssafy.gilbut.domain.user.controller;
 import com.ssafy.gilbut.domain.user.model.dto.request.UserLoginRequestDTO;
 import com.ssafy.gilbut.domain.user.model.dto.request.UserSignUpRequestDTO;
 import com.ssafy.gilbut.domain.user.model.dto.request.UserUpdateRequestDTO;
-import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -17,7 +16,6 @@ interface UserControllerDocs {
             @Parameter(description = "로그인 시 필요한 회원정보(아이디, 비밀번호).", required = true) UserLoginRequestDTO user
     );
 
-    @Hidden
     @Operation(summary = "회원인증", description = "회원 정보를 담은 Token 을 반환한다.")
     ResponseEntity<?> getInfo(String header);
 

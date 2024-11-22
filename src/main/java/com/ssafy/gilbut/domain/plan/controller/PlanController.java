@@ -5,8 +5,6 @@ import com.ssafy.gilbut.domain.plan.model.dto.request.PlanRequest;
 import com.ssafy.gilbut.domain.plan.model.dto.response.PlanResponse;
 import com.ssafy.gilbut.domain.plan.service.PlanService;
 import com.ssafy.gilbut.util.SizeConstant;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -20,11 +18,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/plans")
 @RequiredArgsConstructor
-@Tag(name = "Plan", description = "계획 관련 API")
-public class PlanController {
+public class PlanController implements PlanControllerDocs {
 
     private final PlanService planService;
 
+    @Override
     @GetMapping("/{planId}")
     public ResponseEntity<?> getPlan(
             @RequestHeader("Authorization") String accessToken,
@@ -37,6 +35,7 @@ public class PlanController {
         return ResponseEntity.ok().body(ApiResponse.onSuccess(plan));
     }
 
+    @Override
     @GetMapping
     public ResponseEntity<?> getPlanList(
             @RequestHeader("Authorization") String accessToken,
@@ -48,7 +47,7 @@ public class PlanController {
         return ResponseEntity.ok().body(ApiResponse.onSuccess(planList));
     }
 
-    @Operation(summary = "계획 생성", description = "새로운 계획을 생성합니다.")
+    @Override
     @PostMapping
     public ResponseEntity<?> createPlan(
             @RequestHeader("Authorization") String accessToken,
@@ -59,6 +58,7 @@ public class PlanController {
         return ResponseEntity.ok(ApiResponse.onSuccess(planResultDTO));
     }
 
+    @Override
     @PutMapping("/{travelId}")
     public ResponseEntity<?> updatePlan(
             @RequestHeader("Authorization") String accessToken,
@@ -71,6 +71,7 @@ public class PlanController {
         return ResponseEntity.ok().body(ApiResponse.onSuccess(result));
     }
 
+    @Override
     @DeleteMapping("/{travelId}")
     public ResponseEntity<?> deletePlan(
             @RequestHeader("Authorization") String accessToken,
