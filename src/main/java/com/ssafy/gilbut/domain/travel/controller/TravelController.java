@@ -24,8 +24,6 @@ public class TravelController implements TravelControllerDocs {
 
     private final TravelService travelService;
 
-
-
     /**
      * @param accessToken
      * @return

@@ -69,7 +69,7 @@
 
             /* Plan 정보 */
             p.id AS plan_id,
-            p.order AS plan_order,
+            p.sequence AS plan_order,
 
             /* Attraction 정보 */
             a.id AS attraction_id,
@@ -81,7 +81,7 @@
                  LEFT JOIN plans p ON t.id = p.travel_id
                  LEFT JOIN attractions a ON p.attraction_id = a.id
         WHERE t.user_id = #{userId}
-        ORDER BY t.start_date DESC, p.order ASC
+        ORDER BY t.start_date DESC, p.sequence ASC
     </select>
 
     <!-- 사용자의 총 여행 수 조회 -->
@@ -115,7 +115,7 @@
 
             /* Plan 정보 */
             p.id AS plan_id,
-            p.order AS plan_order,
+            p.sequence AS plan_order,
 
             /* Attraction 정보 */
             a.id AS attraction_id,
@@ -127,7 +127,7 @@
                  LEFT JOIN plans p ON t.id = p.travel_id
                  LEFT JOIN attractions a ON p.attraction_id = a.id
         WHERE t.id = #{travelId}
-        ORDER BY p.order ASC
+        ORDER BY p.sequence ASC
     </select>
 
     <!-- 여행 정보 삭제 -->
