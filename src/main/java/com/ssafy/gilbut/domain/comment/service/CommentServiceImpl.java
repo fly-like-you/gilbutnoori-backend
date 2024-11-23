@@ -35,7 +35,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public DetailResultDTO createComment(String accessToken, CreateDTO createDTO) {
-        Integer userId = jwtUtil.getUserId(accessToken);
+        Long userId = jwtUtil.getUserId(accessToken);
         log.info("userId -> {}, createDTO -> {}", userId, createDTO);
 
         commentMapper.createComment(userId, createDTO);
@@ -46,7 +46,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public DetailResultDTO updateComment(String accessToken, Integer commentId, UpdateDTO updateDTO) {
+    public DetailResultDTO updateComment(String accessToken, Long commentId, UpdateDTO updateDTO) {
         validateCommentUserMatch(accessToken, commentId);
         log.info("commentId -> {}, updateDTO -> {}", commentId, updateDTO);
 
@@ -59,7 +59,7 @@ public class CommentServiceImpl implements CommentService {
         return CommentConverter.toDetailResultDTO(comment);
     }
 
-    private void validateCommentUserMatch(String accessToken, Integer commentId) {
+    private void validateCommentUserMatch(String accessToken, Long commentId) {
         Long userId = Long.valueOf(jwtUtil.getUserId(accessToken));
         log.info("접속한 유저 id -> {}, commentId -> {}", userId, commentId);
 
@@ -71,7 +71,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void deleteComment(String accessToken, Integer commentId) {
+    public void deleteComment(String accessToken, Long commentId) {
         validateCommentUserMatch(accessToken, commentId);
         log.info("commentId -> {}", commentId);
 
@@ -81,7 +81,7 @@ public class CommentServiceImpl implements CommentService {
 
     }
 
-    private Comment getSafeCommentByCommentId(Integer commentId) {
+    private Comment getSafeCommentByCommentId(Long commentId) {
         Optional<Comment> comment = commentMapper.findCommentByCommentId(commentId);
 
         return comment.orElseThrow(() -> new GeneralExceptionHandler(ErrorStatus._INTERNAL_SERVER_ERROR));

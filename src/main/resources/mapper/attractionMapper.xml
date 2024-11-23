@@ -5,29 +5,41 @@
 <mapper namespace="com.ssafy.gilbut.domain.attraction.mapper.AttractionMapper">
 
     <select id="searchAttractionByCourseId">
-        SELECT a.id,
-               a.content_id,
-               a.title,
-               a.content_type_id,
-               a.area_code,
-               a.si_gun_gu_code,
-               a.first_image1,
-               a.first_image2,
-               a.map_level,
-               a.latitude,
-               a.longitude,
-               a.tel,
-               a.addr1,
-               a.addr2,
-               a.homepage,
-               a.overview
+        SELECT
+        a.id,
+        a.content_id,
+        # 컨텐츠 타입
+        a.content_type_id,
+        ct.content_type_name AS content_type,
+
+        # 시군구 타입
+        a.area_code,
+        s.sido_name AS area,
+        a.si_gun_gu_code,
+        g.gugun_name AS gun_gu,
+
+        # 기타 타입
+        a.title,
+        a.first_image1,
+        a.first_image2,
+        a.map_level,
+        a.latitude,
+        a.longitude,
+        a.tel,
+        a.addr1,
+        a.addr2,
+        a.homepage,
+        a.overview
+
         FROM Attractions a
-                 INNER JOIN Courses c
-                            ON a.area_code = c.sido_code AND a.si_gun_gu_code = c.gugun_code
+        INNER JOIN Courses c ON (a.area_code = c.sido_code AND a.si_gun_gu_code = c.gugun_code)
+        INNER JOIN contenttypes ct ON ct.content_type_id = a.content_type_id
+        INNER JOIN sidos s ON s.sido_code = a.area_code
+        INNER JOIN guguns g ON (g.gugun_code = a.si_gun_gu_code AND s.sido_code = g.sido_code)
         WHERE c.id = #{courseId}
-          <if test="contentTypeId">
-              AND a.content_type_id = #{contentTypeId}
-          </if>
+        <if test="contentTypeId">
+            AND a.content_type_id = #{contentTypeId}
+        </if>
 
         <if test="pageable.sort.sorted">
             <trim prefix="order by">
@@ -42,8 +54,11 @@
     <select id="countAttractionByCourseId">
         SELECT COUNT(*)
         FROM Attractions a
-                 INNER JOIN Courses c
-                            ON a.area_code = c.sido_code AND a.si_gun_gu_code = c.gugun_code
+        INNER JOIN Courses c
+        ON a.area_code = c.sido_code AND a.si_gun_gu_code = c.gugun_code
         WHERE c.id = #{courseId}
+        <if test="contentTypeId">
+            AND a.content_type_id = #{contentTypeId}
+        </if>
     </select>
 </mapper>

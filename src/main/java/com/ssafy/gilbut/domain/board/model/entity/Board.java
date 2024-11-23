@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Board {
     @Schema(description = "글번호")
-    private int id;
+    private Long id;
 
     @Schema(description = "작성자")
     private User user;

@@ -14,6 +14,9 @@ public class CourseResponse {
     @NoArgsConstructor
     @Schema(description = "코스 간단 정보 응답 DTO")
     public static class SimpleResultDTO {
+        @Schema(description = "둘렛길 아이디", requiredMode = Schema.RequiredMode.REQUIRED, example = "T_CRS_MNG0000004190")
+        private String id;
+
         @Schema(description = "코스 이름", example = "해파랑길 5코스")
         private String name;
 

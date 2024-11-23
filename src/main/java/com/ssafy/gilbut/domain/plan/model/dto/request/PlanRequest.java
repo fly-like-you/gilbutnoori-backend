@@ -16,13 +16,13 @@ public class PlanRequest {
     @Schema(name = "PlanRequestCreateDTO", description = "계획 생성 요청 DTO")
     public static class CreateDTO {
         @Schema(description = "계획 ID", example = "1")
-        private Integer id;
+        private Long id;
 
         @Schema(description = "관광지 ID", example = "1")
-        private Integer attractionId;
+        private Long attractionId;
 
         @Schema(description = "여행 ID", example = "1")
-        private Integer travelId;
+        private Long travelId;
 
         @Schema(description = "코스 ID", example = "COURSE_001")
         private String courseId;
@@ -39,10 +39,10 @@ public class PlanRequest {
     public static class UpdateDTO {
 
         @Schema(description = "관광지 ID", example = "1")
-        private Integer attractionId;
+        private Long attractionId;
 
         @Schema(description = "여행 ID", example = "1")
-        private Integer travelId;
+        private Long travelId;
 
         @Schema(description = "코스 ID", example = "COURSE_001")
         private String courseId;

@@ -27,21 +27,21 @@ public class PlanServiceImpl implements PlanService {
 
     @Override
     public PlanResponse.DetailResultListDTO createPlans(String accessToken, List<PlanRequest.CreateDTO> planListDTO) {
-        Integer userId = jwtUtil.getUserId(accessToken);
+        Long userId = jwtUtil.getUserId(accessToken);
         log.info("Creating plan for user: {}", userId);
 
         validatePlans(planListDTO);
         planMapper.insertPlans(planListDTO);
 
-        List<Integer> ids = planListDTO.stream().map(PlanRequest.CreateDTO::getId).toList();
+        List<Long> ids = planListDTO.stream().map(PlanRequest.CreateDTO::getId).toList();
         List<Plan> plans = planMapper.findPlansByPlanIds(ids);
 
         return PlanConverter.toDetailResultListDTO(plans);
     }
 
     @Override
-    public DetailResultDTO getPlan(String accessToken, Integer planId) {
-        Integer userId = jwtUtil.getUserId(accessToken);
+    public DetailResultDTO getPlan(String accessToken, Long planId) {
+        Long userId = jwtUtil.getUserId(accessToken);
 
         Plan plan = planMapper.findPlanById(planId).orElseThrow();
         log.info("Retrieved plan {} for user: {}", plan, userId);
@@ -51,7 +51,7 @@ public class PlanServiceImpl implements PlanService {
 
     @Override
     public PlanResponse.DetailResultPageDTO getPlanList(String accessToken, Pageable page) {
-        Integer userId = jwtUtil.getUserId(accessToken);
+        Long userId = jwtUtil.getUserId(accessToken);
         log.info("Retrieving plan list for user: {}, offset: {}, pageSize: {}",
                 userId, page.getOffset(), page.getPageSize());
 
@@ -70,8 +70,8 @@ public class PlanServiceImpl implements PlanService {
      */
 
     @Override
-    public PlanResponse.DetailResultListDTO updatePlan(String accessToken, Integer travelId, List<PlanRequest.CreateDTO> plans) {
-        Integer userId = jwtUtil.getUserId(accessToken);
+    public PlanResponse.DetailResultListDTO updatePlan(String accessToken, Long travelId, List<PlanRequest.CreateDTO> plans) {
+        Long userId = jwtUtil.getUserId(accessToken);
         log.info("Updating plan {} for user: {}", travelId, userId);
 
         // plan 모두 비우기
@@ -82,8 +82,8 @@ public class PlanServiceImpl implements PlanService {
     }
 
     @Override
-    public void deletePlanByTravelId(String accessToken, Integer travelId) {
-        Integer userId = jwtUtil.getUserId(accessToken);
+    public void deletePlanByTravelId(String accessToken, Long travelId) {
+        Long userId = jwtUtil.getUserId(accessToken);
         log.info("Deleting travelId {} for user: {}", travelId, userId);
 
         planMapper.deletePlanByTravelId(travelId);

@@ -37,14 +37,14 @@ public class JWTUtil {
         return create(user, "refreshToken", refreshTokenExpireTime);
     }
 
-    public Integer getUserId(String header) {
+    public Long getUserId(String header) {
         String token = getToken(header);
         Jws<Claims> claims = getClaimsJws(token);
 
         Map<String, Object> value = claims.getPayload();
         log.info("value : {}", value);
 
-        return Integer.parseInt(value.get("id").toString());
+        return Long.parseLong(value.get("id").toString());
     }
     public String getUserLoginId(String header) {
         String token = getToken(header);

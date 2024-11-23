@@ -26,7 +26,7 @@ public class PlanController implements PlanControllerDocs {
     @GetMapping("/{planId}")
     public ResponseEntity<?> getPlan(
             @RequestHeader("Authorization") String accessToken,
-            @PathVariable Integer planId
+            @PathVariable Long planId
     ) {
         PlanResponse.DetailResultDTO plan = planService.getPlan(accessToken, planId);
 
@@ -62,7 +62,7 @@ public class PlanController implements PlanControllerDocs {
     @PutMapping("/{travelId}")
     public ResponseEntity<?> updatePlan(
             @RequestHeader("Authorization") String accessToken,
-            @PathVariable("travelId") Integer travelId,
+            @PathVariable("travelId") Long travelId,
             @RequestBody List<PlanRequest.CreateDTO> plans
     ) {
         PlanResponse.DetailResultListDTO result = planService.updatePlan(accessToken, travelId, plans);
@@ -75,7 +75,7 @@ public class PlanController implements PlanControllerDocs {
     @DeleteMapping("/{travelId}")
     public ResponseEntity<?> deletePlan(
             @RequestHeader("Authorization") String accessToken,
-            @PathVariable Integer travelId
+            @PathVariable Long travelId
     ) {
         planService.deletePlanByTravelId(accessToken, travelId);
         log.info("Deleted plan with id: {}", travelId);

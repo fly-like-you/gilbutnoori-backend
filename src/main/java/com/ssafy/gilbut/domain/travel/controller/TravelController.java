@@ -1,20 +1,25 @@
 package com.ssafy.gilbut.domain.travel.controller;
 
 import com.ssafy.gilbut.advice.ApiResponse;
-import com.ssafy.gilbut.domain.travel.model.dto.request.TravelCreateRequestDTO;
-import com.ssafy.gilbut.domain.travel.model.dto.request.TravelUpdateRequestDTO;
-import com.ssafy.gilbut.domain.travel.model.dto.response.TravelDetailResponseDTO;
-import com.ssafy.gilbut.domain.travel.model.dto.response.TravelResponseDTO;
+import com.ssafy.gilbut.domain.travel.model.dto.TravelRequest;
+import com.ssafy.gilbut.domain.travel.model.dto.TravelResponse;
 import com.ssafy.gilbut.domain.travel.service.TravelService;
 import com.ssafy.gilbut.util.SizeConstant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
@@ -30,11 +35,11 @@ public class TravelController implements TravelControllerDocs {
      */
     @Override
     @GetMapping
-    public ResponseEntity<?> travelList(
+    public ResponseEntity<?> getTravelListByUserId(
             @RequestHeader("Authorization") String accessToken,
             @PageableDefault(size = SizeConstant.LIST_SIZE) Pageable page
     ) {
-        Page<TravelResponseDTO> travelList = travelService.travelList(accessToken, page);
+        TravelResponse.SimplePageResultDTO travelList = travelService.travelList(accessToken, page);
         log.info("travel list: {}", travelList);
 
 
@@ -50,8 +55,11 @@ public class TravelController implements TravelControllerDocs {
      */
     @Override
     @GetMapping("/{travelId}")
-    public ResponseEntity<?> getTravelById(@PathVariable("travelId") Integer travelId) {
-        TravelDetailResponseDTO travel = travelService.getTravelById(travelId);
+    public ResponseEntity<?> getTravelById(
+            @RequestHeader("Authorization") String accessToken,
+            @PathVariable("travelId") Long travelId
+    ) {
+        TravelResponse.DetailResultDTO travel = travelService.getTravelById(accessToken, travelId);
         log.info("travel: {}", travel);
 
         return ResponseEntity.ok(ApiResponse.onSuccess(travel));
@@ -59,16 +67,16 @@ public class TravelController implements TravelControllerDocs {
 
     /**
      * @param accessToken
-     * @param travelCreateRequestDTO
+     * @param createDTO
      * @return
      */
     @Override
     @PostMapping
-    public ResponseEntity<?> travelCreate(
+    public ResponseEntity<?> createTravel(
             @RequestHeader("Authorization") String accessToken,
-            @RequestBody TravelCreateRequestDTO travelCreateRequestDTO
+            @RequestBody TravelRequest.CreateDTO createDTO
     ) {
-        travelService.travelCreate(accessToken, travelCreateRequestDTO);
+        travelService.travelCreate(accessToken, createDTO);
         return ResponseEntity.noContent().build();
     }
 
@@ -80,7 +88,7 @@ public class TravelController implements TravelControllerDocs {
     @DeleteMapping("/{travelId}")
     public ResponseEntity<?> deleteTravelById(
             @RequestHeader("Authorization") String accessToken,
-            @PathVariable("travelId") Integer travelId
+            @PathVariable("travelId") Long travelId
     ) {
         travelService.deleteTravelById(accessToken, travelId);
 
@@ -90,17 +98,17 @@ public class TravelController implements TravelControllerDocs {
     /**
      * @param accessToken
      * @param travelId
-     * @param travelDTO
+     * @param updateDTO
      * @return
      */
     @Override
     @PutMapping("/{travelId}")
     public ResponseEntity<?> updateTravelById(
             @RequestHeader("Authorization") String accessToken,
-            @PathVariable("travelId") Integer travelId,
-            @RequestBody TravelUpdateRequestDTO travelDTO
+            @PathVariable("travelId") Long travelId,
+            @RequestBody TravelRequest.UpdateDTO updateDTO
     ) {
-        TravelDetailResponseDTO travel = travelService.updateTravel(accessToken, travelId, travelDTO);
+        TravelResponse.DetailResultDTO travel = travelService.updateTravel(accessToken, travelId, updateDTO);
         log.info("updated travel: {}", travel);
 
         return ResponseEntity.ok(ResponseEntity.noContent().build());

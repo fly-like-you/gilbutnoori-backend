@@ -14,8 +14,8 @@ public class CommentRequest {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class CreateDTO {
-        private Integer id;
-        private Integer boardId;
+        private Long id;
+        private Long boardId;
         private String content;
     }
 

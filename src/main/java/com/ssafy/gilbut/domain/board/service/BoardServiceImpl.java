@@ -35,7 +35,7 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public DetailResultDTO getArticle(Integer boardId) {
+	public DetailResultDTO getArticle(Long boardId) {
 		log.info("getArticle -> {}", boardId);
 
 		Board article = getSafeBoardArticleByBoardId(boardId);
@@ -45,14 +45,14 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public DetailResultDTO getModifyArticle(String accessToken, Integer boardId) {
+	public DetailResultDTO getModifyArticle(String accessToken, Long boardId) {
 		validateBoardOwnerMatch(accessToken, boardId);
 
 		return getArticle(boardId);
 	}
 
 	@Override
-	public void updateHit(Integer boardId) {
+	public void updateHit(Long boardId) {
 		boardMapper.updateHit(boardId);
 	}
 
@@ -60,7 +60,7 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	@Transactional
 	public void writeArticle(String accessToken, CreateDTO boardDto) {
-		Integer userId = jwtUtil.getUserId(accessToken);
+		Long userId = jwtUtil.getUserId(accessToken);
 		boardMapper.writeArticle(userId, boardDto);
 
 		List<BoardRequest.FileCreateDTO> files = boardDto.getFileInfos();
@@ -72,7 +72,7 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public void modifyArticle(String accessToken, Integer boardId, UpdateDTO boardDto){
+	public void modifyArticle(String accessToken, Long boardId, UpdateDTO boardDto){
 		validateBoardOwnerMatch(accessToken, boardId);
 
 		boardMapper.modifyArticle(boardId, boardDto);
@@ -81,7 +81,7 @@ public class BoardServiceImpl implements BoardService {
 
 
 	@Override
-	public void deleteArticle(String accessToken, Integer boardId) {
+	public void deleteArticle(String accessToken, Long boardId) {
 		validateBoardOwnerMatch(accessToken, boardId);
 		boardMapper.deleteArticle(boardId);
 
@@ -90,14 +90,14 @@ public class BoardServiceImpl implements BoardService {
 
 
 
-	private Board getSafeBoardArticleByBoardId(Integer boardId) {
+	private Board getSafeBoardArticleByBoardId(Long boardId) {
 		return boardMapper.getArticle(boardId).orElseThrow(
 				() -> new GeneralExceptionHandler(ErrorStatus.BOARD_NOT_FOUND)
 		);
 	}
 
-	private void validateBoardOwnerMatch(String accessToken, Integer boardId) {
-		Long userId = Long.valueOf(jwtUtil.getUserId(accessToken));
+	private void validateBoardOwnerMatch(String accessToken, Long boardId) {
+		Long userId = jwtUtil.getUserId(accessToken);
 		Board board = getSafeBoardArticleByBoardId(boardId);
 
 		if (!userId.equals(board.getUser().getId())) throw new GeneralExceptionHandler(ErrorStatus.BOARD_OWNER_NOT_MATCHED);

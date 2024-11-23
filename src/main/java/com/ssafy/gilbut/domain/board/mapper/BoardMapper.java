@@ -14,22 +14,22 @@ public interface BoardMapper {
 
     List<Board> listArticle(@Param("pageable") Pageable pageable);
 
-    Optional<Board> getArticle(@Param("boardId") int boardId);
+    Optional<Board> getArticle(@Param("boardId") Long boardId);
 
-    void updateHit(@Param("boardId") int boardId);
+    void updateHit(@Param("boardId") Long boardId);
 
-    void writeArticle(@Param("userId") Integer userId, @Param("dto") BoardRequest.CreateDTO boardDto);
+    void writeArticle(@Param("userId") Long userId, @Param("dto") BoardRequest.CreateDTO boardDto);
 
-    void modifyArticle(@Param("boardId") Integer boardId, @Param("dto") BoardRequest.UpdateDTO boardDto);
+    void modifyArticle(@Param("boardId") Long boardId, @Param("dto") BoardRequest.UpdateDTO boardDto);
 
-    void deleteFile(@Param("boardId") int boardId);
+    void deleteFile(@Param("boardId") Long boardId);
 
-    List<FileInfoDto> fileInfoList(@Param("boardId") int boardId);
+    List<FileInfoDto> fileInfoList(@Param("boardId") Long boardId);
 
     int getTotalArticleCount(@Param("pageable") Pageable pageable);
 
     void registerFile(@Param("dto") List<BoardRequest.FileCreateDTO> boardDto);
 
-    void deleteArticle(@Param("boardId") int boardId);
+    void deleteArticle(@Param("boardId") Long boardId);
 
 }

@@ -35,7 +35,7 @@ public class BoardController {
 
 	@GetMapping("/{boardId}")
 	public ResponseEntity<?> getArticle(
-			@PathVariable("boardId") int boardId
+			@PathVariable("boardId") Long boardId
 	) {
 		log.info("getArticle - 호출 : " + boardId);
 		boardService.updateHit(boardId);
@@ -45,7 +45,7 @@ public class BoardController {
 	@GetMapping("/modify/{boardId}")
 	public ResponseEntity<?> getModifyArticle(
 			@RequestHeader("Authorization") String accessToken,
-			@PathVariable("boardId") int boardId
+			@PathVariable("boardId") Long boardId
 	) {
 
 		log.info("getModifyArticle - 호출 : " + boardId);
@@ -68,7 +68,7 @@ public class BoardController {
 	@PutMapping("/modify/{boardId}")
 	public ResponseEntity<?> modifyArticle(
 			@RequestHeader("Authorization") String accessToken,
-			@PathVariable("boardId") Integer boardId,
+			@PathVariable("boardId") Long boardId,
 			@RequestBody BoardRequest.UpdateDTO boardDto) {
 		log.info("modifyArticle - 호출 {}", boardDto);
 
@@ -79,7 +79,7 @@ public class BoardController {
 	@DeleteMapping("/{boardId}")
 	public ResponseEntity<?> deleteArticle(
 			@RequestHeader("Authorization") String accessToken,
-			@PathVariable("boardId") Integer boardId
+			@PathVariable("boardId") Long boardId
 	) {
 		log.info("deleteArticle - 호출");
 		boardService.deleteArticle(accessToken, boardId);

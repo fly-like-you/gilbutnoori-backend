@@ -21,6 +21,7 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // 여행 (Travel) 관련 에러
     TRAVEL_NOT_FOUND(HttpStatus.BAD_REQUEST, "TRAVEL4001", "ID와 일치하는 여행 계획이 없습니다."),
+    TRAVEL_OWNER_NOT_MATCHED(HttpStatus.BAD_REQUEST, "TRAVEL4002", "유저 ID와 일치하는 여행이 없습니다."),
 
     // 여행 계획 (Plan) 관련 에러
     PLAN_ATTRACTION_DUPLICATED_ERROR(HttpStatus.BAD_REQUEST, "PLAN4001", "여행지와 둘렛길이 중복됩니다."),

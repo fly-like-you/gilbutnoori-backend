@@ -1,14 +1,14 @@
 package com.ssafy.gilbut.domain.plan.model.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ssafy.gilbut.domain.attraction.model.dto.AttractionResponse;
 import com.ssafy.gilbut.domain.course.model.dto.CourseResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Schema(description = "계획 응답 관련")
 public class PlanResponse {
@@ -26,6 +26,7 @@ public class PlanResponse {
         @Schema(description = "순서", example = "1.0")
         private Double sequence;
 
+        @JsonInclude(JsonInclude.Include.NON_NULL)
         @Schema(description = "여행 ID", example = "1")
         private Long travelId;
 

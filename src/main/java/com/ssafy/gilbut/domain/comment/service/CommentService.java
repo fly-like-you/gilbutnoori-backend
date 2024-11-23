@@ -9,6 +9,6 @@ import com.ssafy.gilbut.domain.comment.model.dto.CommentRequest.UpdateDTO;
 public interface CommentService {
     DetailListResultDTO listComment();
     DetailResultDTO createComment(String accessToken, CreateDTO createDTO);
-    DetailResultDTO updateComment(String accessToken, Integer commentId, UpdateDTO updateDTO);
-    void deleteComment(String accessToken, Integer commentId);
+    DetailResultDTO updateComment(String accessToken, Long commentId, UpdateDTO updateDTO);
+    void deleteComment(String accessToken, Long commentId);
 }

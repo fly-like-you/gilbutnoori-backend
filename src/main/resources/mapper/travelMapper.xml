@@ -5,164 +5,235 @@
 <mapper namespace="com.ssafy.gilbut.domain.travel.mapper.TravelMapper">
 
     <!-- ResultMap 정의 -->
-    <resultMap id="TravelDetailResultMap" type="TravelDetailResponseDTO">
+    <!-- Course 관련 매핑 -->
+    <!-- Plans 관련 매핑 -->
+    <!-- Attraction 관련 매핑 -->
+    <!-- Course 관련 매핑 -->
+
+    <resultMap id="TravelResultMap" type="Travel">
         <id property="id" column="travel_id"/>
         <result property="title" column="travel_title"/>
         <result property="content" column="travel_content"/>
-        <result property="startDate" column="start_date"/>
+        <result property="startDate" column="travel_start_date"/>
 
-        <!-- Course 관련 매핑 -->
-        <association property="course" javaType="CourseSimpleResponseDTO">
+        <association property="user" javaType="User">
+            <!-- ID -->
+            <id property="id" column="user_id"/>
+
+            <!-- 기본 속성 -->
+            <result property="loginId" column="user_login_id"/>
+            <result property="password" column="user_password"/>
+            <result property="email" column="user_email"/>
+            <result property="profileImg" column="user_profile_img"/>
+            <result property="nickname" column="user_nickname"/>
+            <result property="createdAt" column="user_created_at"/>
+            <result property="updatedAt" column="user_updated_at"/>
+
+            <!-- Enum 타입 (Role, Status) -->
+            <result property="role" column="user_role" javaType="Role"/>
+            <result property="status" column="user_status" javaType="Status"/>
+        </association>
+
+        <association property="course" javaType="Course">
+            <!-- Course 테이블 -->
+            <id property="id" column="course_id"/>
             <result property="name" column="course_name"/>
             <result property="dist" column="course_dist"/>
             <result property="turnaround" column="course_turnaround"/>
             <result property="level" column="course_level"/>
+            <result property="cycle" column="course_cycle"/>
+            <result property="summary" column="course_summary"/>
+            <result property="detail" column="course_detail"/>
+            <result property="travelPoint" column="course_travel_point"/>
+            <result property="travelerInfo" column="course_traveler_info"/>
+            <result property="sigun" column="course_sigun"/>
+            <result property="sidoCode" column="course_sido_code"/>
+            <result property="gugunCode" column="course_gugun_code"/>
+            <result property="roadOrBike" column="course_road_or_bike"/>
+            <result property="createdAt" column="course_created_at"/>
+            <result property="updatedAt" column="course_updated_at"/>
+
+            <!-- Route 테이블: Association -->
+            <association property="route" javaType="com.ssafy.gilbut.domain.course.model.entity.Route">
+                <id property="id" column="route_id"/>
+                <result property="name" column="route_name"/>
+                <result property="summary" column="route_summary"/>
+                <result property="detail" column="route_detail"/>
+                <result property="roadOrBike" column="route_road_or_bike"/>
+                <result property="createdAt" column="route_created_at"/>
+                <result property="updatedAt" column="route_updated_at"/>
+            </association>
         </association>
 
-        <!-- User 관련 매핑 -->
-        <association property="user" javaType="UserResponseDTO">
-            <result property="loginId" column="user_login_id"/>
-            <result property="nickname" column="nickname"/>
-            <result property="email" column="user_email"/>
-        </association>
-
-        <!-- Plans 관련 매핑 -->
-        <collection property="plans" ofType="PlanResponseDTO">
+        <collection property="plans" javaType="Plan">
             <id property="id" column="plan_id"/>
-            <result property="travelId" column="travel_id"/>
-            <result property="order" column="plan_order"/>
+            <result property="sequence" column="plan_sequence"/>
 
-            <!-- Attraction 관련 매핑 -->
-            <association property="attraction" javaType="AttractionDTO">
+            <association property="attraction" javaType="Attraction">
                 <id property="id" column="attraction_id"/>
-                <result property="title" column="attraction_name"/>
-                <!-- AttractionDTO의 다른 필드들 추가 -->
+                <result property="contentId" column="attraction_content_id"/>
+                <result property="contentTypeId" column="attraction_content_type_id"/>
+                <result property="contentType" column="attraction_content_type"/>
+                <result property="areaCode" column="attraction_area_code"/>
+                <result property="area" column="attraction_area"/>
+                <result property="siGunGuCode" column="attraction_si_gun_gu_code"/>
+                <result property="gunGu" column="attraction_gun_gu"/>
+                <result property="title" column="attraction_title"/>
+                <result property="firstImage1" column="attraction_first_image_1"/>
+                <result property="firstImage2" column="attraction_first_image_2"/>
+                <result property="mapLevel" column="attraction_map_level"/>
+                <result property="latitude" column="attraction_latitude"/>
+                <result property="longitude" column="attraction_longitude"/>
+                <result property="tel" column="attraction_tel"/>
+                <result property="addr1" column="attraction_addr_1"/>
+                <result property="addr2" column="attraction_addr_2"/>
+                <result property="homepage" column="attraction_homepage"/>
+                <result property="overview" column="attraction_overview"/>
             </association>
 
-            <!-- Course 관련 매핑 -->
-            <association property="course" javaType="CourseSimpleResponseDTO">
-                <result property="name" column="course_name"/>
-                <result property="dist" column="course_dist"/>
-                <result property="turnaround" column="course_turnaround"/>
-                <result property="level" column="course_level"/>
+            <association property="course" javaType="Course">
+                <id property="id" column="plan_course_id"/>
             </association>
         </collection>
     </resultMap>
 
-    <select id="findTravelListByUserId" resultMap="TravelDetailResultMap">
+    <select id="findTravelListByUserId" parameterType="Long" resultMap="TravelResultMap">
         SELECT
-            t.id AS travel_id,
-            t.title AS travel_title,
-            t.content AS travel_content,
-            t.start_date,
-
-            /* Course 정보 */
-            c.name AS course_name,
-            c.dist AS course_dist,
-            c.turnaround AS course_turnaround,
-            c.level AS course_level,
-
-            /* User 정보 */
-            u.login_id AS user_login_id,
-            u.nickname,
-            u.email AS user_email,
-
-            /* Plan 정보 */
-            p.id AS plan_id,
-            p.sequence AS plan_order,
-
-            /* Attraction 정보 */
-            a.id AS attraction_id,
-            a.title AS attraction_name
-
+        <include refid="travelSelectColumns"/>
         FROM travels t
-                 INNER JOIN courses c ON t.course_id = c.id
-                 INNER JOIN users u ON t.user_id = u.id
-                 LEFT JOIN plans p ON t.id = p.travel_id
-                 LEFT JOIN attractions a ON p.attraction_id = a.id
+        <include refid="travelJoinTables"/>
         WHERE t.user_id = #{userId}
-        ORDER BY t.start_date DESC, p.sequence ASC
     </select>
 
     <!-- 사용자의 총 여행 수 조회 -->
     <select id="countTotalTravelByUserId" resultType="int">
-        SELECT
-            COUNT(*)
-        FROM
-            travels
-        WHERE
-            user_id = #{userId}
+        SELECT COUNT(*)
+        FROM travels
+        WHERE user_id = #{userId}
     </select>
 
     <!-- 여행 ID로 여행 정보 조회 -->
-    <select id="findTravelByTravelId" resultMap="TravelDetailResultMap">
+    <select id="findTravelByTravelId" resultMap="TravelResultMap">
         SELECT
-            t.id AS travel_id,
-            t.title AS travel_title,
-            t.content AS travel_content,
-            t.start_date,
-
-            /* Course 정보 */
-            c.name AS course_name,
-            c.dist AS course_dist,
-            c.turnaround AS course_turnaround,
-            c.level AS course_level,
-
-            /* User 정보 */
-            u.login_id AS user_login_id,
-            u.nickname,
-            u.email AS user_email,
-
-            /* Plan 정보 */
-            p.id AS plan_id,
-            p.sequence AS plan_order,
-
-            /* Attraction 정보 */
-            a.id AS attraction_id,
-            a.title AS attraction_name
-
+        <include refid="travelSelectColumns"/>
         FROM travels t
-                 INNER JOIN courses c ON t.course_id = c.id
-                 INNER JOIN users u ON t.user_id = u.id
-                 LEFT JOIN plans p ON t.id = p.travel_id
-                 LEFT JOIN attractions a ON p.attraction_id = a.id
+        <include refid="travelJoinTables"/>
         WHERE t.id = #{travelId}
-        ORDER BY p.sequence ASC
+        ORDER BY p.sequence
     </select>
 
     <!-- 여행 정보 삭제 -->
     <delete id="deleteTravelByTravelId">
-        DELETE FROM travels
+        DELETE
+        FROM travels
         WHERE id = #{travelId}
     </delete>
 
     <!-- 여행 정보 수정 -->
-    <update id="updateTravel">
+    <update id="updateTravel" parameterType="com.ssafy.gilbut.domain.travel.model.dto.TravelRequest$UpdateDTO">
         UPDATE travels
-        SET
-            title = #{travel.title},
-            content = NULLIF(#{travel.content}, ''),
-            course_id = #{travel.courseId},
-            start_date = #{travel.startDate}
-        WHERE
-            id = #{travelId}
+        SET title      = #{dto.title},
+            content    = NULLIF(#{dto.content}, ''),
+            course_id  = #{dto.courseId},
+            start_date = #{dto.startDate}
+        WHERE id = #{travelId}
           AND user_id = #{userId}
     </update>
     <!-- 새로운 여행 생성 -->
-    <insert id="travelCreate" parameterType="map" useGeneratedKeys="true" keyProperty="travel.id">
-        INSERT INTO travels (
-            user_id,
-            title,
-            content,
-            course_id,
-            start_date
-        ) VALUES (
-                     #{userId},
-                     #{travel.title},
-                     #{travel.content},
-                     #{travel.courseId},
-                     #{travel.startDate}
-                 )
+    <insert id="travelCreate" parameterType="com.ssafy.gilbut.domain.travel.model.dto.TravelRequest$CreateDTO"
+            useGeneratedKeys="true" keyProperty="dto.id">
+        INSERT INTO travels (user_id,
+                             title,
+                             content,
+                             course_id,
+                             start_date)
+        VALUES (#{userId},
+                #{dto.title},
+                #{dto.content},
+                #{dto.courseId},
+                #{dto.startDate})
     </insert>
+
+    <!-- 공통 SELECT 절 -->
+    <sql id="travelSelectColumns">
+        t.id AS travel_id,
+        t.title AS travel_title,
+        t.content AS travel_content,
+        t.start_date AS travel_start_date,
+
+        c.id AS course_id,
+        c.name AS course_name,
+        c.dist AS course_dist,
+        c.turnaround AS course_turnaround,
+        c.level AS course_level,
+        c.cycle AS course_cycle,
+        c.summary AS course_summary,
+        c.detail AS course_detail,
+        c.travel_point AS course_travel_point,
+        c.traveler_info AS course_traveler_info,
+        c.sigun AS course_sigun,
+        c.sido_code AS course_sido_code,
+        c.gugun_code AS course_gugun_code,
+        c.road_or_bike AS course_road_or_bike,
+        c.created_at AS course_created_at,
+        c.updated_at AS course_updated_at,
+
+        <!-- User 테이블 -->
+        u.id AS user_id,
+        u.login_id AS user_login_id,
+        u.email AS user_email,
+        u.profile_img AS user_profile_img,
+        u.nickname AS user_nickname,
+        u.created_at AS user_created_at,
+        u.updated_at AS user_updated_at,
+        u.role AS user_role,
+        u.status AS user_status,
+
+        r.id AS route_id,
+        r.name AS route_name,
+        r.summary AS route_summary,
+        r.detail AS route_detail,
+        r.road_or_bike AS route_road_or_bike,
+        r.created_at AS route_created_at,
+        r.updated_at AS route_updated_at,
+
+        p.id AS plan_id,
+        p.sequence AS plan_sequence,
+
+        a.id AS attraction_id,
+        a.content_id AS attraction_content_id,
+        a.content_type_id AS attraction_content_type_id,
+        ct.content_type_name AS attraction_content_type,
+        a.area_code AS attraction_area_code,
+        s.sido_name AS attraction_area,
+        a.si_gun_gu_code AS attraction_si_gun_gu_code,
+        g.gugun_name AS attraction_gun_gu,
+        a.title AS attraction_title,
+        a.first_image1 AS attraction_first_image_1,
+        a.first_image2 AS attraction_first_image_2,
+        a.map_level AS attraction_map_level,
+        a.latitude AS attraction_latitude,
+        a.longitude AS attraction_longitude,
+        a.tel AS attraction_tel,
+        a.addr1 AS attraction_addr_1,
+        a.addr2 AS attraction_addr_2,
+        a.homepage AS attraction_homepage,
+        a.overview AS attraction_overview,
+
+        pc.id AS plan_course_id
+    </sql>
+
+    <!-- 공통 JOIN 절 -->
+    <sql id="travelJoinTables">
+    LEFT JOIN courses c ON t.course_id = c.id
+    LEFT JOIN routes r ON c.route_id = r.id
+    LEFT JOIN plans p ON t.id = p.travel_id
+    LEFT JOIN Users u ON u.id = t.user_id
+    LEFT JOIN attractions a ON p.attraction_id = a.id
+    LEFT JOIN contenttypes ct ON ct.content_type_id = a.content_type_id
+    LEFT JOIN sidos s ON s.sido_code = a.area_code
+    LEFT JOIN guguns g ON (g.gugun_code = a.si_gun_gu_code AND s.sido_code = g.sido_code)
+    LEFT JOIN courses pc ON p.course_id = pc.id
+    </sql>
 
 </mapper>

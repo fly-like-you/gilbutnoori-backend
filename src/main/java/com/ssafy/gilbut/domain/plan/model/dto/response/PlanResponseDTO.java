@@ -1,6 +1,6 @@
 package com.ssafy.gilbut.domain.plan.model.dto.response;
 
-import com.ssafy.gilbut.domain.attraction.model.dto.AttractionDTO;
+import com.ssafy.gilbut.domain.attraction.model.dto.AttractionResponse;
 import com.ssafy.gilbut.domain.course.model.dto.CourseSimpleResponseDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -19,7 +19,7 @@ public class PlanResponseDTO {
     private Long id;
 
     @Schema(description = "관광지 DTO", example = "")
-    private AttractionDTO attraction;
+    private AttractionResponse.SimpleResultDTO attraction;
 
     @Schema(description = "여행 ID", example = "1")
     private Long travelId;

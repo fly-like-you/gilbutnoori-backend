@@ -21,7 +21,7 @@ public class BoardResponse {
     public static class DetailResultDTO {
 
         @Schema(description = "글번호")
-        private int id;
+        private Long id;
 
         @Schema(description = "작성자 아이디")
         private String loginId;
@@ -60,7 +60,7 @@ public class BoardResponse {
     @Schema(title = "SimpleResultDTO : 게시글정보", description = "게시글의 간단한 정보를 나타낸다")
     public static class SimpleResultDTO {
         @Schema(description = "글번호")
-        private int id;
+        private Long id;
 
         @Schema(description = "글제목")
         private String title;

@@ -1,26 +1,23 @@
 package com.ssafy.gilbut.domain.travel.mapper;
 
-import com.ssafy.gilbut.domain.travel.model.dto.request.TravelCreateRequestDTO;
-import com.ssafy.gilbut.domain.travel.model.dto.request.TravelUpdateRequestDTO;
-import com.ssafy.gilbut.domain.travel.model.dto.response.TravelDetailResponseDTO;
-import com.ssafy.gilbut.domain.travel.model.dto.response.TravelResponseDTO;
+import com.ssafy.gilbut.domain.travel.model.dto.TravelRequest;
+import com.ssafy.gilbut.domain.travel.model.entity.Travel;
+import java.util.List;
+import java.util.Optional;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.List;
-import java.util.Optional;
-
 @Mapper
 public interface TravelMapper {
-    List<TravelResponseDTO> findTravelListByUserId(@Param("userId") Integer userId);
+    List<Travel> findTravelListByUserId(@Param("userId") Long userId);
 
-    Optional<TravelDetailResponseDTO> findTravelByTravelId(@Param("travelId") Integer travelId);
+    Optional<Travel> findTravelByTravelId(@Param("travelId") Long travelId);
 
-    int countTotalTravelByUserId(@Param("userId") Integer userId);
+    int countTotalTravelByUserId(@Param("userId") Long userId);
 
-    void deleteTravelByTravelId(@Param("travelId") Integer travelId);
+    void deleteTravelByTravelId(@Param("travelId") Long travelId);
 
-    void updateTravel(@Param("userId") Integer userId, @Param("travelId") Integer travelId, @Param("travel") TravelUpdateRequestDTO travelDTO);
+    void updateTravel(@Param("userId") Long userId, @Param("travelId") Long travelId, @Param("dto") TravelRequest.UpdateDTO createDTO);
 
-    int travelCreate(@Param("userId") Integer userId, @Param("travel") TravelCreateRequestDTO travelCreateRequestDTO);
+    void travelCreate(@Param("userId") Long userId, @Param("dto") TravelRequest.CreateDTO createDTO);
 }

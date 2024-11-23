@@ -24,7 +24,7 @@ public interface PlanService {
      * @param planId 조회할 계획 ID
      * @return 계획 상세 정보
      */
-    PlanResponse.DetailResultDTO getPlan(String accessToken, Integer planId);
+    PlanResponse.DetailResultDTO getPlan(String accessToken, Long planId);
 
     /**
      * 사용자의 여행 계획 목록을 페이지네이션하여 조회합니다.
@@ -41,12 +41,12 @@ public interface PlanService {
      * @param plans 수정 요청 정보
      * @return 수정된 계획 정보
      */
-    PlanResponse.DetailResultListDTO updatePlan(String accessToken, Integer travelId, List<PlanRequest.CreateDTO> plans);
+    PlanResponse.DetailResultListDTO updatePlan(String accessToken, Long travelId, List<PlanRequest.CreateDTO> plans);
 
     /**
      * 계획을 삭제합니다.
      * @param accessToken 사용자 인증 토큰
      * @param travelId 삭제할 계획 ID
      */
-    void deletePlanByTravelId(String accessToken, Integer travelId);
+    void deletePlanByTravelId(String accessToken, Long travelId);
 }

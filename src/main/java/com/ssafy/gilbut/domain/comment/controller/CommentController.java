@@ -47,7 +47,7 @@ public class CommentController {
     @PutMapping("/{commentId}")
     public ResponseEntity<?> updateComment(
             @RequestHeader("Authorization") String accessToken,
-            @PathVariable("commentId") Integer commentId,
+            @PathVariable("commentId") Long commentId,
             @RequestBody UpdateDTO updateDTO
     ) {
         log.info("댓글 수정");
@@ -59,7 +59,7 @@ public class CommentController {
     @DeleteMapping("/{commentId}")
     public ResponseEntity<?> deleteComment(
             @RequestHeader("Authorization") String accessToken,
-            @PathVariable("commentId") Integer commentId
+            @PathVariable("commentId") Long commentId
     ) {
         log.info("댓글 삭제");
 

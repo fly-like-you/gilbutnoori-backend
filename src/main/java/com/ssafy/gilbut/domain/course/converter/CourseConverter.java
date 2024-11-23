@@ -33,4 +33,14 @@ public class CourseConverter {
                 .route(routeDTO)
                 .build();
     }
+
+    public static CourseResponse.SimpleResultDTO toSimpleResultDTO (Course course) {
+        return CourseResponse.SimpleResultDTO.builder()
+                .id(course.getId())
+                .name(course.getName())
+                .dist(course.getDist())
+                .turnaround(course.getTurnaround())
+                .level(course.getLevel())
+                .build();
+    }
 }

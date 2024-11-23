@@ -13,11 +13,11 @@ import org.apache.ibatis.annotations.Param;
 public interface CommentMapper {
     List<Comment> listComment();
 
-    void createComment(@Param("userId") Integer userId, @Param("dto") CreateDTO createDTO);
+    void createComment(@Param("userId") Long userId, @Param("dto") CreateDTO createDTO);
 
-    void updateComment(@Param("commentId") Integer commentId, @Param("dto") UpdateDTO updateDTO);
+    void updateComment(@Param("commentId") Long commentId, @Param("dto") UpdateDTO updateDTO);
 
-    void deleteComment(@Param("commentId") Integer commentId);
+    void deleteComment(@Param("commentId") Long commentId);
 
-    Optional<Comment> findCommentByCommentId(@Param("commentId") Integer commentId);
+    Optional<Comment> findCommentByCommentId(@Param("commentId") Long commentId);
 }

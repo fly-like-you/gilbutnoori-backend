@@ -9,8 +9,20 @@ import lombok.*;
 @AllArgsConstructor
 public class Attraction {
     private Long id;
+    private Long contentId;
+
+    /* 컨텐츠 타입 */
     private Long contentTypeId;
+    private String contentType;
+
+    /* 시군구 타입 */
+    private Long areaCode;
+    private String area;
+
     private Long siGunGuCode;
+    private String gunGu;
+
+    /* 기타 정보 */
     private String title;
     private String firstImage1;
     private String firstImage2;
