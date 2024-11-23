@@ -29,6 +29,12 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // 게시판 관련 에러
     BOARD_NOT_FOUND(HttpStatus.BAD_REQUEST, "BOARD4001", "게시판이 없습니다."),
+    BOARD_OWNER_NOT_MATCHED(HttpStatus.BAD_REQUEST, "BOARD4002", "게시글의 주인과 로그인한 사용자가 일치하지 않습니다."),
+
+    // 댓글 관련 에러
+    COMMENT_NOT_FOUND(HttpStatus.BAD_REQUEST, "COMMENT4001", "댓글이 없습니다."),
+    COMMENT_OWNER_NOT_MATCHED(HttpStatus.BAD_REQUEST, "COMMENT4002", "댓글의 주인과 로그인한 사용자가 일치하지 않습니다."),
+
 
     // 멤버 관련 에러
     USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "MEMBER4001", "사용자가 없습니다."),

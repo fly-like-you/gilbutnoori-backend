@@ -15,7 +15,6 @@ public class CommentRequest {
     @AllArgsConstructor
     public static class CreateDTO {
         private Integer id;
-        private Integer userId;
         private Integer boardId;
         private String content;
     }

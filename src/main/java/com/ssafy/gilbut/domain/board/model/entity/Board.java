@@ -1,15 +1,15 @@
 package com.ssafy.gilbut.domain.board.model.entity;
 
+import com.ssafy.gilbut.domain.comment.model.entity.Comment;
 import com.ssafy.gilbut.domain.travel.model.entity.Travel;
 import com.ssafy.gilbut.domain.user.model.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
@@ -26,6 +26,9 @@ public class Board {
 
     @Schema(description = "선택한 여행 정보")
     private Travel travel;
+
+    @Schema(description = "댓글 리스트")
+    private List<Comment> comments = new ArrayList<>();
 
     @Schema(description = "글내용")
     private String content;

@@ -53,6 +53,19 @@
 			</collection>
 		</association>
 
+		<!-- Comments 관련 매핑 -->
+		<collection property="comments" javaType="Comment">
+			<id property="id" column="comment_id"/>
+			<result property="content" column="comment_content"/>
+			<result property="createdAt" column="comment_created_at"/>
+			<result property="updatedAt" column="comment_updated_at"/>
+			<association property="user" javaType="User">
+				<id property="id" column="comment_user_id"/>
+				<result property="loginId" column="comment_user_login_id"/>
+				<result property="nickname" column="comment_user_nickname"/>
+			</association>
+		</collection>
+
 		<!-- FileInfo 리스트 매핑 -->
 		<collection property="fileInfos" javaType="FileInfo">
 			<id property="id" column="file_id"/>
@@ -104,7 +117,7 @@
 					<!-- INSERT -->
 	<insert id="writeArticle" parameterType="com.ssafy.gilbut.domain.board.model.dto.BoardRequest$CreateDTO">
 		insert into boards (user_id, title, content, hit, created_at)
-		values (#{dto.userId}, #{dto.title}, #{dto.content}, 0, now())
+		values (#{userId}, #{dto.title}, #{dto.content}, 0, now())
 	</insert>
 	
 	<insert id="registerFile" parameterType="com.ssafy.gilbut.domain.board.model.dto.BoardRequest$FileCreateDTO">
@@ -123,7 +136,7 @@
 	
 	<update id="modifyArticle" parameterType="com.ssafy.gilbut.domain.board.model.dto.BoardRequest$UpdateDTO">
 		update boards
-		set title = #{title}, content = #{content}
+		set title = #{dto.title}, content = #{dto.content}
 		where id = #{boardId}
 	</update>
 	
@@ -174,7 +187,16 @@
     f.id as file_id,
     f.save_folder as file_info_save_folder,
     f.original_file as file_info_original_file,
-    f.save_file as file_info_save_file
+    f.save_file as file_info_save_file,
+
+	co.id as comment_id,
+	co.content as comment_content,
+	co.created_at as comment_created_at,
+	co.updated_at as comment_updated_at,
+
+	co_u.id as comment_user_id,
+	co_u.login_id as comment_user_login_id,
+	co_u.nickname as comment_user_nickname
 	</sql>
 
 	<sql id="boardJoins">
@@ -183,6 +205,10 @@
     LEFT JOIN plans p ON t.id = p.travel_id
     LEFT JOIN attractions a ON p.attraction_id = a.id
     LEFT JOIN courses c ON p.course_id = c.id
+	# 댓글 기능
+	LEFT JOIN comments co ON co.board_id = b.id
+	LEFT JOIN users co_u ON co_u.id = co.user_id
+
     LEFT JOIN file_infos f ON b.id = f.board_id
 	</sql>
 

@@ -43,34 +43,46 @@ public class BoardController {
 	}
 
 	@GetMapping("/modify/{boardId}")
-	public ResponseEntity<?> getModifyArticle(@PathVariable("boardId") int boardId) {
+	public ResponseEntity<?> getModifyArticle(
+			@RequestHeader("Authorization") String accessToken,
+			@PathVariable("boardId") int boardId
+	) {
 
 		log.info("getModifyArticle - 호출 : " + boardId);
-		BoardResponse.DetailResultDTO result = boardService.getArticle(boardId);
+		BoardResponse.DetailResultDTO result = boardService.getModifyArticle(accessToken, boardId);
 
 		return ResponseEntity.ok().body(ApiResponse.onSuccess(result));
 	}
 
 	@PostMapping
-	public ResponseEntity<?> writeArticle(@RequestBody BoardRequest.CreateDTO boardDto) {
+	public ResponseEntity<?> writeArticle(
+			@RequestHeader("Authorization") String accessToken,
+			@RequestBody BoardRequest.CreateDTO boardDto
+	) {
 		log.info("writeArticle boardDto - {}", boardDto);
-		boardService.writeArticle(boardDto);
+		boardService.writeArticle(accessToken, boardDto);
 
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
-	@PutMapping
-	public ResponseEntity<?> modifyArticle(@RequestBody BoardRequest.UpdateDTO boardDto) {
+	@PutMapping("/modify/{boardId}")
+	public ResponseEntity<?> modifyArticle(
+			@RequestHeader("Authorization") String accessToken,
+			@PathVariable("boardId") Integer boardId,
+			@RequestBody BoardRequest.UpdateDTO boardDto) {
 		log.info("modifyArticle - 호출 {}", boardDto);
 
-		boardService.modifyArticle(boardDto);
+		boardService.modifyArticle(accessToken, boardId, boardDto);
 		return ResponseEntity.ok().build();
 	}
 	
 	@DeleteMapping("/{boardId}")
-	public ResponseEntity<?> deleteArticle(@PathVariable("boardId") int boardId) {
+	public ResponseEntity<?> deleteArticle(
+			@RequestHeader("Authorization") String accessToken,
+			@PathVariable("boardId") Integer boardId
+	) {
 		log.info("deleteArticle - 호출");
-		boardService.deleteArticle(boardId);
+		boardService.deleteArticle(accessToken, boardId);
 		return ResponseEntity.ok().build();
 	}
 

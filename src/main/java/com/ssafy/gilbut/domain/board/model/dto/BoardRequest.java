@@ -18,7 +18,6 @@ public class BoardRequest {
     @Schema(title = "", description = "")
     public static class CreateDTO {
         private Integer id;
-        private Integer userId;
         private String title;
         private Integer travelId;
         private String content;
@@ -33,7 +32,6 @@ public class BoardRequest {
     @AllArgsConstructor
     @Schema(title = "", description = "")
     public static class UpdateDTO {
-        private Integer id;
         private String title;
         private Integer travelId;
         private String content;
