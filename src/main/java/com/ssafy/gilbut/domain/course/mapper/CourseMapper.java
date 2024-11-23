@@ -1,29 +1,29 @@
 package com.ssafy.gilbut.domain.course.mapper;
 
-import com.ssafy.gilbut.domain.course.model.dto.CourseDetailResponseDTO;
-import com.ssafy.gilbut.domain.course.model.dto.CourseSearchCriteria;
-import com.ssafy.gilbut.domain.course.model.dto.RouteDTO;
+import com.ssafy.gilbut.domain.course.model.dto.CourseRequest;
+import com.ssafy.gilbut.domain.course.model.entity.Course;
+import com.ssafy.gilbut.domain.course.model.entity.Route;
+import java.util.List;
+import java.util.Optional;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.data.domain.Pageable;
-
-import java.util.List;
-import java.util.Optional;
+import org.springframework.data.domain.Sort;
 
 @Mapper
 public interface CourseMapper {
-    List<CourseDetailResponseDTO> courseList(@Param("pageable") Pageable pageable);
+    List<Course> courseList(@Param("pageable") Pageable pageable, @Param("sort") Sort sort);
+    List<Course> courseSearchBy(@Param("criteria") CourseRequest.SearchCriteria criteria,
+                                @Param("pageable") Pageable pageable);
+    Optional<Course> courseDetail(@Param("courseId") String courseId);
 
-    Optional<CourseDetailResponseDTO> courseDetail(@Param("courseId") String courseId);
-
-    List<RouteDTO> routeList(@Param("pageable") Pageable page);
+    List<Route> routeList(@Param("pageable") Pageable page);
 
     int countCourses();
 
     int countRoutes();
 
-    int countCoursesBy(@Param("criteria") CourseSearchCriteria criteria);
+    int countCoursesBy(@Param("criteria") CourseRequest.SearchCriteria criteria);
 
-    List<CourseDetailResponseDTO> courseSearchBy(@Param("criteria") CourseSearchCriteria criteria,
-                                                 @Param("pageable") Pageable pageable);
+
 }

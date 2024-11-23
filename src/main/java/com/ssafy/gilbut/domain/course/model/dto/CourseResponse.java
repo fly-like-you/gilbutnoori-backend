@@ -1,11 +1,17 @@
 package com.ssafy.gilbut.domain.course.model.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
-
 import java.time.LocalDate;
+import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 public class CourseResponse {
+
     @Getter
     @Setter
     @Builder
@@ -19,6 +25,9 @@ public class CourseResponse {
 
         @Schema(description = "코스 이름", example = "해파랑길 5코스")
         private String name;
+
+        @Schema(description = "길 이름", example = "해파랑길")
+        private RouteResponse.SimpleResultDTO route;
 
         @Schema(description = "코스 길이(km)", example = "18")
         private Integer dist;
@@ -34,6 +43,51 @@ public class CourseResponse {
     @Setter
     @Builder
     @ToString
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema(title = "CourseResponse SimpleResultDTO : 코스 목록 & 페이지 정보", description = "코스 목록과 현재 페이지와 전체 페이지 정보를 나타낸다.")
+    public static class SimplePageResultDTO {
+        @Schema(description = "글목록")
+        private List<CourseResponse.SimpleResultDTO> courses;
+
+        @Schema(description = "페이지당 항목 수",
+                example = "10")
+        private Integer listSize;
+
+        @Schema(description = "첫 페이지 여부",
+                example = "true")
+        private boolean isFirstPage;
+
+        @Schema(description = "마지막 페이지 여부",
+                example = "false")
+        private boolean isLastPage;
+
+        @Schema(description = "전체 페이지 수",
+                example = "5")
+        private Integer totalPages;
+
+        @Schema(description = "전체 항목 수",
+                example = "42")
+        private Long totalElements;
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @ToString
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Schema(title = "Course 목록", description = "코스 정보 리스트")
+    public static class SimpleResultListDTO {
+        @Schema(description = "Course 목록")
+        private List<CourseResponse.SimpleResultDTO> courses;
+
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @ToString
     @AllArgsConstructor
     @NoArgsConstructor
     public static class DetailResultDTO {
@@ -42,6 +96,9 @@ public class CourseResponse {
 
         @Schema(description = "코스 이름", example = "해파랑길 5코스")
         private String name;
+
+        @Schema(description = "길 이름", example = "해파랑길")
+        private RouteResponse.SimpleResultDTO route;
 
         @Schema(description = "코스 길이(km)", example = "18")
         private Integer dist;
@@ -79,7 +136,5 @@ public class CourseResponse {
         @Schema(description = "둘렛길 수정 시간", example = "2017-01-20 04:20:00")
         private LocalDate updatedAt;
 
-        @Schema(description = "길", example = "T_THEME_MNG0000011235")
-        private RouteResponse.DetailResultDTO route;
     }
 }

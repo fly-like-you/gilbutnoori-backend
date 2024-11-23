@@ -1,28 +1,25 @@
 package com.ssafy.gilbut.domain.course.controller;
 
-import com.ssafy.gilbut.domain.course.model.dto.CourseSearchCriteria;
+import com.ssafy.gilbut.domain.course.model.dto.CourseRequest;
 import com.ssafy.gilbut.util.SizeConstant;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.io.IOException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-
-import java.io.IOException;
-import java.util.Map;
 
 @Tag(name = "코스 정보 컨트롤러", description = "코스 정보 상세보기, 리스트 보기 등의 처리를 하는 클래스")
 public interface CourseControllerDocs {
     @Operation(summary = "코스 검색", description = "필터 별로 다양한 코스를 검색할 수 있는 기능")
     ResponseEntity<?> courseSearch(
-            @Parameter(description = "검색용 객체", required = true) CourseSearchCriteria searchCriteria,
+            @Parameter(description = "검색용 객체", required = true) CourseRequest.SearchCriteria searchCriteria,
             @PageableDefault(size = SizeConstant.LIST_SIZE) Pageable page
     );
 
     @Operation(summary = "코스 전체 얻어오기", description = "코스 목록 데이터를 가져옵니다. 코스 데이터는 페이지네이션되어 제공됩니다.")
     ResponseEntity<?> courseList(
-            @Parameter(description = "페이지 네이션 데이터") Map<String, Object> map,
             Pageable pageable
     );
 

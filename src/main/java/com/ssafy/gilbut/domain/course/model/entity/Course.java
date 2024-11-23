@@ -3,11 +3,12 @@ package com.ssafy.gilbut.domain.course.model.entity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import lombok.*;
-
 import java.time.LocalDate;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Getter
 @Builder
@@ -18,16 +19,12 @@ import java.time.LocalDate;
 public class Course {
 
     @Schema(description = "둘렛길 아이디", requiredMode = RequiredMode.REQUIRED, example = "T_CRS_MNG0000004190")
-    @Size(max = 30)
-    @NotNull
     private String id;
 
     @Schema(description = "길 아이디", example = "T_THEME_MNG0000011235")
     private Route route;
 
     @Schema(description = "코스 이름", example = "해파랑길 5코스")
-    @Size(max = 60)
-    @NotNull
     private String name;
 
     @Schema(description = "코스 길이(km)", example = "18")
@@ -40,7 +37,6 @@ public class Course {
     private Integer level;
 
     @Schema(description = "순환형, 비순환형", example = "비순환형")
-    @Size(max = 10)
     private String cycle;
 
     @Schema(description = "코스 정보 요약", example = "진하해변을 출발해 덕하역까지 구간 - 해파랑길 울산 구간이 시작되는 코스...")
@@ -56,20 +52,15 @@ public class Course {
     private String travelerInfo;
 
     @Schema(description = "둘렛길 관할 구역", example = "울산 울주군")
-    @Size(max = 10)
-    @NotNull
     private String sigun;
 
     @Schema(description = "둘렛길 시도 코드", example = "6 (부산광역시)")
-    @NotNull
     private Integer sidoCode;
 
     @Schema(description = "둘렛길 구군 코드", example = "12 (sidoCode = 6 기준 수영구)")
-    @NotNull
     private Integer gugunCode;
 
     @Schema(description = "자전거 도로 구분", example = "DNWW")
-    @Size(max = 4)
     private String roadOrBike;
 
     @Future
