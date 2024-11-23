@@ -37,14 +37,16 @@ public class WeatherServiceImpl implements WeatherService {
                 city.getLatitude(),
                 city.getLongitude(),
                 "metric",
-                apiKey
+                apiKey,
+                "kr"
 
                 );
         ForecastResponse forecast = weatherClient.getForecast(
                 city.getLatitude(),
                 city.getLongitude(),
                 "metric",
-                apiKey
+                apiKey,
+                "kr"
         );
 
         return WeatherForecastResponse.builder()

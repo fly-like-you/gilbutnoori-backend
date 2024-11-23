@@ -15,7 +15,8 @@ public interface WeatherClient {
             @RequestParam("lat") String latitude,
             @RequestParam("lon") String longitude,
             @RequestParam("units") String units,
-            @RequestParam("appid") String apiKey
+            @RequestParam("appid") String apiKey,
+            @RequestParam("lang") String lang
     );
 
     @GetMapping("/forecast")
@@ -23,6 +24,7 @@ public interface WeatherClient {
             @RequestParam("lat") String latitude,
             @RequestParam("lon") String longitude,
             @RequestParam("units") String units,
-            @RequestParam("appid") String apiKey
+            @RequestParam("appid") String apiKey,
+            @RequestParam("lang") String lang
     );
 }

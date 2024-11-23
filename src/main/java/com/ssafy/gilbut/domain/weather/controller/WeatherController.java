@@ -11,18 +11,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/weather")
+@RequestMapping("/weather")
 @RequiredArgsConstructor
 public class WeatherController {
     private final WeatherService weatherService;
 
     @GetMapping("/forecast")
-    public ResponseEntity<List<WeatherForecastResponse>> getAllCitiesWeatherForecast() {
+    public ResponseEntity<?> getAllCitiesWeatherForecast() {
         return ResponseEntity.ok(weatherService.getAllCitiesWeatherForecast());
     }
 
     @GetMapping("/forecast/{cityName}")
-    public ResponseEntity<WeatherForecastResponse> getCityWeatherForecast(@PathVariable String cityName) {
+    public ResponseEntity<?> getCityWeatherForecast(@PathVariable String cityName) {
         return ResponseEntity.ok(weatherService.getCityWeatherForecast(cityName));
     }
 }
