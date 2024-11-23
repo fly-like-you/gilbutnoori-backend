@@ -1,8 +1,8 @@
 package com.ssafy.gilbut.domain.plan.controller;
 
 import com.ssafy.gilbut.advice.ApiResponse;
-import com.ssafy.gilbut.domain.plan.model.dto.request.PlanRequest;
-import com.ssafy.gilbut.domain.plan.model.dto.response.PlanResponse;
+import com.ssafy.gilbut.domain.plan.model.dto.PlanRequest;
+import com.ssafy.gilbut.domain.plan.model.dto.PlanResponse;
 import com.ssafy.gilbut.domain.plan.service.PlanService;
 import com.ssafy.gilbut.util.SizeConstant;
 import lombok.RequiredArgsConstructor;

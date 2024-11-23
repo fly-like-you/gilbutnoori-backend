@@ -3,7 +3,7 @@ package com.ssafy.gilbut.domain.travel.converter;
 import com.ssafy.gilbut.domain.course.converter.CourseConverter;
 import com.ssafy.gilbut.domain.course.model.dto.CourseResponse.SimpleResultDTO;
 import com.ssafy.gilbut.domain.plan.converter.PlanConverter;
-import com.ssafy.gilbut.domain.plan.model.dto.response.PlanResponse.DetailResultListDTO;
+import com.ssafy.gilbut.domain.plan.model.dto.PlanResponse.DetailResultListDTO;
 import com.ssafy.gilbut.domain.travel.model.dto.TravelResponse;
 import com.ssafy.gilbut.domain.travel.model.entity.Travel;
 import java.util.List;

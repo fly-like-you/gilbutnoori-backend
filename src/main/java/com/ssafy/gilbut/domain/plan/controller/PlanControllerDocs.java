@@ -1,7 +1,7 @@
 package com.ssafy.gilbut.domain.plan.controller;
 
-import com.ssafy.gilbut.domain.plan.model.dto.request.PlanRequest;
-import com.ssafy.gilbut.domain.plan.model.dto.response.PlanResponse;
+import com.ssafy.gilbut.domain.plan.model.dto.PlanRequest;
+import com.ssafy.gilbut.domain.plan.model.dto.PlanResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

@@ -1,10 +1,10 @@
 package com.ssafy.gilbut.domain.plan.converter;
 
-import static com.ssafy.gilbut.domain.plan.model.dto.response.PlanResponse.DetailResultDTO;
+import static com.ssafy.gilbut.domain.plan.model.dto.PlanResponse.DetailResultDTO;
 
 import com.ssafy.gilbut.domain.attraction.converter.AttractionConverter;
 import com.ssafy.gilbut.domain.course.converter.CourseConverter;
-import com.ssafy.gilbut.domain.plan.model.dto.response.PlanResponse;
+import com.ssafy.gilbut.domain.plan.model.dto.PlanResponse;
 import com.ssafy.gilbut.domain.plan.model.entity.Plan;
 import java.util.List;
 import java.util.Optional;

@@ -1,4 +1,4 @@
-package com.ssafy.gilbut.domain.plan.model.dto.request;
+package com.ssafy.gilbut.domain.plan.model.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

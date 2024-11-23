@@ -16,6 +16,9 @@ public enum ErrorStatus implements BaseErrorCode {
     _UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "COMMON401", "인증이 필요합니다."),
     _FORBIDDEN(HttpStatus.FORBIDDEN, "COMMON403", "금지된 요청입니다."),
 
+    // 입력 관련 에러
+    NOT_ENOUGH_REQUEST_BODY_ERROR(HttpStatus.BAD_REQUEST, "COMMON404", "요청 바디가 잘못되었습니다."),
+
     // 코스 관련 에러
     COURSE_NOT_FOUND(HttpStatus.BAD_REQUEST, "COURSE4001", "관련 코스가 없습니다."),
 
@@ -35,6 +38,7 @@ public enum ErrorStatus implements BaseErrorCode {
     // 댓글 관련 에러
     COMMENT_NOT_FOUND(HttpStatus.BAD_REQUEST, "COMMENT4001", "댓글이 없습니다."),
     COMMENT_OWNER_NOT_MATCHED(HttpStatus.BAD_REQUEST, "COMMENT4002", "댓글의 주인과 로그인한 사용자가 일치하지 않습니다."),
+
 
 
     // 멤버 관련 에러

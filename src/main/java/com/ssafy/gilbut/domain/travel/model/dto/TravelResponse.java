@@ -1,7 +1,7 @@
 package com.ssafy.gilbut.domain.travel.model.dto;
 
 import com.ssafy.gilbut.domain.course.model.dto.CourseResponse;
-import com.ssafy.gilbut.domain.plan.model.dto.response.PlanResponse.DetailResultListDTO;
+import com.ssafy.gilbut.domain.plan.model.dto.PlanResponse.DetailResultListDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 import java.util.List;

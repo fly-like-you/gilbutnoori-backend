@@ -1,7 +1,7 @@
 package com.ssafy.gilbut.domain.plan.service;
 
-import com.ssafy.gilbut.domain.plan.model.dto.request.PlanRequest;
-import com.ssafy.gilbut.domain.plan.model.dto.response.PlanResponse;
+import com.ssafy.gilbut.domain.plan.model.dto.PlanRequest;
+import com.ssafy.gilbut.domain.plan.model.dto.PlanResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 

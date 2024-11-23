@@ -1,6 +1,6 @@
 package com.ssafy.gilbut.domain.plan.mapper;
 
-import com.ssafy.gilbut.domain.plan.model.dto.request.PlanRequest;
+import com.ssafy.gilbut.domain.plan.model.dto.PlanRequest;
 import com.ssafy.gilbut.domain.plan.model.entity.Plan;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

@@ -1,6 +1,7 @@
 package com.ssafy.gilbut.util;
 
 import com.ssafy.gilbut.advice.status.ErrorStatus;
+import com.ssafy.gilbut.domain.user.model.entity.Token;
 import com.ssafy.gilbut.domain.user.model.entity.User;
 import com.ssafy.gilbut.exception.handler.GeneralExceptionHandler;
 import io.jsonwebtoken.Claims;
@@ -8,12 +9,15 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import java.util.Base64;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.StringTokenizer;
+import javax.crypto.SecretKey;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
-import javax.crypto.SecretKey;
-import java.util.*;
 
 @Component
 @Slf4j
@@ -28,13 +32,33 @@ public class JWTUtil {
     @Value("${jwt.secret-key}")
     private String secretKey;
 
-    public String createAccessToken(User user) {
-        return create(user, "accessToken", accessTokenExpireTime);
+    public Token createJwtToken(User user) {
+        return Token.builder()
+                .accessToken(
+                        create(user, "accessToken", accessTokenExpireTime)
+                )
+                .refreshToken(
+                        create(user, "refreshToken", refreshTokenExpireTime)
+                )
+                .build();
+    }
+    public Token createAccessToken(User user) {
+        return Token.builder()
+                .accessToken(
+                        create(user, "accessToken", accessTokenExpireTime)
+                )
+                .refreshToken(null)
+                .build();
     }
 
     //	AccessToken에 비해 유효기간을 길게 설정.
-    public String createRefreshToken(User user) {
-        return create(user, "refreshToken", refreshTokenExpireTime);
+    public Token createRefreshToken(User user) {
+        return Token.builder()
+                .accessToken(null)
+                .refreshToken(
+                        create(user, "refreshToken", refreshTokenExpireTime)
+                )
+                .build();
     }
 
     public Long getUserId(String header) {

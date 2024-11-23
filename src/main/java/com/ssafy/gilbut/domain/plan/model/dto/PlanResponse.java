@@ -1,4 +1,4 @@
-package com.ssafy.gilbut.domain.plan.model.dto.response;
+package com.ssafy.gilbut.domain.plan.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ssafy.gilbut.domain.attraction.model.dto.AttractionResponse;
