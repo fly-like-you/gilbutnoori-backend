@@ -101,7 +101,6 @@
 		from file_infos
 		where id = #{boardId}
 	</select>
-
 					<!-- INSERT -->
 	<insert id="writeArticle" parameterType="com.ssafy.gilbut.domain.board.model.dto.BoardRequest$CreateDTO">
 		insert into boards (user_id, title, content, hit, created_at)

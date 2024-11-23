@@ -3,11 +3,11 @@ package com.ssafy.gilbut.domain.board.mapper;
 import com.ssafy.gilbut.domain.board.model.dto.BoardRequest;
 import com.ssafy.gilbut.domain.board.model.dto.FileInfoDto;
 import com.ssafy.gilbut.domain.board.model.entity.Board;
+import java.util.List;
+import java.util.Optional;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.data.domain.Pageable;
-
-import java.util.List;
 
 @Mapper
 public interface BoardMapper {
@@ -16,7 +16,7 @@ public interface BoardMapper {
 
     List<FileInfoDto> fileInfoList(@Param("boardId") int boardId);
 
-    Board getArticle(@Param("boardId") int boardId);
+    Optional<Board> getArticle(@Param("boardId") int boardId);
 
     int getTotalArticleCount(@Param("pageable") Pageable pageable);
 

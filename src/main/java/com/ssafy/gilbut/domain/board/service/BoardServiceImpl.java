@@ -1,17 +1,18 @@
 package com.ssafy.gilbut.domain.board.service;
 
+import com.ssafy.gilbut.advice.status.ErrorStatus;
 import com.ssafy.gilbut.domain.board.converter.BoardConverter;
 import com.ssafy.gilbut.domain.board.mapper.BoardMapper;
 import com.ssafy.gilbut.domain.board.model.dto.BoardRequest;
 import com.ssafy.gilbut.domain.board.model.dto.BoardResponse;
 import com.ssafy.gilbut.domain.board.model.entity.Board;
+import com.ssafy.gilbut.exception.handler.GeneralExceptionHandler;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -32,11 +33,12 @@ public class BoardServiceImpl implements BoardService {
 	public BoardResponse.DetailResultDTO getArticle(Integer boardId) {
 		log.info("getArticle -> {}", boardId);
 
-		Board article = boardMapper.getArticle(boardId);
+		Board article = getSafeBoardArticleByBoardId(boardId);
 		log.debug("article: {}", article);
 
 		return BoardConverter.toDetailResultDTO(article);
 	}
+
 
 	@Override
 	public void updateHit(Integer boardId) {
@@ -63,5 +65,12 @@ public class BoardServiceImpl implements BoardService {
 	public void deleteArticle(Integer boardId) {
 		boardMapper.deleteArticle(boardId);
 	}
+
+	private Board getSafeBoardArticleByBoardId(Integer boardId) {
+		return boardMapper.getArticle(boardId).orElseThrow(
+				() -> new GeneralExceptionHandler(ErrorStatus.BOARD_NOT_FOUND)
+		);
+	}
+
 
 }

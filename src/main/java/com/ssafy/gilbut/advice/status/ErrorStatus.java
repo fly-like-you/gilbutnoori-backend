@@ -27,6 +27,9 @@ public enum ErrorStatus implements BaseErrorCode {
     PLAN_ORDER_DUPLICATED_ERROR(HttpStatus.BAD_REQUEST, "PLAN4002", "여행지 탐방 순서가 중복됩니다. null값이나 key를 확인해주세요"),
     PLAN_COURSE_NOT_ONE_ERROR(HttpStatus.BAD_REQUEST, "PLAN4003", "코스의 개수는 무조건 1개만 선택가능합니다."),
 
+    // 게시판 관련 에러
+    BOARD_NOT_FOUND(HttpStatus.BAD_REQUEST, "BOARD4001", "게시판이 없습니다."),
+
     // 멤버 관련 에러
     USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "MEMBER4001", "사용자가 없습니다."),
     USER_NICKNAME_NOT_EXIST(HttpStatus.BAD_REQUEST, "MEMBER4002", "닉네임은 필수 입니다."),
