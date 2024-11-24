@@ -77,7 +77,7 @@ public class TravelController implements TravelControllerDocs {
             @RequestBody TravelRequest.CreateDTO createDTO
     ) {
         travelService.travelCreate(accessToken, createDTO);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.onSuccess(null));
     }
 
     /**

@@ -54,7 +54,7 @@ public class UserController implements UserControllerDocs {
     @PostMapping("/logout")
     public ResponseEntity<?> logout(@RequestHeader("Authorization") String accessToken) {
         userService.deleteRefreshToken(accessToken);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().body(ApiResponse.onSuccess(null));
     }
 
     /**
@@ -77,7 +77,7 @@ public class UserController implements UserControllerDocs {
         log.debug("register user -> {}", user);
         userService.register(user);
 
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.onSuccess(null));
     }
 
 

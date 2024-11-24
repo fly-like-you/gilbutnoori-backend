@@ -1,5 +1,6 @@
 package com.ssafy.gilbut.domain.board.controller;
 
+import com.ssafy.gilbut.advice.ApiResponse;
 import com.ssafy.gilbut.domain.board.model.dto.FileInfoDto;
 import com.ssafy.gilbut.domain.board.model.entity.FileInfo;
 import com.ssafy.gilbut.domain.board.service.FileService;
@@ -28,7 +29,8 @@ public class FileUploadController {
 
         fileService.saveFiles(files, boardId);
 
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.onSuccess(null));
+
 
     }
 

@@ -64,7 +64,8 @@ public class BoardController {
 		log.info("writeArticle boardDto - {}", boardDto);
 		boardService.writeArticle(accessToken, boardDto);
 
-		return ResponseEntity.status(HttpStatus.CREATED).build();
+		return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.onSuccess(null));
+
 	}
 
 	@PutMapping("/modify/{boardId}")

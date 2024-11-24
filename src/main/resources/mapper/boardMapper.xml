@@ -1,219 +1,269 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
-	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ssafy.gilbut.domain.board.mapper.BoardMapper">
 
-	<resultMap id="BoardResultMap" type="Board">
-		<id property="id" column="board_id"/>
-		<result property="title" column="board_title"/>
-		<result property="content" column="board_content"/>
-		<result property="hit" column="board_hit"/>
-		<result property="created_at" column="board_created_at"/>
-		<result property="updated_at" column="board_updated_at"/>
+    <!-- User ResultMap -->
+    <resultMap id="UserResultMap" type="User">
+        <id property="id" column="user_id"/>
+        <result property="loginId" column="user_login_id"/>
+        <result property="nickname" column="user_nickname"/>
+        <result property="email" column="user_email"/>
+    </resultMap>
 
-		<!-- User 매핑 -->
-		<association property="user" javaType="User">
-			<id property="id" column="user_id"/>
-			<result property="loginId" column="user_login_id"/>
-			<result property="nickname" column="user_nickname"/>
-			<result property="email" column="user_email"/>
-		</association>
+    <!-- Attraction ResultMap -->
+    <resultMap id="AttractionResultMap" type="Attraction">
+        <id property="id" column="attraction_id"/>
+        <result property="title" column="attraction_name"/>
+        <result property="contentTypeId" column="attraction_content_type_id"/>
+        <result property="areaCode" column="attraction_area_code"/>
+        <result property="siGunGuCode" column="attraction_si_gun_gu_code"/>
+        <result property="latitude" column="attraction_latitude"/>
+        <result property="longitude" column="attraction_longitude"/>
+        <result property="firstImage1" column="attraction_first_image1"/>
+        <result property="firstImage2" column="attraction_first_image2"/>
+    </resultMap>
 
-		<!-- Travel 매핑 -->
-		<association property="travel" javaType="Travel">
-			<id property="id" column="travel_id"/>
-			<result property="title" column="travel_title" />
-			<result property="content" column="travel_content"/>
-			<result property="startDate" column="start_date"/>
+    <!-- Course ResultMap -->
+    <resultMap id="CourseResultMap" type="Course">
+        <id property="id" column="course_id"/>
+        <result property="name" column="course_name"/>
+        <result property="dist" column="course_dist"/>
+        <result property="turnaround" column="course_turnaround"/>
+        <result property="level" column="course_level"/>
+    </resultMap>
 
+    <!-- Plan ResultMap -->
+    <resultMap id="PlanResultMap" type="Plan">
+        <id property="id" column="plan_id"/>
+        <result property="sequence" column="plan_sequence"/>
+        <association property="attraction" resultMap="AttractionResultMap"/>
+        <association property="course" resultMap="CourseResultMap"/>
+    </resultMap>
 
-			<!-- Plans 관련 매핑 -->
-			<collection property="plans" javaType="Plan">
-				<id property="id" column="plan_id"/>
-				<result property="sequence" column="plan_sequence"/>
+    <!-- Travel ResultMap -->
+    <resultMap id="TravelResultMap" type="Travel">
+        <id property="id" column="travel_id"/>
+        <result property="title" column="travel_title"/>
+        <result property="content" column="travel_content"/>
+        <result property="startDate" column="start_date"/>
+        <collection property="plans" resultMap="PlanResultMap"/>
+    </resultMap>
 
-				<!-- Attraction 관련 매핑 -->
-				<association property="attraction" javaType="Attraction">
-					<id property="id" column="attraction_id"/>
-					<result property="title" column="attraction_name"/>
-					<result property="contentTypeId" column="attraction_content_type_id"/>
+    <!-- Comment ResultMap -->
+    <resultMap id="CommentResultMap" type="Comment">
+        <id property="id" column="comment_id"/>
+        <result property="content" column="comment_content"/>
+        <result property="createdAt" column="comment_created_at"/>
+        <result property="updatedAt" column="comment_updated_at"/>
+        <association property="user" javaType="User">
+            <id property="id" column="comment_user_id"/>
+            <result property="loginId" column="comment_user_login_id"/>
+            <result property="nickname" column="comment_user_nickname"/>
+        </association>
+    </resultMap>
 
-					<result property="areaCode" column="attraction_area_code"/>
-					<result property="siGunGuCode" column="attraction_si_gun_gu_code"/>
+    <!-- FileInfo ResultMap -->
+    <resultMap id="FileInfoResultMap" type="FileInfo">
+        <id property="id" column="file_id"/>
+        <result property="saveFolder" column="file_info_save_folder"/>
+        <result property="originalFile" column="file_info_original_file"/>
+        <result property="saveFile" column="file_info_save_file"/>
+    </resultMap>
 
-					<result property="latitude" column="attraction_latitude"/>
-					<result property="longitude" column="attraction_longitude"/>
+    <!-- Main Board ResultMap -->
+    <resultMap id="BoardResultMap" type="Board">
+        <id property="id" column="board_id"/>
+        <result property="title" column="board_title"/>
+        <result property="content" column="board_content"/>
+        <result property="hit" column="board_hit"/>
+        <result property="created_at" column="board_created_at"/>
+        <result property="updated_at" column="board_updated_at"/>
 
-					<result property="firstImage1" column="attraction_first_image1"/>
-					<result property="firstImage2" column="attraction_first_image2"/>
+        <association property="user" resultMap="UserResultMap"/>
+        <association property="travel" resultMap="TravelResultMap"/>
+        <collection property="comments" resultMap="CommentResultMap"/>
+        <collection property="fileInfos" resultMap="FileInfoResultMap"/>
+    </resultMap>
 
+    <!-- Main BoardList ResultMap -->
+    <resultMap id="BoardListResultMap" type="Board">
+        <id property="id" column="board_id"/>
+        <result property="title" column="board_title"/>
+        <result property="content" column="board_content"/>
+        <result property="hit" column="board_hit"/>
+        <result property="created_at" column="board_created_at"/>
+        <result property="updated_at" column="board_updated_at"/>
 
-				</association>
+        <association property="user" resultMap="UserResultMap"/>
+        <association property="travel" resultMap="TravelResultMap"/>
+        <collection property="comments" resultMap="CommentResultMap"/>
+        <collection property="fileInfos" resultMap="FileInfoResultMap"/>
+    </resultMap>
 
-				<!-- Course 관련 매핑 -->
-				<association property="course" javaType="Course">
-					<id property="id" column="course_id"/>
-					<result property="name" column="course_name"/>
-					<result property="dist" column="course_dist"/>
-					<result property="turnaround" column="course_turnaround"/>
-					<result property="level" column="course_level"/>
-				</association>
-			</collection>
-		</association>
+    <!-- SELECT -->
+    <select id="listArticle" resultMap="BoardListResultMap">
+        select
+		<include refid="boardColumns"/>,
+		<include refid="userColumns"/>
+        FROM boards b
+		LEFT JOIN users u ON b.user_id = u.id
+    </select>
 
-		<!-- Comments 관련 매핑 -->
-		<collection property="comments" javaType="Comment">
-			<id property="id" column="comment_id"/>
-			<result property="content" column="comment_content"/>
-			<result property="createdAt" column="comment_created_at"/>
-			<result property="updatedAt" column="comment_updated_at"/>
-			<association property="user" javaType="User">
-				<id property="id" column="comment_user_id"/>
-				<result property="loginId" column="comment_user_login_id"/>
-				<result property="nickname" column="comment_user_nickname"/>
-			</association>
-		</collection>
+    <select id="getTotalArticleCount" resultType="int">
+        select count(*)
+        FROM boards
+    </select>
 
-		<!-- FileInfo 리스트 매핑 -->
-		<collection property="fileInfos" javaType="FileInfo">
-			<id property="id" column="file_id"/>
-			<result property="saveFolder" column="file_info_save_folder"/>
-			<result property="originalFile" column="file_info_original_file"/>
-			<result property="saveFile" column="file_info_save_file"/>
-		</collection>
-	</resultMap>
+    <select id="getArticle" resultMap="BoardResultMap">
+        SELECT
+        <include refid="allColumns"/>
+        FROM boards b
+        <include refid="boardJoins"/>
+        WHERE b.id = #{boardId}
+    </select>
 
-	<resultMap id="fileInfoResultMap" type="FileInfo">
-		<collection property="fileInfos" javaType="FileInfo">
-			<id property="id" column="file_id"/>
-			<result property="saveFolder" column="file_info_save_folder"/>
-			<result property="originalFile" column="file_info_original_file"/>
-			<result property="saveFile" column="file_info_save_file"/>
-		</collection>
-	</resultMap>
+    <!-- INSERT -->
+    <insert id="writeArticle" parameterType="com.ssafy.gilbut.domain.board.model.dto.BoardRequest$CreateDTO">
+        insert into boards (user_id, travel_id, title, content, hit, created_at)
+        values (#{userId}, #{dto.travelId}, #{dto.title}, #{dto.content}, 0, now())
+    </insert>
 
-						<!-- SELECT -->
-	<select id="listArticle" resultMap="BoardResultMap">
-		select
-		    <include refid="boardColumns" />
-		FROM boards b
-		<include refid="boardJoins" />
-		<include refid="pagination" />
-	</select>
+    <insert id="registerFiles" parameterType="com.ssafy.gilbut.domain.board.model.dto.BoardRequest$FileCreateDTO">
+        insert into file_infos (board_id, save_folder, original_file, save_file)
+        values
+        <foreach collection="dto" item="fileinfo" separator=" , ">
+            (#{fileinfo.boardId}, #{fileinfo.saveFolder}, #{fileinfo.originalFile}, #{fileinfo.saveFile})
+        </foreach>
+    </insert>
 
-	<select id="getTotalArticleCount" resultType="int">
-		select count(id)
-		FROM boards
-	</select>
+    <insert id="registerFile" parameterType="com.ssafy.gilbut.domain.board.model.dto.BoardRequest$FileCreateDTO">
+        insert into file_infos (board_id, save_folder, original_file, save_file)
+            value
+            (#{dto.boardId}, #{dto.saveFolder}, #{dto.originalFile}, #{dto.saveFile})
 
-	<select id="getArticle" resultMap="BoardResultMap">
-		SELECT
-			<include refid="boardColumns" />
-		FROM boards b
-			<include refid="boardJoins" />
-		WHERE b.id = #{boardId}
-	</select>
+    </insert>
 
-					<!-- INSERT -->
-	<insert id="writeArticle" parameterType="com.ssafy.gilbut.domain.board.model.dto.BoardRequest$CreateDTO">
-		insert into boards (user_id, travel_id,title, content, hit, created_at)
-		values (#{userId}, #{dto.travelId}, #{dto.title}, #{dto.content}, 0, now())
-	</insert>
-	
-	<insert id="registerFiles" parameterType="com.ssafy.gilbut.domain.board.model.dto.BoardRequest$FileCreateDTO">
-		insert into file_infos (board_id, save_folder, original_file, save_file)
-		values
-		<foreach collection="dto" item="fileinfo" separator=" , ">
-			(#{fileinfo.boardId}, #{fileinfo.saveFolder}, #{fileinfo.originalFile}, #{fileinfo.saveFile})
-		</foreach>
-	</insert>
+    <update id="updateHit" parameterType="long">
+        update boards
+        set hit = hit + 1
+        where id = #{boardId}
+    </update>
 
-	<insert id="registerFile" parameterType="com.ssafy.gilbut.domain.board.model.dto.BoardRequest$FileCreateDTO">
-		insert into file_infos (board_id, save_folder, original_file, save_file)
-		value
-		(#{dto.boardId}, #{dto.saveFolder}, #{dto.originalFile}, #{dto.saveFile})
+    <update id="modifyArticle" parameterType="com.ssafy.gilbut.domain.board.model.dto.BoardRequest$UpdateDTO">
+        update boards
+        set title   = #{dto.title},
+            content = #{dto.content}
+        where id = #{boardId}
+    </update>
 
-	</insert>
+    <delete id="deleteFile" parameterType="int">
+        delete
+        from file_infos
+        where id = #{boardId}
+    </delete>
 
-	<update id="updateHit" parameterType="long">
-		update boards
-		set hit = hit + 1
-		where id = #{boardId}
-	</update>
-	
-	<update id="modifyArticle" parameterType="com.ssafy.gilbut.domain.board.model.dto.BoardRequest$UpdateDTO">
-		update boards
-		set title = #{dto.title}, content = #{dto.content}
-		where id = #{boardId}
-	</update>
-	
-	<delete id="deleteFile" parameterType="int">
-		delete from file_infos
-		where id = #{boardId}
-	</delete>
-	
-	<delete id="deleteArticle" parameterType="int">
-		delete from boards
-		where id = #{boardId}
-	</delete>
+    <delete id="deleteArticle" parameterType="int">
+        delete
+        from boards
+        where id = #{boardId}
+    </delete>
 
-	<!-- 공통으로 사용할 컬럼들을 SQL 태그로 정의 -->
-	<sql id="boardColumns">
-	b.id as board_id,
+    <!-- 공통으로 사용할 컬럼들을 SQL 태그로 정의 -->
+    <!-- Board 관련 컬럼 -->
+    <sql id="boardColumns">
+        b.id as board_id,
     b.title as board_title,
     b.content as board_content,
     b.hit as board_hit,
     b.created_at as board_created_at,
-    b.updated_at as board_updated_at,
+    b.updated_at as board_updated_at
+    </sql>
 
-    u.id as user_id,
+    <!-- User 관련 컬럼 -->
+    <sql id="userColumns">
+        u.id as user_id,
     u.login_id as user_login_id,
     u.nickname as user_nickname,
-    u.email as user_email,
+    u.email as user_email
+    </sql>
 
-    t.id as travel_id,
+    <!-- Travel 관련 컬럼 -->
+    <sql id="travelColumns">
+        t.id as travel_id,
     t.title as travel_title,
     t.content as travel_content,
-    t.start_date,
+    t.start_date
+    </sql>
 
-    p.id as plan_id,
+    <!-- Plan 관련 컬럼 -->
+    <sql id="planColumns">
+        p.id as plan_id,
     p.travel_id as plan_travel_id,
-    p.sequence as plan_sequence,
+    p.sequence as plan_sequence
+    </sql>
 
-    a.id as attraction_id,
+    <!-- Attraction 관련 컬럼 -->
+    <sql id="attractionColumns">
+        a.id as attraction_id,
     a.title as attraction_name,
-	a.content_type_id as attraction_content_type_id,
-	a.area_code as attraction_area_code,
-	a.si_gun_gu_code as attraction_si_gun_gu_code,
-	a.latitude as attraction_latitude,
-	a.longitude as attraction_longitude,
+    a.content_type_id as attraction_content_type_id,
+    a.area_code as attraction_area_code,
+    a.si_gun_gu_code as attraction_si_gun_gu_code,
+    a.latitude as attraction_latitude,
+    a.longitude as attraction_longitude,
     a.first_image1 as attraction_first_image1,
-    a.first_image2 as attraction_first_image2,
+    a.first_image2 as attraction_first_image2
+    </sql>
 
-    c.id as course_id,
+    <!-- Course 관련 컬럼 -->
+    <sql id="courseColumns">
+        c.id as course_id,
     c.name as course_name,
     c.dist as course_dist,
     c.turnaround as course_turnaround,
-    c.level as course_level,
+    c.level as course_level
+    </sql>
 
-    f.id as file_id,
+    <!-- FileInfo 관련 컬럼 -->
+    <sql id="fileInfoColumns">
+        f.id as file_id,
     f.save_folder as file_info_save_folder,
     f.original_file as file_info_original_file,
-    f.save_file as file_info_save_file,
+    f.save_file as file_info_save_file
+    </sql>
 
-	co.id as comment_id,
-	co.content as comment_content,
-	co.created_at as comment_created_at,
-	co.updated_at as comment_updated_at,
+    <!-- Comment 관련 컬럼 -->
+    <sql id="commentColumns">
+        co.id as comment_id,
+    co.content as comment_content,
+    co.created_at as comment_created_at,
+    co.updated_at as comment_updated_at
+    </sql>
 
-	co_u.id as comment_user_id,
-	co_u.login_id as comment_user_login_id,
-	co_u.nickname as comment_user_nickname
-	</sql>
+    <!-- Comment User 관련 컬럼 -->
+    <sql id="commentUserColumns">
+        co_u.id as comment_user_id,
+    co_u.login_id as comment_user_login_id,
+    co_u.nickname as comment_user_nickname
+    </sql>
 
-	<sql id="boardJoins">
-	LEFT JOIN users u ON b.user_id = u.id
+    <!-- 모든 컬럼을 포함하는 통합 SQL -->
+    <sql id="allColumns">
+        <include refid="boardColumns"/>,
+        <include refid="userColumns"/>,
+        <include refid="travelColumns"/>,
+        <include refid="planColumns"/>,
+        <include refid="attractionColumns"/>,
+        <include refid="courseColumns"/>,
+        <include refid="fileInfoColumns"/>,
+        <include refid="commentColumns"/>,
+        <include refid="commentUserColumns"/>
+    </sql>
+
+    <sql id="boardJoins">
+        LEFT JOIN users u ON b.user_id = u.id
     LEFT JOIN travels t ON b.travel_id = t.id
     LEFT JOIN plans p ON t.id = p.travel_id
     LEFT JOIN attractions a ON p.attraction_id = a.id
@@ -223,17 +273,17 @@
 	LEFT JOIN users co_u ON co_u.id = co.user_id
 
     LEFT JOIN file_infos f ON b.id = f.board_id
-	</sql>
+    </sql>
 
-	<!-- 페이지네이션 -->
-	<sql id="pagination">
-		<if test="pageable.sort.sorted">
-			<trim prefix="ORDER BY">
-				<foreach item="order" collection="pageable.sort" separator=", ">
-					#{order.property} #{order.direction}
-				</foreach>
-			</trim>
-		</if>
-		LIMIT #{pageable.offset}, #{pageable.pageSize}
-	</sql>
+    <!-- 페이지네이션 -->
+    <sql id="pagination">
+        <if test="pageable.sort.sorted">
+            <trim prefix="ORDER BY">
+                <foreach item="order" collection="pageable.sort" separator=", ">
+                    #{order.property} #{order.direction}
+                </foreach>
+            </trim>
+        </if>
+        LIMIT #{pageable.offset}, #{pageable.pageSize}
+    </sql>
 </mapper>

@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,7 +56,7 @@ public class PlanController implements PlanControllerDocs {
     ) {
         PlanResponse.DetailResultListDTO planResultDTO = planService.createPlans(accessToken, planDTOList);
         log.info(planResultDTO.toString());
-        return ResponseEntity.ok(ApiResponse.onSuccess(planResultDTO));
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.onSuccess(planResultDTO));
     }
 
     @Override
