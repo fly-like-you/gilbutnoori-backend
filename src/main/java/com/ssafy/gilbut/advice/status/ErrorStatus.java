@@ -16,16 +16,30 @@ public enum ErrorStatus implements BaseErrorCode {
     _UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "COMMON401", "인증이 필요합니다."),
     _FORBIDDEN(HttpStatus.FORBIDDEN, "COMMON403", "금지된 요청입니다."),
 
+    // 입력 관련 에러
+    NOT_ENOUGH_REQUEST_BODY_ERROR(HttpStatus.BAD_REQUEST, "COMMON404", "요청 바디가 잘못되었습니다."),
+
     // 코스 관련 에러
     COURSE_NOT_FOUND(HttpStatus.BAD_REQUEST, "COURSE4001", "관련 코스가 없습니다."),
 
     // 여행 (Travel) 관련 에러
     TRAVEL_NOT_FOUND(HttpStatus.BAD_REQUEST, "TRAVEL4001", "ID와 일치하는 여행 계획이 없습니다."),
+    TRAVEL_OWNER_NOT_MATCHED(HttpStatus.BAD_REQUEST, "TRAVEL4002", "유저 ID와 일치하는 여행이 없습니다."),
 
     // 여행 계획 (Plan) 관련 에러
     PLAN_ATTRACTION_DUPLICATED_ERROR(HttpStatus.BAD_REQUEST, "PLAN4001", "여행지와 둘렛길이 중복됩니다."),
     PLAN_ORDER_DUPLICATED_ERROR(HttpStatus.BAD_REQUEST, "PLAN4002", "여행지 탐방 순서가 중복됩니다. null값이나 key를 확인해주세요"),
     PLAN_COURSE_NOT_ONE_ERROR(HttpStatus.BAD_REQUEST, "PLAN4003", "코스의 개수는 무조건 1개만 선택가능합니다."),
+
+    // 게시판 관련 에러
+    BOARD_NOT_FOUND(HttpStatus.BAD_REQUEST, "BOARD4001", "게시판이 없습니다."),
+    BOARD_OWNER_NOT_MATCHED(HttpStatus.BAD_REQUEST, "BOARD4002", "게시글의 주인과 로그인한 사용자가 일치하지 않습니다."),
+
+    // 댓글 관련 에러
+    COMMENT_NOT_FOUND(HttpStatus.BAD_REQUEST, "COMMENT4001", "댓글이 없습니다."),
+    COMMENT_OWNER_NOT_MATCHED(HttpStatus.BAD_REQUEST, "COMMENT4002", "댓글의 주인과 로그인한 사용자가 일치하지 않습니다."),
+
+
 
     // 멤버 관련 에러
     USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "MEMBER4001", "사용자가 없습니다."),

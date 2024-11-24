@@ -1,25 +1,21 @@
 package com.ssafy.gilbut.domain.user.service;
 
-import com.ssafy.gilbut.domain.user.model.dto.request.UserInfoResponseDTO;
-import com.ssafy.gilbut.domain.user.model.dto.request.UserLoginRequestDTO;
-import com.ssafy.gilbut.domain.user.model.dto.request.UserSignUpRequestDTO;
-import com.ssafy.gilbut.domain.user.model.dto.request.UserUpdateRequestDTO;
-import com.ssafy.gilbut.domain.user.model.dto.response.UserResponseDTO;
-import com.ssafy.gilbut.domain.user.model.dto.response.UserTokenResponseDTO;
+import com.ssafy.gilbut.domain.user.model.dto.UserRequest;
+import com.ssafy.gilbut.domain.user.model.dto.UserResponse;
 
 public interface UserService {
 
-    UserTokenResponseDTO login(UserLoginRequestDTO memberDto);
+    UserResponse.DetailResultDTO userInfo(String accessToken);
 
-    UserInfoResponseDTO userInfo(String header);
+    UserResponse.TokenDTO login(UserRequest.LoginDTO memberDto);
+
+    UserResponse.TokenDTO refreshAccessToken(String refreshToken);
 
     void deleteRefreshToken(String loginId);
 
-    void withdraw(String userToken);
+    UserResponse.SimpleResultDTO register(UserRequest.SignUpDTO user);
 
-    UserResponseDTO register(UserSignUpRequestDTO user);
+    void updateUser(String accessToken, UserRequest.UpdateDTO user);
 
-    UserTokenResponseDTO refreshAccessToken(String refreshToken);
-
-    void updateUser(String accessToken, UserUpdateRequestDTO user);
+    void withdraw(String accessToken);
 }

@@ -1,35 +1,32 @@
 package com.ssafy.gilbut.domain.user.mapper;
 
-import com.ssafy.gilbut.domain.user.model.dto.request.UserLoginRequestDTO;
-import com.ssafy.gilbut.domain.user.model.dto.request.UserSignUpRequestDTO;
-import com.ssafy.gilbut.domain.user.model.dto.request.UserUpdateRequestDTO;
+import com.ssafy.gilbut.domain.user.model.dto.UserRequest;
 import com.ssafy.gilbut.domain.user.model.entity.User;
+import java.util.Optional;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.Optional;
-
 @Mapper
 public interface UserMapper {
-    Optional<User> login(@Param("user") UserLoginRequestDTO user);
 
     Optional<User> findUserByLoginId(@Param("loginId") String userId);
-    Optional<User> findUserById(@Param("id") String id);
 
-    Integer checkDuplicatedLoginId(@Param("loginId") String loginId);
+    Optional<User> findUserByUserId(@Param("userId") Long userId);
+
+    Integer checkDuplicatedLoginId(@Param("userId") Long userId);
 
     Integer checkDuplicatedNickname(@Param("nickname") String nickname);
 
-    void updateUser(@Param("loginId") String loginId, @Param("user") UserUpdateRequestDTO user);
+    void updateUser(@Param("userId") Long userId, @Param("user") UserRequest.UpdateDTO user);
 
     void inactivateUser(@Param("user") User user);
 
-    void register(@Param("user") UserSignUpRequestDTO user);
+    void register(@Param("user") UserRequest.SignUpDTO user);
 
     /* --------------------- TOKEN ---------------------*/
-    void saveRefreshToken(@Param("loginId") String loginId, @Param("refreshToken") String refreshToken);
+    void saveRefreshToken(@Param("userId") Long userId, @Param("refreshToken") String refreshToken);
 
-    String getRefreshToken(@Param("loginId") String loginId);
+    String getRefreshToken(@Param("userId") Long userId);
 
-    void deleteRefreshToken(@Param("loginId") String loginId);
+    void deleteRefreshToken(@Param("userId") Long userId);
 }

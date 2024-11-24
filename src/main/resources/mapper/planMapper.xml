@@ -126,7 +126,7 @@
                 1=0
     </select>
 
-    <insert id="insertPlans" parameterType="com.ssafy.gilbut.domain.plan.model.dto.request.PlanRequest$CreateDTO" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertPlans" parameterType="com.ssafy.gilbut.domain.plan.model.dto.PlanRequest$CreateDTO" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO plans (
         attraction_id,
         travel_id,
@@ -142,7 +142,7 @@
             )
         </foreach>
     </insert>
-    <update id="updatePlans">
+    <update id="updatePlans" parameterType="com.ssafy.gilbut.domain.plan.model.dto.PlanRequest$UpdateDTO">
         UPDATE plans
         SET attraction_id = #{dto.attractionId},
             course_id     = #{dto.courseId},

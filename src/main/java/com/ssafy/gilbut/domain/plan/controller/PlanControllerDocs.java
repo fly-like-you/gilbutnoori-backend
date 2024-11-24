@@ -1,7 +1,7 @@
 package com.ssafy.gilbut.domain.plan.controller;
 
-import com.ssafy.gilbut.domain.plan.model.dto.request.PlanRequest;
-import com.ssafy.gilbut.domain.plan.model.dto.response.PlanResponse;
+import com.ssafy.gilbut.domain.plan.model.dto.PlanRequest;
+import com.ssafy.gilbut.domain.plan.model.dto.PlanResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -28,7 +28,7 @@ public interface PlanControllerDocs {
     })
     ResponseEntity<?> getPlan(
             @Parameter(description = "사용자 인증 토큰", required = true) String accessToken,
-            @Parameter(description = "조회할 계획 ID", required = true) Integer planId
+            @Parameter(description = "조회할 계획 ID", required = true) Long planId
     );
 
     @Operation(summary = "계획 목록 조회", description = "페이지네이션을 적용하여 여행 계획 목록을 조회합니다.")
@@ -63,7 +63,7 @@ public interface PlanControllerDocs {
     })
     ResponseEntity<?> updatePlan(
             @Parameter(description = "사용자 인증 토큰", required = true) String accessToken,
-            @Parameter(description = "수정할 여행 ID", required = true) Integer travelId,
+            @Parameter(description = "수정할 여행 ID", required = true) Long travelId,
             @Parameter(description = "수정할 계획 정보 리스트", required = true) List<PlanRequest.CreateDTO> plans
     );
 
@@ -75,6 +75,6 @@ public interface PlanControllerDocs {
     })
     ResponseEntity<?> deletePlan(
             @Parameter(description = "사용자 인증 토큰", required = true) String accessToken,
-            @Parameter(description = "삭제할 여행 ID", required = true) Integer travelId
+            @Parameter(description = "삭제할 여행 ID", required = true) Long travelId
     );
 }

@@ -1,20 +1,17 @@
 package com.ssafy.gilbut.domain.travel.service;
 
-import com.ssafy.gilbut.domain.travel.model.dto.request.TravelCreateRequestDTO;
-import com.ssafy.gilbut.domain.travel.model.dto.request.TravelUpdateRequestDTO;
-import com.ssafy.gilbut.domain.travel.model.dto.response.TravelDetailResponseDTO;
-import com.ssafy.gilbut.domain.travel.model.dto.response.TravelResponseDTO;
-import org.springframework.data.domain.Page;
+import com.ssafy.gilbut.domain.travel.model.dto.TravelRequest;
+import com.ssafy.gilbut.domain.travel.model.dto.TravelResponse;
 import org.springframework.data.domain.Pageable;
 
 public interface TravelService {
-    Page<TravelResponseDTO> travelList(String accessToken, Pageable page);
+    TravelResponse.SimplePageResultDTO  travelList(String accessToken, Pageable page);
 
-    TravelDetailResponseDTO getTravelById(Integer travelId);
+    TravelResponse.DetailResultDTO getTravelById(String accessToken, Long travelId);
 
-    TravelDetailResponseDTO travelCreate(String accessToken, TravelCreateRequestDTO travelCreateRequestDTO);
+    TravelResponse.DetailResultDTO travelCreate(String accessToken, TravelRequest.CreateDTO createDTO);
 
-    TravelDetailResponseDTO updateTravel(String accessToken, Integer travelId, TravelUpdateRequestDTO travelDTO);
+    TravelResponse.DetailResultDTO updateTravel(String accessToken, Long travelId, TravelRequest.UpdateDTO updateDTO);
 
-    void deleteTravelById(String accessToken, Integer travelId);
+    void deleteTravelById(String accessToken, Long travelId);
 }
