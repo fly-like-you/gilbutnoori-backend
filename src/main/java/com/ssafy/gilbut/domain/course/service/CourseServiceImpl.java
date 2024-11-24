@@ -24,9 +24,6 @@ import org.springframework.stereotype.Service;
 public class CourseServiceImpl implements CourseService{
     private final CourseMapper courseMapper;
 
-    @Value("${open-api.travel.api-key}")
-    private String openApiKey;
-
     @Override
     public CourseResponse.SimplePageResultDTO courseList(Pageable page) {
         log.trace("offset = {}, pageSize = {}", page.getOffset(), page.getPageSize());
