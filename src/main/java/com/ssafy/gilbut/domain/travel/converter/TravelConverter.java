@@ -7,6 +7,7 @@ import com.ssafy.gilbut.domain.plan.model.dto.PlanResponse.DetailResultListDTO;
 import com.ssafy.gilbut.domain.travel.model.dto.TravelResponse;
 import com.ssafy.gilbut.domain.travel.model.entity.Travel;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
@@ -18,7 +19,11 @@ public class TravelConverter {
      * @return
      */
     public static TravelResponse.DetailResultDTO toDetailResultDTO(Travel travel) {
-        SimpleResultDTO courseDTO = CourseConverter.toSimpleResultDTO(travel.getCourse());
+
+        SimpleResultDTO courseDTO = Optional.ofNullable(travel.getCourse())
+                .map(CourseConverter::toSimpleResultDTO)
+                .orElse(null);
+
         DetailResultListDTO planDTOList = PlanConverter.toDetailResultListDTO(travel.getPlans());
         return TravelResponse.DetailResultDTO.builder()
                 .id(travel.getId())

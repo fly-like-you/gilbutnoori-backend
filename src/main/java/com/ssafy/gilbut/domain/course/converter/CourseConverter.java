@@ -5,7 +5,10 @@ import com.ssafy.gilbut.domain.course.model.dto.CourseResponse.SimpleResultDTO;
 import com.ssafy.gilbut.domain.course.model.dto.RouteResponse;
 import com.ssafy.gilbut.domain.course.model.entity.Course;
 import com.ssafy.gilbut.domain.course.model.entity.Route;
+import com.ssafy.gilbut.domain.travel.converter.TravelConverter;
+import com.ssafy.gilbut.domain.travel.model.dto.TravelResponse.DetailResultDTO;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -13,8 +16,9 @@ import org.springframework.data.domain.Pageable;
 public class CourseConverter {
 
     public static CourseResponse.DetailResultDTO toDetailResultDTO(Course course) {
-        Route route = course.getRoute();
-        RouteResponse.SimpleResultDTO routeSimpleDTO = RouteConverter.toSimpleResultDTO(route);
+        RouteResponse.SimpleResultDTO routeSimpleDTO = Optional.ofNullable(course.getRoute())
+                .map(RouteConverter::toSimpleResultDTO)
+                .orElse(null);
 
         return CourseResponse.DetailResultDTO.builder()
                 .id(course.getId())
@@ -36,20 +40,23 @@ public class CourseConverter {
     }
 
     public static CourseResponse.SimpleResultDTO toSimpleResultDTO(Course course) {
-        Route route = course.getRoute();
-        RouteResponse.SimpleResultDTO routeSimpleDTO = RouteConverter.toSimpleResultDTO(route);
+
+        RouteResponse.SimpleResultDTO routeDTO = Optional.ofNullable(course.getRoute())
+                .map(RouteConverter::toSimpleResultDTO)
+                .orElse(null);
 
         return CourseResponse.SimpleResultDTO.builder()
                 .id(course.getId())
                 .name(course.getName())
-                .route(routeSimpleDTO)
+                .route(routeDTO)
                 .dist(course.getDist())
                 .turnaround(course.getTurnaround())
                 .level(course.getLevel())
                 .build();
     }
 
-    public static CourseResponse.SimplePageResultDTO toSimplePageResultDTO (List<Course> courses, Pageable pageable, Integer totalCount) {
+    public static CourseResponse.SimplePageResultDTO toSimplePageResultDTO(List<Course> courses, Pageable pageable,
+                                                                           Integer totalCount) {
         List<SimpleResultDTO> list = courses.stream().map(CourseConverter::toSimpleResultDTO).toList();
         Page<CourseResponse.SimpleResultDTO> page = new PageImpl<>(list, pageable, totalCount);
 

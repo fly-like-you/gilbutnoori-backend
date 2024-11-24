@@ -24,11 +24,11 @@ public interface BoardMapper {
 
     void deleteFile(@Param("boardId") Long boardId);
 
-    List<FileInfoDto> fileInfoList(@Param("boardId") Long boardId);
 
     int getTotalArticleCount(@Param("pageable") Pageable pageable);
 
-    void registerFile(@Param("dto") List<BoardRequest.FileCreateDTO> boardDto);
+    void registerFiles(@Param("dto") List<BoardRequest.FileCreateDTO> boardDto);
+    void registerFile(@Param("dto") BoardRequest.FileCreateDTO fileCreateDTO);
 
     void deleteArticle(@Param("boardId") Long boardId);
 

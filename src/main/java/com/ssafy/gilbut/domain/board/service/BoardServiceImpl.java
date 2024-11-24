@@ -65,7 +65,7 @@ public class BoardServiceImpl implements BoardService {
 
 		List<BoardRequest.FileCreateDTO> files = boardDto.getFileInfos();
 		if (files != null && !files.isEmpty()) {
-			boardMapper.registerFile(files);
+			boardMapper.registerFiles(files);
 		}
 
 		log.info("게시글 작성 성공!");

@@ -8,6 +8,7 @@ import java.util.List;
 
 public class CommentConverter {
     public static DetailListResultDTO toDetailListResultDTO(List<Comment> commentList) {
+
         List<CommentResponse.DetailResultDTO> comments = commentList.stream()
                 .map(CommentConverter::toDetailResultDTO).toList();
 

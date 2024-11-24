@@ -24,6 +24,7 @@ public class BoardRequest {
         List<FileCreateDTO> fileInfos = new ArrayList<>();
     }
 
+
     @Getter
     @Setter
     @Builder
@@ -48,6 +49,8 @@ public class BoardRequest {
     public static class FileCreateDTO {
         @Schema(description = "저장폴더")
         private String saveFolder;
+        private Long boardId;
+
         @Schema(description = "원본 파일이름")
         private String originalFile;
         @Schema(description = "저장 파일이름")

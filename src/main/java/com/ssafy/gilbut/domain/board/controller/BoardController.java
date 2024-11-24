@@ -3,6 +3,7 @@ package com.ssafy.gilbut.domain.board.controller;
 import com.ssafy.gilbut.advice.ApiResponse;
 import com.ssafy.gilbut.domain.board.model.dto.BoardRequest;
 import com.ssafy.gilbut.domain.board.model.dto.BoardResponse;
+import com.ssafy.gilbut.domain.board.model.dto.BoardResponse.DetailResultDTO;
 import com.ssafy.gilbut.domain.board.service.BoardService;
 import com.ssafy.gilbut.util.SizeConstant;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +40,8 @@ public class BoardController {
 	) {
 		log.info("getArticle - 호출 : " + boardId);
 		boardService.updateHit(boardId);
-		return ResponseEntity.ok().body(ApiResponse.onSuccess(boardService.getArticle(boardId)));
+		DetailResultDTO article = boardService.getArticle(boardId);
+		return ResponseEntity.ok().body(ApiResponse.onSuccess(article));
 	}
 
 	@GetMapping("/modify/{boardId}")

@@ -27,18 +27,27 @@
 			<result property="content" column="travel_content"/>
 			<result property="startDate" column="start_date"/>
 
+
 			<!-- Plans 관련 매핑 -->
-			<collection property="plans" ofType="Plan">
+			<collection property="plans" javaType="Plan">
 				<id property="id" column="plan_id"/>
-				<result property="travelId" column="plan_travel_id"/>
 				<result property="sequence" column="plan_sequence"/>
 
 				<!-- Attraction 관련 매핑 -->
 				<association property="attraction" javaType="Attraction">
 					<id property="id" column="attraction_id"/>
 					<result property="title" column="attraction_name"/>
-					<result property="firstImage1" column="attraction_firstImage1"/>
-					<result property="firstImage2" column="attraction_firstImage2"/>
+					<result property="contentTypeId" column="attraction_content_type_id"/>
+
+					<result property="areaCode" column="attraction_area_code"/>
+					<result property="siGunGuCode" column="attraction_si_gun_gu_code"/>
+
+					<result property="latitude" column="attraction_latitude"/>
+					<result property="longitude" column="attraction_longitude"/>
+
+					<result property="firstImage1" column="attraction_first_image1"/>
+					<result property="firstImage2" column="attraction_first_image2"/>
+
 
 				</association>
 
@@ -106,29 +115,28 @@
 		WHERE b.id = #{boardId}
 	</select>
 
-	<select id="fileInfoList" resultMap="fileInfoResultMap">
-		select
-		    save_folder as file_info_save_folder,
-		    original_file as file_info_original_file,
-		    save_file as file_info_save_file
-		from file_infos
-		where id = #{boardId}
-	</select>
 					<!-- INSERT -->
 	<insert id="writeArticle" parameterType="com.ssafy.gilbut.domain.board.model.dto.BoardRequest$CreateDTO">
-		insert into boards (user_id, title, content, hit, created_at)
-		values (#{userId}, #{dto.title}, #{dto.content}, 0, now())
+		insert into boards (user_id, travel_id,title, content, hit, created_at)
+		values (#{userId}, #{dto.travelId}, #{dto.title}, #{dto.content}, 0, now())
 	</insert>
 	
-	<insert id="registerFile" parameterType="com.ssafy.gilbut.domain.board.model.dto.BoardRequest$FileCreateDTO">
-		insert into file_info (board_id, save_folder, original_file, save_file)
+	<insert id="registerFiles" parameterType="com.ssafy.gilbut.domain.board.model.dto.BoardRequest$FileCreateDTO">
+		insert into file_infos (board_id, save_folder, original_file, save_file)
 		values
-		<foreach collection="fileInfos" item="fileinfo" separator=" , ">
-			(#{boardId}, #{fileinfo.saveFolder}, #{fileinfo.originalFile}, #{fileinfo.saveFile})
+		<foreach collection="dto" item="fileinfo" separator=" , ">
+			(#{fileinfo.boardId}, #{fileinfo.saveFolder}, #{fileinfo.originalFile}, #{fileinfo.saveFile})
 		</foreach>
 	</insert>
 
-	<update id="updateHit" parameterType="int">
+	<insert id="registerFile" parameterType="com.ssafy.gilbut.domain.board.model.dto.BoardRequest$FileCreateDTO">
+		insert into file_infos (board_id, save_folder, original_file, save_file)
+		value
+		(#{dto.boardId}, #{dto.saveFolder}, #{dto.originalFile}, #{dto.saveFile})
+
+	</insert>
+
+	<update id="updateHit" parameterType="long">
 		update boards
 		set hit = hit + 1
 		where id = #{boardId}
@@ -175,8 +183,13 @@
 
     a.id as attraction_id,
     a.title as attraction_name,
-    a.first_image1 as attraction_firstImage1,
-    a.first_image2 as attraction_firstImage2,
+	a.content_type_id as attraction_content_type_id,
+	a.area_code as attraction_area_code,
+	a.si_gun_gu_code as attraction_si_gun_gu_code,
+	a.latitude as attraction_latitude,
+	a.longitude as attraction_longitude,
+    a.first_image1 as attraction_first_image1,
+    a.first_image2 as attraction_first_image2,
 
     c.id as course_id,
     c.name as course_name,

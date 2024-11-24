@@ -33,6 +33,9 @@ public class Travel {
     @Schema(description = "여행 내용", requiredMode = RequiredMode.REQUIRED, example = "부산가보자")
     private String content;
 
+    @Schema(description = "여행 시작 날자", requiredMode = RequiredMode.REQUIRED, example = "2024-10-01")
+    private LocalDate startDate;
+
     @Schema(description = "둘렛길 아이디", requiredMode = RequiredMode.REQUIRED, example = "1")
     private Course course;
 
@@ -41,7 +44,6 @@ public class Travel {
 
 
 
-    @Schema(description = "여행 시작 날자", requiredMode = RequiredMode.REQUIRED, example = "2024-10-01")
-    private LocalDate startDate;
+
 
 }
