@@ -47,6 +47,7 @@ public class CourseConverter {
                 .id(course.getId())
                 .name(course.getName())
                 .summary(course.getSummary())
+                .sigun(course.getSigun())
                 .route(routeDTO)
                 .dist(course.getDist())
                 .turnaround(course.getTurnaround())

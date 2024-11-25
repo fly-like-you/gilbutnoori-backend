@@ -25,6 +25,9 @@ public class CourseResponse {
         @Schema(description = "코스 정보 요약", example = "진하해변을 출발해 덕하역까지 구간 - 해파랑길 울산 구간이 시작되는 코스...")
         private String summary;
 
+        @Schema(description = "둘렛길 관할 구역", example = "울산 울주군")
+        private String sigun;
+
         @Schema(description = "길 이름", example = "해파랑길")
         private RouteResponse.SimpleResultDTO route;
 
