@@ -7,22 +7,18 @@ import com.ssafy.gilbut.domain.course.model.dto.CourseResponse;
 import com.ssafy.gilbut.domain.course.service.CourseService;
 import com.ssafy.gilbut.exception.handler.GeneralExceptionHandler;
 import com.ssafy.gilbut.util.SizeConstant;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Slf4j
 @RestController
@@ -35,7 +31,7 @@ public class CourseController implements CourseControllerDocs {
     @Override
     @GetMapping("/search")
     public ResponseEntity<?> courseSearch(
-            @RequestBody CourseRequest.SearchCriteria criteria,
+            @ModelAttribute CourseRequest.SearchCriteria criteria,
             @PageableDefault(size = SizeConstant.LIST_SIZE) Pageable page
     ) {
         log.trace("Search criteria: {}", criteria);

@@ -4,14 +4,12 @@ import com.ssafy.gilbut.domain.course.model.dto.CourseResponse;
 import com.ssafy.gilbut.domain.course.model.dto.CourseResponse.SimpleResultDTO;
 import com.ssafy.gilbut.domain.course.model.dto.RouteResponse;
 import com.ssafy.gilbut.domain.course.model.entity.Course;
-import com.ssafy.gilbut.domain.course.model.entity.Route;
-import com.ssafy.gilbut.domain.travel.converter.TravelConverter;
-import com.ssafy.gilbut.domain.travel.model.dto.TravelResponse.DetailResultDTO;
-import java.util.List;
-import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
+import java.util.Optional;
 
 public class CourseConverter {
 
@@ -48,6 +46,7 @@ public class CourseConverter {
         return CourseResponse.SimpleResultDTO.builder()
                 .id(course.getId())
                 .name(course.getName())
+                .summary(course.getSummary())
                 .route(routeDTO)
                 .dist(course.getDist())
                 .turnaround(course.getTurnaround())
