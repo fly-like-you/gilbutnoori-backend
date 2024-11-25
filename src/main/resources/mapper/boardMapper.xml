@@ -109,6 +109,7 @@
 		<include refid="userColumns"/>
         FROM boards b
 		LEFT JOIN users u ON b.user_id = u.id
+        <include refid="pagination" />
     </select>
 
     <select id="getTotalArticleCount" resultType="int">
