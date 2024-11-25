@@ -1,5 +1,6 @@
 package com.ssafy.gilbut.domain.course.service;
 
+import com.ssafy.gilbut.advice.status.ErrorStatus;
 import com.ssafy.gilbut.domain.course.converter.CourseConverter;
 import com.ssafy.gilbut.domain.course.converter.RouteConverter;
 import com.ssafy.gilbut.domain.course.mapper.CourseMapper;
@@ -8,15 +9,16 @@ import com.ssafy.gilbut.domain.course.model.dto.CourseResponse;
 import com.ssafy.gilbut.domain.course.model.dto.RouteResponse;
 import com.ssafy.gilbut.domain.course.model.entity.Course;
 import com.ssafy.gilbut.domain.course.model.entity.Route;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
+import com.ssafy.gilbut.exception.handler.GeneralExceptionHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -52,8 +54,20 @@ public class CourseServiceImpl implements CourseService{
 
     }
 
+    /**
+     * @param routeId
+     * @return
+     */
+    @Override
+    public RouteResponse.DetailResultDTO getRouteDetail(String routeId) {
+        log.info("입력받은 길 번호 -> {}", routeId);
+        Route route = getSafeRouteByRouteId(routeId);
+        return RouteConverter.toDetailResultDTO(route);
+    }
+
     @Override
     public CourseResponse.DetailResultDTO courseDetail(String courseId) {
+
         Course course = courseMapper
                 .courseDetail(courseId)
                 .orElseThrow(() -> new NoSuchElementException("해당 코스가 존재하지 않습니다."));
@@ -75,6 +89,12 @@ public class CourseServiceImpl implements CourseService{
 
     }
 
+    private Route getSafeRouteByRouteId(String routeId) {
+        return courseMapper.getRouteByRouteId(routeId).orElseThrow(
+                () -> new GeneralExceptionHandler(ErrorStatus.ROUTE_NOT_FOUND)
+        );
+
+    }
 
 
 }

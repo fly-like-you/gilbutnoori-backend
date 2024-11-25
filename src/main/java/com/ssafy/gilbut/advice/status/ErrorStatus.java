@@ -21,7 +21,10 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // 코스 관련 에러
     COURSE_NOT_FOUND(HttpStatus.BAD_REQUEST, "COURSE4001", "관련 코스가 없습니다."),
-
+    
+    // 길 관련 에러
+    ROUTE_NOT_FOUND(HttpStatus.BAD_REQUEST, "ROUTE4001", "아이디에 맞는 길이 없습니다."),
+    
     // 여행 (Travel) 관련 에러
     TRAVEL_NOT_FOUND(HttpStatus.BAD_REQUEST, "TRAVEL4001", "ID와 일치하는 여행 계획이 없습니다."),
     TRAVEL_OWNER_NOT_MATCHED(HttpStatus.BAD_REQUEST, "TRAVEL4002", "유저 ID와 일치하는 여행이 없습니다."),

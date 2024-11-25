@@ -3,8 +3,11 @@ package com.ssafy.gilbut.domain.course.converter;
 import com.ssafy.gilbut.domain.course.model.dto.RouteResponse;
 import com.ssafy.gilbut.domain.course.model.dto.RouteResponse.DetailPageResultDTO;
 import com.ssafy.gilbut.domain.course.model.entity.Route;
-import java.util.List;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class RouteConverter {
     public static RouteResponse.DetailResultDTO toDetailResultDTO(Route route) {
@@ -28,7 +31,16 @@ public class RouteConverter {
     }
 
     public static DetailPageResultDTO toDetailPageResultDTO(List<Route> routes, Pageable pageable, int totalCount) {
+        List<RouteResponse.DetailResultDTO> routeDTOs = routes.stream().map(RouteConverter::toDetailResultDTO).collect(Collectors.toList());
+        PageImpl<RouteResponse.DetailResultDTO> page = new PageImpl<>(routeDTOs, pageable, totalCount);
 
-        return null;
+        return RouteResponse.DetailPageResultDTO.builder()
+                .routes(routeDTOs)
+                .listSize(routeDTOs.size())
+                .isFirstPage(page.isFirst())
+                .isLastPage(page.isLast())
+                .totalPages(page.getTotalPages())
+                .totalElements(page.getTotalElements())
+                .build();
     }
 }

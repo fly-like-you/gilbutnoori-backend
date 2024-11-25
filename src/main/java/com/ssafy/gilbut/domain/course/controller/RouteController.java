@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,6 +28,14 @@ public class RouteController implements RouteControllerDocs {
             @PageableDefault(size = SizeConstant.LIST_SIZE) Pageable page
     ) {
         RouteResponse.DetailPageResultDTO result = courseService.routeList(page);
+        return ResponseEntity.ok(ApiResponse.onSuccess(result));
+    }
+
+    @GetMapping("/{routeId}")
+    public ResponseEntity<?> getRouteDetail(
+            @PathVariable("routeId") String routeId
+    ) {
+        RouteResponse.DetailResultDTO result = courseService.getRouteDetail(routeId);
         return ResponseEntity.ok(ApiResponse.onSuccess(result));
     }
 }

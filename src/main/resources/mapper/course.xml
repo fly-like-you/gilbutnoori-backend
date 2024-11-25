@@ -79,6 +79,13 @@
         <include refid="pagination"/>
     </select>
 
+    <select id="getRouteByRouteId" resultMap="RouteResultMap">
+        SELECT
+        <include refid="RouteColumns" />
+        FROM Routes r
+        WHERE r.id = #{routeId}
+    </select>
+
     <select id="countCourses" resultType="int">
         SELECT COUNT(*) AS course_count
         FROM courses c

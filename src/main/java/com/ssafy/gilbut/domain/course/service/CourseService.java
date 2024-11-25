@@ -14,4 +14,6 @@ public interface CourseService {
     RouteResponse.DetailPageResultDTO routeList(Pageable page);
 
     CourseResponse.SimplePageResultDTO courseSearch(CourseRequest.SearchCriteria criteria, Pageable page);
+
+    RouteResponse.DetailResultDTO getRouteDetail(String routeId);
 }

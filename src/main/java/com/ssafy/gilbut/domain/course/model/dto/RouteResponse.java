@@ -1,15 +1,10 @@
 package com.ssafy.gilbut.domain.course.model.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.*;
+
 import java.time.LocalDate;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 public class RouteResponse {
     @Data
@@ -58,9 +53,16 @@ public class RouteResponse {
         private String summary;
     }
 
+    @Getter
+    @Setter
+    @Builder
+    @ToString
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Schema(description = "코스 간단 정보 응답 DTO")
     public static class DetailPageResultDTO {
         @Schema(description = "글목록")
-        private List<RouteResponse.DetailPageResultDTO> routes;
+        private List<RouteResponse.DetailResultDTO> routes;
 
         @Schema(description = "페이지당 항목 수",
                 example = "10")

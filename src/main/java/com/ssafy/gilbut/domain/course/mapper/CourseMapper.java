@@ -3,12 +3,13 @@ package com.ssafy.gilbut.domain.course.mapper;
 import com.ssafy.gilbut.domain.course.model.dto.CourseRequest;
 import com.ssafy.gilbut.domain.course.model.entity.Course;
 import com.ssafy.gilbut.domain.course.model.entity.Route;
-import java.util.List;
-import java.util.Optional;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+
+import java.util.List;
+import java.util.Optional;
 
 @Mapper
 public interface CourseMapper {
@@ -26,4 +27,5 @@ public interface CourseMapper {
     int countCoursesBy(@Param("criteria") CourseRequest.SearchCriteria criteria);
 
 
+    Optional<Route> getRouteByRouteId(@Param("routeId") String routeId);
 }
