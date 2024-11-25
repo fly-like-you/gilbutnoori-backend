@@ -17,7 +17,7 @@ public class BoardRequest {
     @AllArgsConstructor
     @Schema(title = "", description = "")
     public static class CreateDTO {
-        private Integer id;
+        private Long id;
         private String title;
         private Integer travelId;
         private String content;
@@ -47,6 +47,7 @@ public class BoardRequest {
     @AllArgsConstructor
     @Schema(title = "", description = "")
     public static class FileCreateDTO {
+        private Long id;
         @Schema(description = "저장폴더")
         private String saveFolder;
         private Long boardId;

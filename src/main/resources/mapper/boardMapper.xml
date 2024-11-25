@@ -21,6 +21,8 @@
         <result property="siGunGuCode" column="attraction_si_gun_gu_code"/>
         <result property="latitude" column="attraction_latitude"/>
         <result property="longitude" column="attraction_longitude"/>
+        <result property="addr1" column="attraction_addr1"/>
+        <result property="addr2" column="attraction_addr2"/>
         <result property="firstImage1" column="attraction_first_image1"/>
         <result property="firstImage2" column="attraction_first_image2"/>
     </resultMap>
@@ -105,11 +107,18 @@
     <!-- SELECT -->
     <select id="listArticle" resultMap="BoardListResultMap">
         select
-		<include refid="boardColumns"/>,
-		<include refid="userColumns"/>
+        <include refid="boardColumns"/>,
+        <include refid="userColumns"/>
         FROM boards b
-		LEFT JOIN users u ON b.user_id = u.id
-        <include refid="pagination" />
+        LEFT JOIN users u ON b.user_id = u.id
+        <if test="sort">
+            <trim prefix="ORDER BY">
+                <foreach item="order" collection="sort" separator=", ">
+                    ${order.property} ${order.direction}
+                </foreach>
+            </trim>
+        </if>
+        LIMIT #{pageable.offset}, #{pageable.pageSize}
     </select>
 
     <select id="getTotalArticleCount" resultType="int">
@@ -125,8 +134,19 @@
         WHERE b.id = #{boardId}
     </select>
 
+    <select id="findFileByFileId" parameterType="long" resultType="FileInfo">
+        SELECT id,
+               save_folder,
+               board_id,
+               original_file,
+               save_file
+        FROM file_infos
+        WHERE id = #{fileId}
+    </select>
+
     <!-- INSERT -->
-    <insert id="writeArticle" parameterType="com.ssafy.gilbut.domain.board.model.dto.BoardRequest$CreateDTO">
+    <insert id="writeArticle" parameterType="com.ssafy.gilbut.domain.board.model.dto.BoardRequest$CreateDTO"
+            useGeneratedKeys="true" keyProperty="dto.id">
         insert into boards (user_id, travel_id, title, content, hit, created_at)
         values (#{userId}, #{dto.travelId}, #{dto.title}, #{dto.content}, 0, now())
     </insert>
@@ -139,7 +159,8 @@
         </foreach>
     </insert>
 
-    <insert id="registerFile" parameterType="com.ssafy.gilbut.domain.board.model.dto.BoardRequest$FileCreateDTO">
+    <insert id="registerFile" parameterType="com.ssafy.gilbut.domain.board.model.dto.BoardRequest$FileCreateDTO"
+            useGeneratedKeys="true" keyProperty="dto.id">
         insert into file_infos (board_id, save_folder, original_file, save_file)
             value
             (#{dto.boardId}, #{dto.saveFolder}, #{dto.originalFile}, #{dto.saveFile})
@@ -165,7 +186,7 @@
         where id = #{boardId}
     </delete>
 
-    <delete id="deleteArticle" parameterType="int">
+    <delete id="deleteArticle" parameterType="long">
         delete
         from boards
         where id = #{boardId}
@@ -215,7 +236,10 @@
     a.latitude as attraction_latitude,
     a.longitude as attraction_longitude,
     a.first_image1 as attraction_first_image1,
-    a.first_image2 as attraction_first_image2
+    a.first_image2 as attraction_first_image2,
+        a.addr1 as attraction_addr1,
+        a.addr2 as attraction_addr2
+
     </sql>
 
     <!-- Course 관련 컬럼 -->

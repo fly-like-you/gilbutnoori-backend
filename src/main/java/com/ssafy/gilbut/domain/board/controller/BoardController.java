@@ -4,6 +4,7 @@ import com.ssafy.gilbut.advice.ApiResponse;
 import com.ssafy.gilbut.domain.board.model.dto.BoardRequest;
 import com.ssafy.gilbut.domain.board.model.dto.BoardResponse;
 import com.ssafy.gilbut.domain.board.model.dto.BoardResponse.DetailResultDTO;
+import com.ssafy.gilbut.domain.board.model.dto.BoardResponse.SimpleResultDTO;
 import com.ssafy.gilbut.domain.board.service.BoardService;
 import com.ssafy.gilbut.util.SizeConstant;
 import lombok.RequiredArgsConstructor;
@@ -62,9 +63,9 @@ public class BoardController {
 			@RequestBody BoardRequest.CreateDTO boardDto
 	) {
 		log.info("writeArticle boardDto - {}", boardDto);
-		boardService.writeArticle(accessToken, boardDto);
+		SimpleResultDTO simpleResultDTO = boardService.writeArticle(accessToken, boardDto);
 
-		return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.onSuccess(null));
+		return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.onSuccess(simpleResultDTO));
 
 	}
 

@@ -106,6 +106,7 @@ public class JWTUtil {
                 .and()
                 .subject(subject)
                 .claim("loginId", user.getLoginId())
+                .claim("nickname", user.getNickname())
                 .claim("id", user.getId())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + expireTime))

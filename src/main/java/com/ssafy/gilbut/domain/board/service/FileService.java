@@ -1,7 +1,9 @@
 package com.ssafy.gilbut.domain.board.service;
 
+import com.ssafy.gilbut.domain.board.converter.FileInfoConverter;
 import com.ssafy.gilbut.domain.board.mapper.BoardMapper;
 import com.ssafy.gilbut.domain.board.model.dto.BoardRequest.FileCreateDTO;
+import com.ssafy.gilbut.domain.board.model.dto.FileInfoDto;
 import com.ssafy.gilbut.domain.board.model.entity.FileInfo;
 import java.io.File;
 import java.io.IOException;
@@ -35,7 +37,7 @@ public class FileService {
     }
 
     // 단일 파일 저장 메소드
-    public void saveFile(MultipartFile file, Long boardId) throws IOException {
+    public FileInfoDto saveFile(MultipartFile file, Long boardId) throws IOException {
         if (file.isEmpty()) {
             throw new IllegalArgumentException("파일이 비어있습니다.");
         }
@@ -82,6 +84,20 @@ public class FileService {
 
         boardMapper.registerFile(fileInfo);
 
+        return FileInfoDto.builder()
+                .id(fileInfo.getId())
+                .originalFile(fileInfo.getOriginalFile())
+                .saveFolder(fileInfo.getSaveFolder())
+                .saveFile(fileInfo.getSaveFile())
+                .build();
+
     }
 
+
+
+    public FileInfo getFileInfoById(Long fileId) {
+        FileInfo fileByFileId = boardMapper.findFileByFileId(fileId);
+        log.info(fileByFileId.toString());
+        return fileByFileId;
+    }
 }

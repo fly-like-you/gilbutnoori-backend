@@ -12,9 +12,11 @@ import com.ssafy.gilbut.domain.board.model.entity.Board;
 import com.ssafy.gilbut.exception.handler.GeneralExceptionHandler;
 import com.ssafy.gilbut.util.JWTUtil;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 @Slf4j
@@ -26,12 +28,17 @@ public class BoardServiceImpl implements BoardService {
 	private final JWTUtil jwtUtil;
 
 	@Override
-	public BoardResponse.SimplePageResultDTO listArticle(Pageable pageable) {
+	public BoardResponse.SimplePageResultDTO listArticle(Pageable page) {
+		List<Sort.Order> orders = page.getSort().stream()
+				.map(order -> new Sort.Order(order.getDirection(), "b." + order.getProperty()))
+				.collect(Collectors.toList());
 
-		List<Board> list = boardMapper.listArticle(pageable);
-		int totalCount = boardMapper.getTotalArticleCount(pageable);
+		// 새로운 Sort 객체 생성
+		Sort updatedSort = Sort.by(orders);
+		List<Board> list = boardMapper.listArticle(page, updatedSort);
+		int totalCount = boardMapper.getTotalArticleCount(page);
 
-		return BoardConverter.toSimplePageResultDTO(list, pageable, totalCount);
+		return BoardConverter.toSimplePageResultDTO(list, page, totalCount);
 	}
 
 	@Override
@@ -59,7 +66,7 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	@Transactional
-	public void writeArticle(String accessToken, CreateDTO boardDto) {
+	public BoardResponse.SimpleResultDTO writeArticle(String accessToken, CreateDTO boardDto) {
 		Long userId = jwtUtil.getUserId(accessToken);
 		boardMapper.writeArticle(userId, boardDto);
 
@@ -69,6 +76,10 @@ public class BoardServiceImpl implements BoardService {
 		}
 
 		log.info("게시글 작성 성공!");
+		return BoardResponse.SimpleResultDTO.builder()
+				.id(boardDto.getId())
+				.title(boardDto.getTitle())
+				.build();
 	}
 
 	@Override
