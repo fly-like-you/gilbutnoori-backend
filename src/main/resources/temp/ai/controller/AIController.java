@@ -1,6 +1,5 @@
 package com.ssafy.gilbut.domain.ai.controller;
 
-import com.ssafy.gilbut.util.PromptTemplateLoader;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.SystemMessage;
