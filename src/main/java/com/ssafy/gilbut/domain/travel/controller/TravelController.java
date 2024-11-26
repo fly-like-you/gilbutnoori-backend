@@ -3,6 +3,7 @@ package com.ssafy.gilbut.domain.travel.controller;
 import com.ssafy.gilbut.advice.ApiResponse;
 import com.ssafy.gilbut.domain.travel.model.dto.TravelRequest;
 import com.ssafy.gilbut.domain.travel.model.dto.TravelResponse;
+import com.ssafy.gilbut.domain.travel.model.dto.TravelResponse.DetailResultDTO;
 import com.ssafy.gilbut.domain.travel.service.TravelService;
 import com.ssafy.gilbut.util.SizeConstant;
 import lombok.RequiredArgsConstructor;
@@ -59,7 +60,7 @@ public class TravelController implements TravelControllerDocs {
             @RequestHeader("Authorization") String accessToken,
             @PathVariable("travelId") Long travelId
     ) {
-        TravelResponse.DetailResultDTO travel = travelService.getTravelById(accessToken, travelId);
+        DetailResultDTO travel = travelService.getTravelById(accessToken, travelId);
         log.info("travel: {}", travel);
 
         return ResponseEntity.ok(ApiResponse.onSuccess(travel));
@@ -76,8 +77,8 @@ public class TravelController implements TravelControllerDocs {
             @RequestHeader("Authorization") String accessToken,
             @RequestBody TravelRequest.CreateDTO createDTO
     ) {
-        travelService.travelCreate(accessToken, createDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.onSuccess(null));
+        DetailResultDTO result = travelService.travelCreate(accessToken, createDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.onSuccess(result));
     }
 
     /**
@@ -108,7 +109,7 @@ public class TravelController implements TravelControllerDocs {
             @PathVariable("travelId") Long travelId,
             @RequestBody TravelRequest.UpdateDTO updateDTO
     ) {
-        TravelResponse.DetailResultDTO travel = travelService.updateTravel(accessToken, travelId, updateDTO);
+        DetailResultDTO travel = travelService.updateTravel(accessToken, travelId, updateDTO);
         log.info("updated travel: {}", travel);
 
         return ResponseEntity.ok(ResponseEntity.noContent().build());
