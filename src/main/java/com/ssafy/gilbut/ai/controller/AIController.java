@@ -1,5 +1,7 @@
-package com.ssafy.gilbut.domain.ai.controller;
+package com.ssafy.gilbut.ai.controller;
 
+import com.ssafy.gilbut.advice.ApiResponse;
+import com.ssafy.gilbut.util.PromptTemplateLoader;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.SystemMessage;
@@ -9,8 +11,8 @@ import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
@@ -27,36 +29,36 @@ public class AIController {
 		this.promptLoader = promptLoader;
 	}
 
-	@GetMapping("/plans/{city}/{day}")
-    public ResponseEntity<String> getAttractions(@PathVariable("city") String city, @PathVariable("day") String day) {
+    @PostMapping("/chatai")
+    public ResponseEntity<?> getAttractions(@RequestBody String userInput) {
         try {
-            // 유저 프롬프트 템플릿 로드 및 변수 설정
-            String userPromptTemplate = promptLoader.loadUserPrompt();
-            PromptTemplate userTemplate = new PromptTemplate(userPromptTemplate);
-            userTemplate.add("city", city);
-            String userCommand = userTemplate.render();
+            // 사용자 입력 처리
 
-            // 시스템 프롬프트 로드
+            // 유저 프롬프트 템플릿 렌더링
+            PromptTemplate userTemplate = new PromptTemplate("<instruction>${userInput}</instruction>");
+            userTemplate.add("userInput", userInput);
+            String userCommand = userTemplate.render();
+            log.info(userCommand);
+
+            // 시스템 프롬프트 템플릿 렌더링
             String systemPromptTemplate = promptLoader.loadSystemPrompt();
             PromptTemplate systemTemplate = new PromptTemplate(systemPromptTemplate);
-            systemTemplate.add("day", day);
             String systemCommand = systemTemplate.render();
-            
             // 메시지 생성
             Message userMessage = new UserMessage(userCommand);
             Message systemMessage = new SystemMessage(systemCommand);
-            
+
             // API 호출
             String response = chatModel.call(userMessage, systemMessage);
-            System.out.println(response);
-            log.info("Generated response for city: {}, day: {}", city, day);
-            
-            return ResponseEntity.ok(response);
-            
+            log.info(response);
+
+            return ResponseEntity.ok(ApiResponse.onSuccess(response));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Invalid input: " + e.getMessage());
         } catch (Exception e) {
-            log.error("Error processing attraction request for city: " + city, e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Error processing request: " + e.getMessage());
+                    .body("Error processing request: " + e.getMessage());
         }
     }
 	
